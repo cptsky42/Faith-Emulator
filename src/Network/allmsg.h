@@ -14,5 +14,6 @@
 #include "msgtalk.h"
 #include "msgaction.h"
 #include "msguserinfo.h"
+#include "msguserattrib.h"
 
 #endif // _EOFEMU_ALL_MSG_H_

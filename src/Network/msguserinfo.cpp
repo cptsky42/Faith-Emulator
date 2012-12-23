@@ -46,7 +46,7 @@ MsgUserInfo :: create(void* aEntity)
         mInfo->Header.Type = MSG_USERINFO;
 
         mInfo->UniqId = 1000000;
-        mInfo->Look = 1010001;
+        mInfo->Look = 1010003;
         mInfo->Hair = 101;
         mInfo->Length = 0;
         mInfo->Fat = 0;

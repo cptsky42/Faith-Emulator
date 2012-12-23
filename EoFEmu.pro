@@ -23,7 +23,8 @@ SOURCES += \
     src/Network/msgtalk.cpp \
     src/Network/stringpacker.cpp \
     src/Network/msgaction.cpp \
-    src/Network/msguserinfo.cpp
+    src/Network/msguserinfo.cpp \
+    src/Network/msguserattrib.cpp
 
 HEADERS += \
     src/server.h \
@@ -47,7 +48,8 @@ HEADERS += \
     src/Common/include/types.h \
     src/Common/include/log.h \
     src/Network/msgaction.h \
-    src/Network/msguserinfo.h
+    src/Network/msguserinfo.h \
+    src/Network/msguserattrib.h
 
 INCLUDEPATH += \
     src/Common/include \

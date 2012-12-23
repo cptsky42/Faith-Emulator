@@ -36,8 +36,8 @@ MsgAction :: create(void* aEntity, int32_t aData, Action aAction)
     {
         // FIXME ! Use an entity class
         mInfo->UniqId = 1000000;
-        mInfo->PosX = 350;
-        mInfo->PosY = 350;
+        mInfo->PosX = 465;
+        mInfo->PosY = 50;
         mInfo->Direction = 1;
     }
     else
@@ -62,8 +62,8 @@ MsgAction :: process(Client* aClient)
     case ACTION_ENTER_MAP:
         {
             //mInfo->UniqId = 1000000;
-            mInfo->PosX = 350;
-            mInfo->PosY = 350;
+            mInfo->PosX = 465;
+            mInfo->PosY = 50;
             mInfo->Data = 2000;
 
             aClient->send(this);

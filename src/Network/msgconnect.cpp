@@ -2,6 +2,7 @@
 #include "client.h"
 #include "msgtalk.h"
 #include "msguserinfo.h"
+#include "msguserattrib.h"
 
 #include <QtCore/QCoreApplication>
 
@@ -84,6 +85,11 @@ MsgConnect :: process(Client* aClient)
             SAFE_DELETE(msg);
 
             msg = new MsgUserInfo(nullptr);
+            aClient->send(msg);
+            SAFE_DELETE(msg);
+
+            // HACK !
+            msg = new MsgUserAttrib(aClient, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
             aClient->send(msg);
             SAFE_DELETE(msg);
 

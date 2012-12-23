@@ -82,7 +82,7 @@ public:
     MsgTalk(uint8_t** aBuf, size_t aLen);
     virtual ~MsgTalk();
 
-    //virtual void process(Client* aClient);
+    virtual void process(Client* aClient);
 
 private:
     void create(const char* aHearer, const char* aSpeaker, const char* aEmotion,

@@ -87,6 +87,7 @@ TcpServer :: disconnect(NetworkClient* aClient)
             onDisconnect(aClient);
         }
 
-        //SAFE_DELETE(aClient);
+        // it may receives message after, so Qt will handle the memory.
+        aClient->deleteLater();
     }
 }

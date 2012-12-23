@@ -29,6 +29,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
     case MSG_ACTION:
         msg = new MsgAction(aBuf, aLen);
         break;
+    case MSG_USERATTRIB:
+        msg = new MsgUserAttrib(aBuf, aLen);
+        break;
     default:
         msg = new Msg(aBuf, aLen);
         break;
@@ -79,7 +82,6 @@ Msg :: process(Client* aClient)
             header->Type, header->Length);
 
     //hexDump(mBuf, mLen);
-    fprintf(stdout, "\n");
 }
 
 /* static */

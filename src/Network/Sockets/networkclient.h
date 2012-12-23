@@ -21,24 +21,14 @@ class QTcpSocket;
   */
 class NetworkClient : private QObject
 {
+    friend class TcpServer;
+
 public:
     /** The size in bytes of the receive buffer. */
     static const size_t BUFFER_SIZE = 4096; // 4 KiB
 
     Q_OBJECT
 public:
-    /**
-      * Create a new NetworkClient linked to the specified TcpServer and
-      * taking the specified TcpSocket.
-      * The pointer to the socket will be took.
-      *
-      * @param[in]      aServer    a reference to the server
-      * @param[in,out]  aSocket    a pointer to the socket object of the client
-      * @param[in]      aParent    (Optional) the parent Qt object of the client
-      *                            Default value is nullptr.
-      */
-    NetworkClient(TcpServer& aServer, QTcpSocket** aSocket, QObject* aParent = nullptr);
-
     /**
       * Destroy the client and close the connection.
       */
@@ -60,6 +50,19 @@ public:
 
     /** Get the server's pointer. It may be used by some programs. */
     const TcpServer* getServer() { return &mServer; }
+
+private:
+    /**
+      * Create a new NetworkClient linked to the specified TcpServer and
+      * taking the specified TcpSocket.
+      * The pointer to the socket will be took.
+      *
+      * @param[in]      aServer    a reference to the server
+      * @param[in,out]  aSocket    a pointer to the socket object of the client
+      * @param[in]      aParent    (Optional) the parent Qt object of the client
+      *                            Default value is nullptr.
+      */
+    NetworkClient(TcpServer& aServer, QTcpSocket** aSocket, QObject* aParent = nullptr);
 
 private slots:
     /* Incoming data event. */

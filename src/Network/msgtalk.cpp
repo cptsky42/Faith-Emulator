@@ -1,5 +1,7 @@
 #include "msgtalk.h"
 #include "stringpacker.h"
+#include "msgaction.h"
+#include "msguserattrib.h"
 #include <string.h>
 
 MsgTalk :: MsgTalk(const char* aHearer, const char* aSpeaker, const char* aWords,
@@ -64,6 +66,14 @@ MsgTalk :: create(const char* aHearer, const char* aSpeaker, const char* aEmotio
         LOG("Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
             strlen(aHearer), strlen(aSpeaker), strlen(aEmotion), strlen(aWords));
     }
+}
+
+void
+MsgTalk :: process(Client* aClient)
+{
+    ASSERT(aClient != nullptr);
+
+
 }
 
 void

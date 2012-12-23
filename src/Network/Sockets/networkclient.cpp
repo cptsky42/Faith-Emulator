@@ -11,6 +11,8 @@
 #include <QObject>
 #include <QTcpSocket>
 
+using namespace std;
+
 NetworkClient :: NetworkClient(TcpServer& aServer, QTcpSocket** aSocket, QObject* aParent)
     : QObject(aParent), mServer(aServer)
 {
