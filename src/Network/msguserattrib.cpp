@@ -47,11 +47,11 @@ MsgUserAttrib :: swap(uint8_t* aBuf)
 
     MsgInfo* info = (MsgInfo*)aBuf;
 
-    info->UniqId = bswap32(info->UniqId);
-    info->Amount = bswap32(info->Amount);
     for (int i = 0; i < info->Amount; ++i)
     {
         info->Attrib[i].Type = bswap32(info->Attrib[i].Type);
         info->Attrib[i].Data = bswap32(info->Attrib[i].Data);
     }
+    info->UniqId = bswap32(info->UniqId);
+    info->Amount = bswap32(info->Amount);
 }
