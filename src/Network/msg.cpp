@@ -32,6 +32,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
     case MSG_USERATTRIB:
         msg = new MsgUserAttrib(aBuf, aLen);
         break;
+    case MSG_ITEMINFO:
+        msg = new MsgItemInfo(aBuf, aLen);
+        break;
     default:
         msg = new Msg(aBuf, aLen);
         break;

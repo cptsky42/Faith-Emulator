@@ -1,5 +1,5 @@
 QT += core
-QT += network
+QT += network sql
 QT -= gui
 
 TARGET = EoFEmu
@@ -24,7 +24,9 @@ SOURCES += \
     src/Network/stringpacker.cpp \
     src/Network/msgaction.cpp \
     src/Network/msguserinfo.cpp \
-    src/Network/msguserattrib.cpp
+    src/Network/msguserattrib.cpp \
+    src/Database/database.cpp \
+    src/Network/msgiteminfo.cpp
 
 HEADERS += \
     src/server.h \
@@ -49,7 +51,9 @@ HEADERS += \
     src/Common/include/log.h \
     src/Network/msgaction.h \
     src/Network/msguserinfo.h \
-    src/Network/msguserattrib.h
+    src/Network/msguserattrib.h \
+    src/Database/database.h \
+    src/Network/msgiteminfo.h
 
 INCLUDEPATH += \
     src/Common/include \

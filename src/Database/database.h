@@ -1,0 +1,38 @@
+/**
+ * ****** EoF Emulator - Closed Source ******
+ * Copyright (C) 2012 CptSky
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
+#ifndef _EOFEMU_DATABASE_H_
+#define _EOFEMU_DATABASE_H_
+
+#include "common.h"
+#include <QtSql/QSqlDatabase>
+
+class QSqlQuery;
+
+class Database
+{
+public:
+    static Database& getInstance();
+
+public:
+    ~Database();
+
+    bool connect(const char* aHost, const char* aDbName,
+                 const char* aUserName, const char* aPassword);
+
+private:
+    Database();
+
+private:
+    static Database* sInstance;
+
+private:
+    QSqlDatabase mConnection;
+};
+
+#endif // _EOFEMU_DATABASE_H_

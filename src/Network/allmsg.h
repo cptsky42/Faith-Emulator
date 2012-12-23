@@ -15,5 +15,6 @@
 #include "msgaction.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
+#include "msgiteminfo.h"
 
 #endif // _EOFEMU_ALL_MSG_H_

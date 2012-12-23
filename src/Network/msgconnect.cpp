@@ -3,6 +3,7 @@
 #include "msgtalk.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
+#include "msgiteminfo.h"
 
 #include <QtCore/QCoreApplication>
 
@@ -102,6 +103,10 @@ MsgConnect :: process(Client* aClient)
             sprintf(str, "Build for %s (%s), using Qt %s, the %s...\n",
                     TARGET_SYSTEM, TARGET_ARCH, QT_VERSION_STR, __TIMESTAMP__);
             msg = new MsgTalk("SYSTEM", "ALLUSERS", str, MsgTalk::CHANNEL_TALK);
+            aClient->send(msg);
+            SAFE_DELETE(msg);
+
+            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
             aClient->send(msg);
             SAFE_DELETE(msg);
         }
