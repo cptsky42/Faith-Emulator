@@ -1,11 +1,20 @@
+/**
+ * ****** EoF Emulator - Closed Source ******
+ * Copyright (C) 2012 CptSky
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
 #include "tqcipher.h"
-#include <string.h>
+#include <string.h> // memset
 
 TqCipher :: TqCipher()
 {
     mEnCounter = 0;
     mDeCounter = 0;
 
+    // security purpose only...
     memset(mIV, 0, sizeof(mIV));
     memset(mKey, 0, sizeof(mKey));
 
@@ -69,11 +78,13 @@ TqCipher :: encrypt(uint8_t* aBuf, size_t aLen)
     ASSERT(aBuf != nullptr);
     ASSERT(aLen > 0);
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
+    uint8_t* key1 = mIV;
+    uint8_t* key2 = key1 + (TqCipher::IV_SIZE  / 2);
+
     for (size_t i = 0; i < aLen; ++i)
     {
-        aBuf[i] ^= mIV[(uint8_t)mEnCounter];
-        aBuf[i] ^= mIV[(uint8_t)(mEnCounter >> 8) + middle];
+        aBuf[i] ^= key1[(uint8_t)mEnCounter];
+        aBuf[i] ^= key2[(uint8_t)(mEnCounter >> 8)];
         ++mEnCounter;
     }
 }
@@ -84,19 +95,13 @@ TqCipher :: decrypt(uint8_t* aBuf, size_t aLen)
     ASSERT(aBuf != nullptr);
     ASSERT(aLen > 0);
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
+    uint8_t* key1 = mUseKey ? mKey : mIV;
+    uint8_t* key2 = key1 + (TqCipher::IV_SIZE  / 2);
+
     for (size_t i = 0; i < aLen; ++i)
     {
-        if (mUseKey)
-        {
-            aBuf[i] ^= mKey[(uint8_t)mDeCounter];
-            aBuf[i] ^= mKey[(uint8_t)(mDeCounter >> 8) + middle];
-        }
-        else
-        {
-            aBuf[i] ^= mIV[(uint8_t)mDeCounter];
-            aBuf[i] ^= mIV[(uint8_t)(mDeCounter >> 8) + middle];
-        }
+        aBuf[i] ^= key1[(uint8_t)mDeCounter];
+        aBuf[i] ^= key2[(uint8_t)(mDeCounter >> 8)];
         ++mDeCounter;
     }
 }
