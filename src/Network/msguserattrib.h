@@ -1,13 +1,13 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_MSG_USERATTRIB_H_
-#define _EOFEMU_MSG_USERATTRIB_H_
+#ifndef _FAITH_EMULATOR_MSG_USERATTRIB_H_
+#define _FAITH_EMULATOR_MSG_USERATTRIB_H_
 
 #include "common.h"
 #include "msg.h"
@@ -74,4 +74,4 @@ private:
     MsgInfo* mInfo;
 };
 
-#endif // _EOFEMU_MSG_USERATTRIB_H_
+#endif // _FAITH_EMULATOR_MSG_USERATTRIB_H_

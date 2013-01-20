@@ -12,10 +12,10 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     #ifdef _WIN32
-    SetConsoleTitleA("EoFEmu for " TARGET_SYSTEM " (" TARGET_ARCH ") by CptSky");
+    SetConsoleTitleA("Faith Emulator for " TARGET_SYSTEM " (" TARGET_ARCH ") by CptSky");
     #endif
 
-    fprintf(stdout, "EoFEmu by CptSky...\n");
+    fprintf(stdout, "Faith Emulator by CptSky...\n");
     fprintf(stdout, "Build for %s (%s), using Qt %s, the %s...\n",
             TARGET_SYSTEM, TARGET_ARCH, QT_VERSION_STR, __TIMESTAMP__);
     fprintf(stdout, "\n");

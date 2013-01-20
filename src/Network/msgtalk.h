@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_MSG_TALK_H_
-#define _EOFEMU_MSG_TALK_H_
+#ifndef _FAITH_EMULATOR_MSG_TALK_H_
+#define _FAITH_EMULATOR_MSG_TALK_H_
 
 #include "common.h"
 #include "msg.h"
@@ -94,4 +94,4 @@ private:
     MsgInfo* mInfo;
 };
 
-#endif // _EOFEMU_MSG_TALK_H_
+#endif // _FAITH_EMULATOR_MSG_TALK_H_

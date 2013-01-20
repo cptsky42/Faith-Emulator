@@ -1,13 +1,13 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_DATABASE_H_
-#define _EOFEMU_DATABASE_H_
+#ifndef _FAITH_EMULATOR_DATABASE_H_
+#define _FAITH_EMULATOR_DATABASE_H_
 
 #include "common.h"
 #include <QtSql/QSqlDatabase>
@@ -35,4 +35,4 @@ private:
     QSqlDatabase mConnection;
 };
 
-#endif // _EOFEMU_DATABASE_H_
+#endif // _FAITH_EMULATOR_DATABASE_H_

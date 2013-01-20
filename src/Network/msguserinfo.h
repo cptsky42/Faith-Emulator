@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_MSG_USERINFO_H_
-#define _EOFEMU_MSG_USERINFO_H_
+#ifndef _FAITH_EMULATOR_MSG_USERINFO_H_
+#define _FAITH_EMULATOR_MSG_USERINFO_H_
 
 #include "common.h"
 #include "msg.h"
@@ -53,4 +53,4 @@ private:
     MsgInfo* mInfo;
 };
 
-#endif // _EOFEMU_MSG_USERINFO_H_
+#endif // _FAITH_EMULATOR_MSG_USERINFO_H_

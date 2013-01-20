@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_SERVER_H
-#define _EOFEMU_SERVER_H
+#ifndef _FAITH_EMULATOR_SERVER_H
+#define _FAITH_EMULATOR_SERVER_H
 
 #include "common.h"
 #include "tcpserver.h"
@@ -27,4 +27,4 @@ private:
     TcpServer mMsgServer;
 };
 
-#endif // _EOFEMU_SERVER_H
+#endif // _FAITH_EMULATOR_SERVER_H

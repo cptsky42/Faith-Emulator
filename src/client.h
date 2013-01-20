@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_CLIENT_H
-#define _EOFEMU_CLIENT_H
+#ifndef _FAITH_EMULATOR_CLIENT_H
+#define _FAITH_EMULATOR_CLIENT_H
 
 #include "common.h"
 #include "tqcipher.h"
@@ -48,4 +48,4 @@ private:
     std::string mCharacter;
 };
 
-#endif // _EOFEMU_CLIENT_H
+#endif // _FAITH_EMULATOR_CLIENT_H

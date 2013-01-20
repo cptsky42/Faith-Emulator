@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_STRINGPACKER_H_
-#define _EOFEMU_STRINGPACKER_H_
+#ifndef _FAITH_EMULATOR_STRINGPACKER_H_
+#define _FAITH_EMULATOR_STRINGPACKER_H_
 
 #include "common.h"
 
@@ -16,4 +16,4 @@ private:
     uint8_t mStrCount;
 };
 
-#endif // _EOFEMU_STRINGPACKER_H_
+#endif // _FAITH_EMULATOR_STRINGPACKER_H_

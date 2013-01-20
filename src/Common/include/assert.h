@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_ASSERT_H_
-#define _EOFEMU_ASSERT_H_
+#ifndef _FAITH_EMULATOR_ASSERT_H_
+#define _FAITH_EMULATOR_ASSERT_H_
 
 // FIXME HACK! Remove on real release...
 #define DEBUG
@@ -30,4 +30,4 @@
 #define ASSERT(exp) assert(exp)
 #endif // ASSERT
 
-#endif // _EOFEMU_ASSERT_H_
+#endif // _FAITH_EMULATOR_ASSERT_H_

@@ -1,13 +1,13 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_TCP_SERVER_H
-#define _EOFEMU_TCP_SERVER_H
+#ifndef _FAITH_EMULATOR_TCP_SERVER_H
+#define _FAITH_EMULATOR_TCP_SERVER_H
 
 #include "common.h"
 #include <QtNetwork>
@@ -83,4 +83,4 @@ private:
     std::vector<NetworkClient*> mClients; //!< the list of all connected clients
 };
 
-#endif // _EOFEMU_TCP_SERVER_H
+#endif // _FAITH_EMULATOR_TCP_SERVER_H

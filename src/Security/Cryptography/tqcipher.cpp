@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS

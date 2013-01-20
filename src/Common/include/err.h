@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_ERROR_H_
-#define _EOFEMU_ERROR_H_
+#ifndef _FAITH_EMULATOR_ERROR_H_
+#define _FAITH_EMULATOR_ERROR_H_
 
 #include "types.h"
 #include <errno.h>
@@ -125,4 +125,4 @@ const err_t ERROR_UNKNOWN = 0x7FFFFFFF;
     if (IS_SUCCESS(err)) \
     err = fn
 
-#endif // _EOFEMU_ERROR_H_
+#endif // _FAITH_EMULATOR_ERROR_H_

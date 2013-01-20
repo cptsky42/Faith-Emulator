@@ -1,5 +1,5 @@
-#ifndef _EOFEMU_NETWORK_DEF_H_
-#define _EOFEMU_NETWORK_DEF_H_
+#ifndef _FAITH_EMULATOR_NETWORK_DEF_H_
+#define _FAITH_EMULATOR_NETWORK_DEF_H_
 
 #include "common.h"
 
@@ -41,4 +41,4 @@ const uint16_t MSG_ACCOUNT      = MSG_GENERAL + 51;
 const uint16_t MSG_CONNECT      = MSG_GENERAL + 52;
 const uint16_t MSG_TRADE      = MSG_GENERAL + 56;
 
-#endif // _EOFEMU_NETWORK_DEF_H_
+#endif // _FAITH_EMULATOR_NETWORK_DEF_H_

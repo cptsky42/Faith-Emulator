@@ -1,13 +1,13 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_TQCIPHER_H
-#define _EOFEMU_TQCIPHER_H
+#ifndef _FAITH_EMULATOR_TQCIPHER_H
+#define _FAITH_EMULATOR_TQCIPHER_H
 
 #include "common.h"
 
@@ -89,4 +89,4 @@ private:
     bool mUseKey; //!< Determine if the cipher must use the alt. key
 };
 
-#endif // _EOFEMU_TQCIPHER_H
+#endif // _FAITH_EMULATOR_TQCIPHER_H

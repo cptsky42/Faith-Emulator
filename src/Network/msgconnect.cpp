@@ -95,7 +95,7 @@ MsgConnect :: process(Client* aClient)
             SAFE_DELETE(msg);
 
             // TODO... Clean the following code...
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", "EoFEmu by CptSky...", MsgTalk::CHANNEL_TALK);
+            msg = new MsgTalk("SYSTEM", "ALLUSERS", "Faith Emulator by CptSky...", MsgTalk::CHANNEL_TALK);
             aClient->send(msg);
             SAFE_DELETE(msg);
 

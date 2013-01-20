@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_ENDIAN_H_
-#define _EOFEMU_ENDIAN_H_
+#ifndef _FAITH_EMULATOR_ENDIAN_H_
+#define _FAITH_EMULATOR_ENDIAN_H_
 
 #include "types.h"
 
@@ -220,4 +220,4 @@ inline bool isLittleEndian()
             ptr[2] == 0x22 && ptr[3] == 0x11;
 }
 
-#endif // _EOFEMU_ENDIAN_H
+#endif // _FAITH_EMULATOR_ENDIAN_H

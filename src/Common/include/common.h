@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_COMMON_H_
-#define _EOFEMU_COMMON_H_
+#ifndef _FAITH_EMULATOR_COMMON_H_
+#define _FAITH_EMULATOR_COMMON_H_
 
 #include "def.h" // all defines by CMake
 #include "arch.h"
@@ -55,4 +55,4 @@
 #define __TIMESTAMP__ (__DATE__" "__TIME__)
 #endif
 
-#endif // _EOFEMU_COMMON_H_
+#endif // _FAITH_EMULATOR_COMMON_H_

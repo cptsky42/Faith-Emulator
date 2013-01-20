@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_DEF_H_
-#define _EOFEMU_DEF_H_
+#ifndef _FAITH_EMULATOR_DEF_H_
+#define _FAITH_EMULATOR_DEF_H_
 
 // TODO Create a def.h.in file...
 #define HAVE_STDINT_H
@@ -20,4 +20,4 @@
 /* #undef HAVE_ENDIAN_H */
 /* #undef HAVE_FLOCK_FN */
 
-#endif // _EOFEMU_DEF_H_
+#endif // _FAITH_EMULATOR_DEF_H_

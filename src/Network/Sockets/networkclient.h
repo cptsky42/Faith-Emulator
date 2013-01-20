@@ -1,13 +1,13 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_NETWORK_CLIENT_H
-#define _EOFEMU_NETWORK_CLIENT_H
+#ifndef _FAITH_EMULATOR_NETWORK_CLIENT_H
+#define _FAITH_EMULATOR_NETWORK_CLIENT_H
 
 #include "common.h"
 #include <QObject>
@@ -77,4 +77,4 @@ private:
     void* mOwner; //!< a pointer to the owner.
 };
 
-#endif // _EOFEMU_NETWORK_CLIENT_H
+#endif // _FAITH_EMULATOR_NETWORK_CLIENT_H

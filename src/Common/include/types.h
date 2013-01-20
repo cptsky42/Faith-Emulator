@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_TYPES_H_
-#define _EOFEMU_TYPES_H_
+#ifndef _FAITH_EMULATOR_TYPES_H_
+#define _FAITH_EMULATOR_TYPES_H_
 
 #include <stddef.h> // Define NULL, size_t
 #include <limits.h> // Define UCHAR_MAX, etc
@@ -101,4 +101,4 @@ typedef unsigned long long int  uint64_t;
 
 #endif // !BL_HAS_STDINT_H
 
-#endif // _EOFEMU_TYPES_H
+#endif // _FAITH_EMULATOR_TYPES_H

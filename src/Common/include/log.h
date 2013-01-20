@@ -1,5 +1,5 @@
 /**
- * ****** EoF Emulator - Closed Source ******
+ * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 CptSky
  *
  * Taken from :
@@ -11,12 +11,12 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_LOG_H_
-#define _EOFEMU_LOG_H_
+#ifndef _FAITH_EMULATOR_LOG_H_
+#define _FAITH_EMULATOR_LOG_H_
 
 #include <stdio.h>
 
 #define LOG(fmt, ...) \
     fprintf(stderr, fmt "\n", __VA_ARGS__)
 
-#endif // _EOFEMU_LOG_H_
+#endif // _FAITH_EMULATOR_LOG_H_
