@@ -21,6 +21,5 @@ int main(int argc, char *argv[])
     fprintf(stdout, "\n");
 
     Server server;
-
     return a.exec();
 }

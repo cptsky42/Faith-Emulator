@@ -1,6 +1,6 @@
 /**
  * ****** Faith Emulator - Closed Source ******
- * Copyright (C) 2012 CptSky
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
  * Taken from :
  * ****** BARLab - Open Source ******
@@ -29,9 +29,9 @@
  ****************************************************
  */
 
-#if !defined(nullptr) // C++11 defines nullptr
+#if __cplusplus < 201103L // C++11 defines nullptr
 #define nullptr NULL
-#endif // !defined(nullptr)
+#endif // __cplusplus < 201103L
 
 /*
  *****************************************************

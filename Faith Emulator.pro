@@ -2,7 +2,7 @@ QT += core
 QT += network sql
 QT -= gui
 
-TARGET = EoFEmu
+TARGET = "Faith Emulator"
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -41,14 +41,14 @@ HEADERS += \
     src/Network/allmsg.h \
     src/Network/msgtalk.h \
     src/Network/stringpacker.h \
-    src/Common/include/common.h \
-    src/Common/include/assert.h \
-    src/Common/include/arch.h \
-    src/Common/include/def.h \
-    src/Common/include/endian.h \
-    src/Common/include/err.h \
-    src/Common/include/types.h \
-    src/Common/include/log.h \
+    src/Common/common.h \
+    src/Common/arch.h \
+    src/Common/def.h \
+    src/Common/err.h \
+    src/Common/types.h \
+    src/Common/log.h \
+    src/Common/myassert.h \
+    src/Common/endian.h \
     src/Network/msgaction.h \
     src/Network/msguserinfo.h \
     src/Network/msguserattrib.h \
@@ -56,8 +56,9 @@ HEADERS += \
     src/Network/msgiteminfo.h
 
 INCLUDEPATH += \
-    src/Common/include \
+    src/Common \
     src/Network \
     src/Network/Sockets \
     src/Security/Cryptography \
+    src/Database \
     src

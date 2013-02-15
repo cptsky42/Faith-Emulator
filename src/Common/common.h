@@ -1,6 +1,6 @@
 /**
  * ****** Faith Emulator - Closed Source ******
- * Copyright (C) 2012 CptSky
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
  * Taken from :
  * ****** BARLab - Open Source ******
@@ -19,7 +19,7 @@
 #include "types.h"
 #include "endian.h"
 #include "err.h"
-#include "assert.h"
+#include "myassert.h"
 #include "log.h"
 
 /*

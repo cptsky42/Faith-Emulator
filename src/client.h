@@ -13,12 +13,19 @@ class Client
 public:
     enum Status
     {
+        /** The client is still not authenticated */
         NOT_AUTHENTICATED,
+        /** The client is banned */
         BANNED,
+        /** The client use an invalid username */
         INVALID_USERNAME,
+        /** The client use an invalid password */
         INVALID_PASSWORD,
+        /** The client use an invalid token */
         INVALID_KEY,
+        /** The client is normal */
         NORMAL,
+        /** The client is a new account */
         NEW_ACCOUNT
     };
 

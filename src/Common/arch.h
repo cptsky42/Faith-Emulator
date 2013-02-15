@@ -1,6 +1,6 @@
 /**
- * ****** EoF Emulator - Closed Source ******
- * Copyright (C) 2012 CptSky
+ * ****** Faith Emulator - Closed Source ******
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
  * Taken from :
  * ****** BARLab - Open Source ******
@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _EOFEMU_ARCH_H_
-#define _EOFEMU_ARCH_H_
+#ifndef _FAITH_EMULATOR_ARCH_H_
+#define _FAITH_EMULATOR_ARCH_H_
 
 #if defined(_AIX) || defined(__TOS_AIX__)
 #define TARGET_SYSTEM "AIX"
@@ -38,14 +38,14 @@
 #elif defined(__APPLE__)
 #define TARGET_SYSTEM "Mac OS X"
 
-#elif defined(MSDOS) || defined(__MSDOS__) || defined(DOS) \
+#elif defined(MSDOS) || defined(__MSDOS__) || defined(DOS) || \
     defined(_MSDOS)
 #define TARGET_SYSTEM "MS-DOS"
 
 #elif defined(sun) || defined(__sun)
 #define TARGET_SYSTEM "Solaris"
 
-#elif defined(_WIN16) || defined(_WIN32) || defined(_WIN64) \
+#elif defined(_WIN16) || defined(_WIN32) || defined(_WIN64) || \
     defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__)
 #define TARGET_SYSTEM "Windows"
 
@@ -100,4 +100,4 @@
 
 #endif // TARGET_ARCH
 
-#endif // _EOFEMU_ARCH_H_
+#endif // _FAITH_EMULATOR_ARCH_H_

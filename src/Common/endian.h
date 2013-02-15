@@ -1,6 +1,6 @@
 /**
  * ****** Faith Emulator - Closed Source ******
- * Copyright (C) 2012 CptSky
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
  * Taken from :
  * ****** BARLab - Open Source ******

@@ -48,7 +48,7 @@ private:
     virtual void swap(uint8_t* aBuf);
 
 private:
-    MsgInfo* mInfo;
+    MsgInfo* mInfo; //!< the casted internal reference to the buffer
 };
 
 #endif // _FAITH_EMULATOR_MSG_ITEMINFO_H_
