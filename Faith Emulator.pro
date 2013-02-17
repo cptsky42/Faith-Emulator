@@ -26,7 +26,8 @@ SOURCES += \
     src/Network/msguserinfo.cpp \
     src/Network/msguserattrib.cpp \
     src/Database/database.cpp \
-    src/Network/msgiteminfo.cpp
+    src/Network/msgiteminfo.cpp \
+    src/Security/Cryptography/rc5.cpp
 
 HEADERS += \
     src/server.h \
@@ -53,7 +54,8 @@ HEADERS += \
     src/Network/msguserinfo.h \
     src/Network/msguserattrib.h \
     src/Database/database.h \
-    src/Network/msgiteminfo.h
+    src/Network/msgiteminfo.h \
+    src/Security/Cryptography/rc5.h
 
 INCLUDEPATH += \
     src/Common \

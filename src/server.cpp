@@ -14,6 +14,12 @@ const char* Server::SERVER_IP = "172.16.104.1";//"70.80.200.10";
 
 Server :: Server()
 {
+    Database& db = Database::getInstance();
+    if (!db.connect("localhost", "xyserver", "root", "s0cac3r3b0rn"))
+    {
+        // failed to connect
+    }
+
     mAccServer.listen(ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;
     mAccServer.onReceive = &Server::receiveHandler;
