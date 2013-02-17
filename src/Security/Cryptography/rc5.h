@@ -86,16 +86,16 @@ private:
     /* left rotation of the bits */
     inline uint32_t rotl(uint32_t aValue, uint32_t aCount)
     {
-        aCount %= sizeof(uint32_t);
-        uint32_t high = aValue >> (sizeof(uint32_t) - (int32_t)aCount);
+        aCount %= 32;
+        uint32_t high = aValue >> (32 - (int32_t)aCount);
         return (aValue << (int32_t)aCount) | high;
     }
 
     /* right rotation of the bits */
     inline uint32_t rotr(uint32_t aValue, uint32_t aCount)
     {
-        aCount %= sizeof(uint32_t);
-        uint32_t low = aValue << (sizeof(uint32_t) - (int32_t)aCount);
+        aCount %= 32;
+        uint32_t low = aValue << (32 - (int32_t)aCount);
         return (aValue >> (int32_t)aCount) | low;
     }
 

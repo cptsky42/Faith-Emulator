@@ -37,6 +37,9 @@ RC5 :: generateKey(uint8_t aSeed[KEY_SIZE])
     for (size_t i = 0; i < RC5_KEY; ++i)
     {
         mKey[i] = seed[i];
+        #if BYTE_ORDER == BIG_ENDIAN
+        mKey[i] = bswap32(mKey[i]);
+        #endif
     }
 
     mSub[0] = RC5_PW32;
@@ -72,6 +75,11 @@ RC5 :: encrypt(uint8_t* aBuf, size_t aLen)
         uint32_t a = buf[2 * i];
         uint32_t b = buf[2 * i + 1];
 
+        #if BYTE_ORDER == BIG_ENDIAN
+        a = bswap32(a);
+        b = bswap32(b);
+        #endif
+
         uint32_t le = a + mSub[0];
         uint32_t re = b + mSub[1];
         for (size_t j = 1; j < ROUNDS; ++j)
@@ -79,6 +87,11 @@ RC5 :: encrypt(uint8_t* aBuf, size_t aLen)
             le = rotl((le ^ re), re) + mSub[2 * j];
             re = rotl((re ^ le), le) + mSub[2 * j + 1];
         }
+
+        #if BYTE_ORDER == BIG_ENDIAN
+        le = bswap32(le);
+        re = bswap32(re);
+        #endif
 
         buf[2 * i] = le;
         buf[2 * i + 1] = re;
@@ -96,14 +109,24 @@ RC5 :: decrypt(uint8_t* aBuf, size_t aLen)
     {
         uint32_t ld = buf[2 * i];
         uint32_t rd = buf[2 * i + 1];
+
+        #if BYTE_ORDER == BIG_ENDIAN
+        ld = bswap32(ld);
+        rd = bswap32(rd);
+        #endif
+
         for (size_t j = ROUNDS; j >= 1; --j)
         {
             rd = rotr((rd - mSub[2 * j + 1]), ld) ^ ld;
             ld = rotr((ld - mSub[2 * j]), rd) ^ rd;
         }
-
         uint32_t a = rd - mSub[1];
         uint32_t b = ld - mSub[0];
+
+        #if BYTE_ORDER == BIG_ENDIAN
+        a = bswap32(a);
+        b = bswap32(b);
+        #endif
 
         buf[2 * i] = b;
         buf[2 * i + 1] = a;

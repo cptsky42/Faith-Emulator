@@ -78,12 +78,14 @@ MsgAccount :: process(Client* aClient)
         fprintf(stdout, "Connection of %s on %s...\n",
                 mInfo->Account, mInfo->Server);
 
-//        uint8_t seed[RC5::KEY_SIZE] =
-//                { 0x3C, 0xDC, 0xFE, 0xE8, 0xC4, 0x54, 0xD6, 0x7E, 0x16, 0xA6, 0xF8, 0x1A, 0xE8, 0xD0, 0x38, 0xBE };
+        uint8_t seed[RC5::KEY_SIZE] =
+                { 0x3C, 0xDC, 0xFE, 0xE8, 0xC4, 0x54, 0xD6, 0x7E, 0x16, 0xA6, 0xF8, 0x1A, 0xE8, 0xD0, 0x38, 0xBE };
 
-//        RC5 cipher;
-//        cipher.generateKey(seed);
-//        cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
+        RC5 cipher;
+        cipher.generateKey(seed);
+        cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
+
+        fprintf(stderr, "Password = %s\n", mInfo->Password);
 
         // FIXME !
         int32_t accUID = 1;

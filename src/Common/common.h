@@ -61,7 +61,7 @@
 
 // If __TIMESTAMP__ is not defined, create it by merging __DATE__ and __TIME__
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ (__DATE__" "__TIME__)
+#define __TIMESTAMP__ __DATE__" "__TIME__
 #endif
 
 // If not on Windows, we must implement a kind-of timeGetTime()

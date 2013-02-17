@@ -18,15 +18,15 @@ using namespace std;
 /* static */
 const uint16_t Server::ACCSERVER_PORT = 9958;
 const uint16_t Server::MSGSERVER_PORT = 5816;
-const char* Server::SERVER_IP = "172.16.104.1";//"70.80.200.10";
+const char* Server::SERVER_IP = "172.16.104.1";//"192.168.1.112";
 
 Server :: Server()
 {
-    Database& db = Database::getInstance();
-    if (!db.connect("localhost", "xyserver", "root", "s0cac3r3b0rn"))
-    {
-        // failed to connect
-    }
+    //Database& db = Database::getInstance();
+//    if (!db.connect("localhost", "xyserver", "root", "s0cac3r3b0rn"))
+//    {
+//        // failed to connect
+//    }
 
     mAccServer.listen(ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;
