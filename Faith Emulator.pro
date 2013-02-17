@@ -27,7 +27,9 @@ SOURCES += \
     src/Network/msguserattrib.cpp \
     src/Database/database.cpp \
     src/Network/msgiteminfo.cpp \
-    src/Security/Cryptography/rc5.cpp
+    src/Security/Cryptography/rc5.cpp \
+    src/Entity/entity.cpp \
+    src/Entity/player.cpp
 
 HEADERS += \
     src/server.h \
@@ -55,7 +57,10 @@ HEADERS += \
     src/Network/msguserattrib.h \
     src/Database/database.h \
     src/Network/msgiteminfo.h \
-    src/Security/Cryptography/rc5.h
+    src/Security/Cryptography/rc5.h \
+    src/Entity/entity.h \
+    src/Entity/player.h \
+    src/strres.h
 
 INCLUDEPATH += \
     src/Common \
@@ -63,4 +68,5 @@ INCLUDEPATH += \
     src/Network/Sockets \
     src/Security/Cryptography \
     src/Database \
+    src/Entity \
     src

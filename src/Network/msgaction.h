@@ -12,14 +12,25 @@
 #include "common.h"
 #include "msg.h"
 
+class Entity;
+
+/**
+ * Msg sent to the MsgServer to signal small actions like changing the
+ * direction, position, jumping, mining, etc.
+ *
+ * The MsgServer can also send those msgs to the client to signal a small
+ * action.
+ */
 class MsgAction : public Msg
 {
 public:
     enum Action
     {
+        /** No action specified. (Invalid) */
         ACTION_NONE = 0,
+        /** Change the direction of an entity */
         ACTION_CHG_DIR = 1,
-        ACTION_POSITION = 2,
+        actionPosition         = 2,
         actionEmotion			=3,
         actionBroadcastPos		=4,
         actionDivorce			=5,
@@ -31,6 +42,7 @@ public:
         actionDie				=11,
         actionQuitSyn			=12,
         actionWalk				=13,
+        /** Set the position of an entity entering in a new map */
         ACTION_ENTER_MAP = 14,
         actionGetItemSet		=15,
         actionGetGoodFriend		=16,
@@ -46,7 +58,8 @@ public:
         actionDelRole			=26,
         actionGetWeaponSkillSet	=27,
         actionGetMagicSet		=28,
-        actionSetPkMode			=29,
+        /** Set the Pk mode of an entity */
+        ACTION_SET_PKMODE = 29,
         actionGetSynAttr		=30,
         actionGhost				=31,
         actionSynchro			=32,
@@ -124,31 +137,77 @@ public:
         actionDisappear							=97
     };
 
+    enum PkMode
+    {
+        PKMODE_FREE = 0,
+        PKMODE_SAFE = 1,
+        PKMODE_TEAM = 2,
+        PKMODE_ARRESTMENT = 3
+    };
+
 public:
     #pragma pack(1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
+        /** The timestamp of the creation of the packet */
         int32_t Timestamp;
+        /** The unique Id of the entity */
         int32_t UniqId;
+        /** The X coord of the entity */
         uint16_t PosX;
+        /** The Y coord of the entity */
         uint16_t PosY;
+        /** The direction of the entity */
         int32_t Direction;
+        /** The data of the action */
         int32_t Data;
+        /** The action Id */
         uint32_t Action;
     }MsgInfo;
     #pragma pack(pop)
 
 public:
-    MsgAction(void* aEntity, int32_t aData, Action aAction);
+    /**
+     * Create a new MsgAction packet for the specified entity.
+     *
+     * @param[in]   aEntity     the entity doing the action
+     * @param[in]   aData       the data of the action
+     * @param[in]   aAction     the action Id
+     */
+    MsgAction(Entity* aEntity, int32_t aData, Action aAction);
+
+    /**
+     * Create a message object from the specified buffer.
+     * The buffer will be took by the object and the memory
+     * freed when the object will be destroyed.
+     *
+     * If the server is on a Be architecture, all the integers
+     * are swapped.
+     *
+     * @param[in,out] aBuf        a pointer to the buffer to take
+     *                            the pointer will be set to null
+     * @param[in]     aLen        the length in bytes of the buffer
+     */
     MsgAction(uint8_t** aBuf, size_t aLen);
+
+    /* destructor */
     virtual ~MsgAction();
 
+    /**
+     * Process the message received from the client.
+     *
+     * @param[in]     aClient      a pointer to the client which
+     *                             has sent the message
+     */
     virtual void process(Client* aClient);
 
 private:
-    void create(void* aEntity, int32_t aData, Action aAction);
+    /* internal filling of the packet */
+    void create(Entity* aEntity, int32_t aData, Action aAction);
 
+    /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf);
 
 private:

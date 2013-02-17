@@ -68,6 +68,7 @@ public:
 public:
     /** Get a pointer of the buffer. It may not be the internal one. */
     const uint8_t* getBuffer();
+
     /** Get the length in bytes of the message. */
     size_t getLength() { return mLen; }
 

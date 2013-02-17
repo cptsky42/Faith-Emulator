@@ -1,6 +1,7 @@
 #include "client.h"
 #include "networkclient.h"
 #include "msg.h"
+#include "player.h"
 #include <stdlib.h>
 
 Client :: Client(NetworkClient* aSocket)
@@ -14,11 +15,13 @@ Client :: Client(NetworkClient* aSocket)
 
     mAccLvl = 0;
     mFlags = 0;
+
+    mPlayer = new Player(*this);
 }
 
 Client :: ~Client()
 {
-
+    SAFE_DELETE(mPlayer);
 }
 
 void

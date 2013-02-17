@@ -107,14 +107,18 @@ const err_t ERROR_FILE_EXISTS = 1009;
 const err_t ERROR_DISK_FULL = 1010;
 
 
+/** Cannot execute the specified command. */
+const err_t ERROR_EXEC_FAILED = 2000;
+
+
 /** Unknown error */
 const err_t ERROR_UNKNOWN = 0x7FFFFFFF;
 
 /*
-     *****************************************************
-     * Error checking macros
-     *****************************************************
-     */
+ *****************************************************
+ * Error checking macros
+ *****************************************************
+ */
 
 // Return TRUE if the error is success
 #define IS_SUCCESS(err) \

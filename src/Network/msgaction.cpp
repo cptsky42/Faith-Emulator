@@ -1,7 +1,9 @@
 #include "msgaction.h"
 #include "client.h"
+#include "entity.h"
+#include "player.h"
 
-MsgAction :: MsgAction(void* aEntity, int32_t aData, Action aAction)
+MsgAction :: MsgAction(Entity* aEntity, int32_t aData, Action aAction)
     : Msg(sizeof(MsgInfo))
 {
     mInfo = (MsgInfo*)mBuf;
@@ -26,19 +28,18 @@ MsgAction :: ~MsgAction()
 }
 
 void
-MsgAction :: create(void* aEntity, int32_t aData, Action aAction)
+MsgAction :: create(Entity* aEntity, int32_t aData, Action aAction)
 {
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_ACTION;
 
-    mInfo->Timestamp = 0; // TODO : timeGetTime();
+    mInfo->Timestamp = timeGetTime();
     if (aEntity != nullptr)
     {
-        // FIXME ! Use an entity class
-        mInfo->UniqId = 1000000;
-        mInfo->PosX = 465;
-        mInfo->PosY = 50;
-        mInfo->Direction = 1;
+        mInfo->UniqId = aEntity->getUniqId();
+        mInfo->PosX = aEntity->getPosX();
+        mInfo->PosY = aEntity->getPosY();
+        mInfo->Direction = aEntity->getDirection();
     }
     else
     {
@@ -56,17 +57,57 @@ void
 MsgAction :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
+    ASSERT(aClient->getPlayer() != nullptr);
 
+    Client& client = *aClient;
+    Player& player = *aClient->getPlayer();
     switch (mInfo->Action)
     {
     case ACTION_ENTER_MAP:
         {
-            //mInfo->UniqId = 1000000;
-            mInfo->PosX = 465;
-            mInfo->PosY = 50;
-            mInfo->Data = 2000;
+            mInfo->PosX = player.getPosX();
+            mInfo->PosY = player.getPosY();
+            mInfo->Data = player.getMapId();
+            mInfo->Direction = player.getDirection();
+            client.send(this);
 
-            aClient->send(this);
+            player.enterMap();
+            break;
+        }
+    case ACTION_SET_PKMODE:
+        {
+            const char* msg = nullptr;
+            switch ((PkMode)mInfo->Data)
+            {
+            case PKMODE_FREE:
+                {
+                    msg = STR_FREE_PK_MODE;
+                    break;
+                }
+            case PKMODE_SAFE:
+                {
+                    msg = STR_SAFE_PK_MODE;
+                    break;
+                }
+            case PKMODE_TEAM:
+                {
+                    msg = STR_TEAM_PK_MODE;
+                    break;
+                }
+            case PKMODE_ARRESTMENT:
+                {
+                    msg = STR_ARRESTMENT_PK_MODE;
+                    break;
+                }
+            default:
+                break; // TODO: Invalid mode
+            }
+
+            //role.pkmode = data;
+            //role. isinbattle = false
+
+            client.send(this);
+            player.sendSysMsg(msg);
             break;
         }
     default:

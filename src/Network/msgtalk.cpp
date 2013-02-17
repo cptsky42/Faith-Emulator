@@ -52,8 +52,8 @@ MsgTalk :: create(const char* aHearer, const char* aSpeaker, const char* aEmotio
 
         mInfo->Color = aColor;
         mInfo->Channel = (uint16_t)aChannel;
-        mInfo->Style = 0; // TODO : Style enum.
-        mInfo->Timestamp = 0; // TODO : timeGetTime();
+        mInfo->Style = (int16_t)STYLE_NORMAL;
+        mInfo->Timestamp = timeGetTime();
 
         StringPacker packer(mInfo->Buf);
         packer.addString(aHearer);
@@ -73,7 +73,7 @@ MsgTalk :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
-
+    Client& client = *aClient;
 }
 
 void

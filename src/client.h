@@ -7,6 +7,7 @@
 
 class NetworkClient;
 class Msg;
+class Player;
 
 class Client
 {
@@ -37,22 +38,28 @@ public:
     void send(uint8_t* aBuf, size_t aLen);
 
 public:
+    /** Get a reference to the client cipher */
     TqCipher& getCipher() { return mCipher; }
+    /** Get the status of the account */
     Status getStatus() { return mStatus; }
+    /** Get the player object linked to this client */
+    Player* getPlayer() { return mPlayer; }
 
     void setAccount(const std::string& aAccount) { mAccount = aAccount; }
     void setStatus(Status aStatus) { mStatus = aStatus; }
 
 private:
-    NetworkClient* mSocket;
-    TqCipher mCipher;
+    NetworkClient* mSocket; //!< the TCP/IP socket wrapper of the client
+    TqCipher mCipher; //!< the cipher of the client
 
-    Status mStatus;
+    Status mStatus; //!< the status of the account
 
-    std::string mAccount;
-    int8_t mAccLvl;
-    int32_t mFlags;
-    std::string mCharacter;
+    std::string mAccount; //!< the account name
+    int8_t mAccLvl; //!< the account permissions level
+    int32_t mFlags; //!< the account flags
+    std::string mCharacter; //!< the character name
+
+    Player* mPlayer; //!< the character linked to this client
 };
 
 #endif // _FAITH_EMULATOR_CLIENT_H

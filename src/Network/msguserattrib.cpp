@@ -1,7 +1,8 @@
 #include "msguserattrib.h"
 #include "client.h"
+#include "entity.h"
 
-MsgUserAttrib :: MsgUserAttrib(void* aEntity, int32_t aData, UserAttrType aType)
+MsgUserAttrib :: MsgUserAttrib(Entity* aEntity, int32_t aData, UserAttrType aType)
     : Msg(sizeof(MsgInfo))
 {
     mInfo = (MsgInfo*)mBuf;
@@ -26,14 +27,14 @@ MsgUserAttrib :: ~MsgUserAttrib()
 }
 
 void
-MsgUserAttrib :: create(void* aEntity, int32_t aData, UserAttrType aType)
+MsgUserAttrib :: create(Entity* aEntity, int32_t aData, UserAttrType aType)
 {
     ASSERT(aEntity != nullptr);
 
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_USERATTRIB;
 
-    mInfo->UniqId = 1000000;
+    mInfo->UniqId = aEntity != nullptr ? aEntity->getUniqId() : 0;
     mInfo->Amount = 1;
 
     mInfo->Attrib[0].Type = (int32_t)aType;

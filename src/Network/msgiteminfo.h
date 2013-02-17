@@ -39,12 +39,29 @@ public:
 
 public:
     MsgItemInfo(void* aItem, Action aAction); // FIXME!
+
+    /**
+     * Create a message object from the specified buffer.
+     * The buffer will be took by the object and the memory
+     * freed when the object will be destroyed.
+     *
+     * If the server is on a Be architecture, all the integers
+     * are swapped.
+     *
+     * @param[in,out] aBuf        a pointer to the buffer to take
+     *                            the pointer will be set to null
+     * @param[in]     aLen        the length in bytes of the buffer
+     */
     MsgItemInfo(uint8_t** aBuf, size_t aLen);
+
+    /* destructor */
     virtual ~MsgItemInfo();
 
 private:
+    /* internal filling of the packet */
     void create(void* aItem, Action aAction); // FIXME!
 
+    /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf);
 
 private:

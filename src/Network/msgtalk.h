@@ -64,6 +64,16 @@ public:
     };
 
 public:
+    /* basic colors ARGB code */
+    static const uint32_t COLOR_RED = 0x00FF0000;
+    static const uint32_t COLOR_MAGENTA = 0x00FF00FF;
+    static const uint32_t COLOR_BLUE = 0x000000FF;
+    static const uint32_t COLOR_CYAN = 0x0000FFFF;
+    static const uint32_t COLOR_GREEN = 0x0000FF00;
+    static const uint32_t COLOR_YELLOW = 0x00FFFF00;
+    static const uint32_t COLOR_WHITE = 0x00FFFFFF;
+
+public:
     #pragma pack(1)
     typedef struct
     {
@@ -78,16 +88,39 @@ public:
 
 public:
     MsgTalk(const char* aHearer, const char* aSpeaker, const char* aWords,
-            Channel aChannel, uint32_t aColor = 0x00FFFFFF);
+            Channel aChannel, uint32_t aColor = COLOR_WHITE);
+
+    /**
+     * Create a message object from the specified buffer.
+     * The buffer will be took by the object and the memory
+     * freed when the object will be destroyed.
+     *
+     * If the server is on a Be architecture, all the integers
+     * are swapped.
+     *
+     * @param[in,out] aBuf        a pointer to the buffer to take
+     *                            the pointer will be set to null
+     * @param[in]     aLen        the length in bytes of the buffer
+     */
     MsgTalk(uint8_t** aBuf, size_t aLen);
+
+    /* destructor */
     virtual ~MsgTalk();
 
+    /**
+     * Process the message received from the client.
+     *
+     * @param[in]     aClient      a pointer to the client which
+     *                             has sent the message
+     */
     virtual void process(Client* aClient);
 
 private:
+    /* internal filling of the packet */
     void create(const char* aHearer, const char* aSpeaker, const char* aEmotion,
                 const char* aWords, Channel aChannel, uint32_t aColor);
 
+    /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf);
 
 private:

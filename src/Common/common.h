@@ -21,6 +21,15 @@
 #include "err.h"
 #include "myassert.h"
 #include "log.h"
+#include "strres.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/time.h> // for timeGetTime()
+#endif
+
+
 
 /*
  *****************************************************
@@ -54,5 +63,16 @@
 #ifndef __TIMESTAMP__
 #define __TIMESTAMP__ (__DATE__" "__TIME__)
 #endif
+
+// If not on Windows, we must implement a kind-of timeGetTime()
+#ifndef _WIN32
+inline unsigned int timeGetTime()
+{
+    struct timeval now;
+    gettimeofday(&now, nullptr);
+    return now.tv_usec / 1000;
+}
+#endif
+
 
 #endif // _FAITH_EMULATOR_COMMON_H_

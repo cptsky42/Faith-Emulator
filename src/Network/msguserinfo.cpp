@@ -1,18 +1,15 @@
 #include "msguserinfo.h"
 #include "stringpacker.h"
+#include "player.h"
 #include <string.h>
 
-// HACK !
-const char* name = "CptSky";
-const char* mate = "Test";
-
-MsgUserInfo :: MsgUserInfo(void* aEntity)
+MsgUserInfo :: MsgUserInfo(Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
-          (name != nullptr ? strlen(name) : 0)  + 1 +
-          (mate != nullptr ? strlen(mate) : 0)  + 1)
+          strlen(aPlayer.getName())  + 1 +
+          strlen(aPlayer.getMate()) + 1)
 {
     mInfo = (MsgInfo*)mBuf;
-    create(aEntity);
+    create(aPlayer);
 }
 
 MsgUserInfo :: MsgUserInfo(uint8_t** aBuf, size_t aLen)
@@ -33,52 +30,52 @@ MsgUserInfo :: ~MsgUserInfo()
 }
 
 void
-MsgUserInfo :: create(void* aEntity)
+MsgUserInfo :: create(Player& aPlayer)
 {
-    //ASSERT(aEntity != nullptr);
-    ASSERT(name != nullptr && name[0] != '\0');
-    ASSERT(mate != nullptr && mate[0] != '\0');
+    ASSERT(&aPlayer != nullptr);
+    ASSERT(aPlayer.getName() != nullptr && aPlayer.getName()[0] != '\0');
+    ASSERT(aPlayer.getMate() != nullptr && aPlayer.getMate()[0] != '\0');
 
-    if (strlen(name) < MAX_NAMESIZE &&
-        strlen(mate) < MAX_NAMESIZE)
+    if (strlen(aPlayer.getName()) < MAX_NAMESIZE &&
+        strlen(aPlayer.getMate()) < MAX_NAMESIZE)
     {
         mInfo->Header.Length = mLen;
         mInfo->Header.Type = MSG_USERINFO;
 
-        mInfo->UniqId = 1000000;
-        mInfo->Look = 1010005;
-        mInfo->Hair = 101;
-        mInfo->Length = 0;
-        mInfo->Fat = 0;
-        mInfo->Money = 20000;
-        mInfo->Exp = 92134;
-        mInfo->MercenaryExp = 10;
-        mInfo->MercenaryLevel = 20;
-        mInfo->Strength = 5;
-        mInfo->Vitality = 7;
-        mInfo->Agility = 9;
-        mInfo->Spirit = 11;
-        mInfo->AddPoints = 3;
-        mInfo->CurHP = 150;
-        mInfo->CurMP = 100;
-        mInfo->PkPoints = 29; // ?
-        mInfo->Level = 50;
-        mInfo->Profession = 10;
-        mInfo->AutoAllot = 1;
-        mInfo->Metempsychosis = 1;
+        mInfo->UniqId = aPlayer.getUniqId();
+        mInfo->Look = aPlayer.getLook();
+        mInfo->Hair = aPlayer.getHair();
+        mInfo->Length = 0; // unused by EoF
+        mInfo->Fat = 0; // unused by EoF
+        mInfo->Money = aPlayer.getMoney();
+        mInfo->Exp = aPlayer.getExp();
+        mInfo->MercenaryExp = aPlayer.getMercenaryExp();
+        mInfo->MercenaryLevel = aPlayer.getMercenaryLevel();
+        mInfo->Strength = aPlayer.getStrength();
+        mInfo->Vitality = aPlayer.getVitality();
+        mInfo->Agility = aPlayer.getAgility();
+        mInfo->Spirit = aPlayer.getSpirit();
+        mInfo->AddPoints = aPlayer.getAddPoints();
+        mInfo->CurHP = aPlayer.getCurHP();
+        mInfo->CurMP = aPlayer.getCurMP();
+        mInfo->PkPoints = aPlayer.getPkPoints(); // ?
+        mInfo->Level = aPlayer.getLevel();
+        mInfo->Profession = aPlayer.getProfession();
+        mInfo->AutoAllot = 1; // not really used by the client...
+        mInfo->Metempsychosis = aPlayer.getMetempsychosis();
         mInfo->ShowName = 1;
 
         memset(mInfo->Padding1, 0, sizeof(mInfo->Padding1));
         memset(mInfo->Padding2, 0, sizeof(mInfo->Padding2));
 
         StringPacker packer(mInfo->Buf);
-        packer.addString(name);
-        packer.addString(mate);
+        packer.addString(aPlayer.getName());
+        packer.addString(aPlayer.getMate());
     }
     else
     {
         LOG("Invalid length: name=%zu, mate=%zu",
-            strlen(name), strlen(mate));
+            strlen(aPlayer.getName()), strlen(aPlayer.getMate()));
     }
 }
 

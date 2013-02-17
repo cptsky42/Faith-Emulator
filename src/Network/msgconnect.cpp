@@ -1,11 +1,10 @@
 #include "msgconnect.h"
 #include "client.h"
+#include "player.h"
 #include "msgtalk.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
-
-#include <QtCore/QCoreApplication>
 
 MsgConnect :: MsgConnect(int32_t aAccUID, int32_t aData, const char* aInfo)
     : Msg(sizeof(MsgInfo))
@@ -56,7 +55,8 @@ MsgConnect :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
-    Client::Status status = aClient->getStatus();
+    Client& client = *aClient;
+    Client::Status status = client.getStatus();
     switch (status)
     {
     case Client::NOT_AUTHENTICATED: // Sent to the AccServer
@@ -69,45 +69,44 @@ MsgConnect :: process(Client* aClient)
         // TODO: load character from DB()
         // TODO: if online, disconnect
 
-        TqCipher& cipher = aClient->getCipher();
+        TqCipher& cipher = client.getCipher();
         cipher.generateKey(mInfo->Data, mInfo->AccountUID);
 
         Msg* msg= nullptr;
         if (false)
         {
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", "NEW_ROLE", MsgTalk::CHANNEL_ENTRANCE);
-            aClient->send(msg);
+            msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_NEW_ROLE, MsgTalk::CHANNEL_ENTRANCE);
+            client.send(msg);
             SAFE_DELETE(msg);
         }
         else
         {
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", "ANSWER_OK", MsgTalk::CHANNEL_ENTRANCE);
-            aClient->send(msg);
+            Player& player = *client.getPlayer();
+
+            msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK, MsgTalk::CHANNEL_ENTRANCE);
+            client.send(msg);
             SAFE_DELETE(msg);
 
-            msg = new MsgUserInfo(nullptr);
-            aClient->send(msg);
+            msg = new MsgUserInfo(player);
+            client.send(msg);
             SAFE_DELETE(msg);
 
             // HACK !
-            msg = new MsgUserAttrib(aClient, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
-            aClient->send(msg);
+            msg = new MsgUserAttrib(&player, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
+            client.send(msg);
             SAFE_DELETE(msg);
 
-            // TODO... Clean the following code...
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", "Faith Emulator by CptSky...", MsgTalk::CHANNEL_TALK);
-            aClient->send(msg);
+            msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_CREATOR_INFO, MsgTalk::CHANNEL_TALK);
+            client.send(msg);
             SAFE_DELETE(msg);
 
-            char str[4096];
-            sprintf(str, "Build for %s (%s), using Qt %s, the %s...\n",
-                    TARGET_SYSTEM, TARGET_ARCH, QT_VERSION_STR, __TIMESTAMP__);
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", str, MsgTalk::CHANNEL_TALK);
-            aClient->send(msg);
+            msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
+            client.send(msg);
             SAFE_DELETE(msg);
 
+            // HACK !
             msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
-            aClient->send(msg);
+            client.send(msg);
             SAFE_DELETE(msg);
         }
 

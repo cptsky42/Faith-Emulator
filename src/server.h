@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "tcpserver.h"
+#include "rc5.h"
 
 class NetworkClient;
 

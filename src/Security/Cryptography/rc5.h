@@ -76,7 +76,7 @@ public:
 private:
     /* magic values */
     static const uint32_t RC5_PW32 = 0xB7E15163;
-    static const uint32_t RC5_QW32 = 0x61C88647;//0x9E3779B9;
+    static const uint32_t RC5_QW32 = 0x61C88647;
 
     /* internal key sizes for uint32_t arrays */
     static const size_t RC5_SUB = ((ROUNDS * 2) + 2);
@@ -86,27 +86,17 @@ private:
     /* left rotation of the bits */
     inline uint32_t rotl(uint32_t aValue, uint32_t aCount)
     {
-        aCount %= 32;
-
-        uint32_t High = aValue >> (32 - (int32_t)aCount);
-        return (aValue << (int32_t)aCount) | High;
-
-//        aCount %= sizeof(uint32_t);
-//        return ((aValue << (int32_t)aCount) |
-//                (aValue >> (sizeof(uint32_t) - (int32_t)aCount)));
+        aCount %= sizeof(uint32_t);
+        uint32_t high = aValue >> (sizeof(uint32_t) - (int32_t)aCount);
+        return (aValue << (int32_t)aCount) | high;
     }
 
     /* right rotation of the bits */
     inline uint32_t rotr(uint32_t aValue, uint32_t aCount)
     {
-        aCount %= 32;
-
-        uint32_t Low = aValue << (32 - (int32_t)aCount);
-        return (aValue >> (int32_t)aCount) | Low;
-
-//        aCount %= sizeof(uint32_t);
-//        return ((aValue >> (int32_t)aCount) |
-//                (aValue << (sizeof(uint32_t) - (int32_t)aCount)));
+        aCount %= sizeof(uint32_t);
+        uint32_t low = aValue << (sizeof(uint32_t) - (int32_t)aCount);
+        return (aValue >> (int32_t)aCount) | low;
     }
 
 private:
