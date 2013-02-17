@@ -1,3 +1,11 @@
+/**
+ * ****** Faith Emulator - Closed Source ******
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
 #ifndef _FAITH_EMULATOR_NETWORK_DEF_H_
 #define _FAITH_EMULATOR_NETWORK_DEF_H_
 

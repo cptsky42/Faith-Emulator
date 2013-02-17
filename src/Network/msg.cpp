@@ -1,3 +1,11 @@
+/**
+ * ****** Faith Emulator - Closed Source ******
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
 #include "msg.h"
 #include "allmsg.h"
 #include "client.h"
@@ -22,6 +30,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
         break;
     case MSG_TALK:
         msg = new MsgTalk(aBuf, aLen);
+        break;
+    case MSG_WALK:
+        msg = new MsgWalk(aBuf, aLen);
         break;
     case MSG_USERINFO:
         msg = new MsgUserInfo(aBuf, aLen);

@@ -6,30 +6,45 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_MSG_CONNECT_H_
-#define _FAITH_EMULATOR_MSG_CONNECT_H_
+#ifndef _FAITH_EMULATOR_MSG_WALK_H_
+#define _FAITH_EMULATOR_MSG_WALK_H_
 
 #include "common.h"
 #include "msg.h"
 
 /**
- *
+ * Msg sent to the client by the MsgServer or by the client to the MsgServer to
+ * indicate a deplacement in a specific direction by walking or running.
  */
-class MsgConnect : public Msg
+class MsgWalk : public Msg
 {
 public:
     #pragma pack(1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
-        int32_t AccountUID;
-        int32_t Data;
-        char Info[MAX_NAMESIZE];
+        /** The unique Id of the entity which is walking */
+        int32_t UniqId;
+        /** The direction of the mouvement */
+        uint8_t Direction;
+        /** The mode of the mouvement (walk/run) */
+        uint8_t Mode;
+        /** Unknown bytes (padding ?) */
+        int16_t Padding1;
     }MsgInfo;
     #pragma pack(pop)
 
 public:
-    MsgConnect(int32_t aAccUID, int32_t aData, const char* aInfo);
+    /**
+     * Create a MsgWalk packet for the specified entity to move it
+     * in the specified direction.
+     *
+     * @param[in]  aUniqId      the unique Id of the entity
+     * @param[in]  aDirection   the direction of the mouvement
+     * @param[in]  aIsRunning   (optional) the mode of the mouvement
+     */
+    MsgWalk(int32_t aUniqId, uint8_t aDirection, bool aIsRunning = false);
 
     /**
      * Create a message object from the specified buffer.
@@ -43,10 +58,10 @@ public:
      *                            the pointer will be set to null
      * @param[in]     aLen        the length in bytes of the buffer
      */
-    MsgConnect(uint8_t** aBuf, size_t aLen);
+    MsgWalk(uint8_t** aBuf, size_t aLen);
 
     /* destructor */
-    ~MsgConnect();
+    ~MsgWalk();
 
     /**
      * Process the message received from the client.
@@ -58,7 +73,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(int32_t aAccUID, int32_t aData, const char* aInfo);
+    void create(int32_t aUniqId, uint8_t aDirection, bool aIsRunning);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf);
@@ -67,4 +82,4 @@ private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer
 };
 
-#endif // _FAITH_EMULATOR_MSG_CONNECT_H_
+#endif // _FAITH_EMULATOR_MSG_WALK_H_

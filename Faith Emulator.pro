@@ -29,7 +29,8 @@ SOURCES += \
     src/Network/msgiteminfo.cpp \
     src/Security/Cryptography/rc5.cpp \
     src/Entity/entity.cpp \
-    src/Entity/player.cpp
+    src/Entity/player.cpp \
+    src/Network/msgwalk.cpp
 
 HEADERS += \
     src/server.h \
@@ -60,7 +61,8 @@ HEADERS += \
     src/Security/Cryptography/rc5.h \
     src/Entity/entity.h \
     src/Entity/player.h \
-    src/strres.h
+    src/strres.h \
+    src/Network/msgwalk.h
 
 INCLUDEPATH += \
     src/Common \

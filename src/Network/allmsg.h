@@ -16,5 +16,6 @@
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
+#include "msgwalk.h"
 
 #endif // _FAITH_EMULATOR_ALL_MSG_H_
