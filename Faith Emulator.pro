@@ -30,7 +30,12 @@ SOURCES += \
     src/Security/Cryptography/rc5.cpp \
     src/Entity/entity.cpp \
     src/Entity/player.cpp \
-    src/Network/msgwalk.cpp
+    src/Network/msgwalk.cpp \
+    src/Map/mapmanager.cpp \
+    src/Map/gamemap.cpp \
+    src/IO/binarywriter.cpp \
+    src/IO/binaryreader.cpp \
+    src/IO/finder.cpp
 
 HEADERS += \
     src/server.h \
@@ -62,7 +67,12 @@ HEADERS += \
     src/Entity/entity.h \
     src/Entity/player.h \
     src/strres.h \
-    src/Network/msgwalk.h
+    src/Network/msgwalk.h \
+    src/Map/mapmanager.h \
+    src/Map/gamemap.h \
+    src/IO/binarywriter.h \
+    src/IO/binaryreader.h \
+    src/IO/finder.h
 
 INCLUDEPATH += \
     src/Common \
@@ -71,4 +81,6 @@ INCLUDEPATH += \
     src/Security/Cryptography \
     src/Database \
     src/Entity \
+    src/IO \
+    src/Map \
     src
