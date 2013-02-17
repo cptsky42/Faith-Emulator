@@ -13,7 +13,6 @@
 
 
 #include "finder.h"
-
 #include <sys/stat.h>
 #include <string.h> // strerror
 

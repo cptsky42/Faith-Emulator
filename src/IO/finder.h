@@ -70,11 +70,44 @@ public:
       */
     static err_t fileUnlock(FILE* aFile);
 
+    /**
+     * Return the current value of the position indicator of the stream.
+     *
+     * @param[in]  aFile   the file descriptor
+     *
+     * @retval -1 on failure
+     * @returns The current value of the position indicator is returned on success
+     */
     static int64_t fileTell(FILE* aFile);
+
+    /**
+     * Set the position indicator associated with the stream to a new position.
+     *
+     * @param[in]  aFile     the file descriptor
+     * @param[in]  aOffset   the number of bytes to offset from origin
+     * @param[in]  aWhence   the position used as reference for the offset
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_SEEK on failure
+     * @returns Error code otherwise
+     */
     static err_t fileSeek(FILE* aFile, int64_t aOffset, int aWhence);
 
+    /**
+     * Determine wheter or not a file exists at the specified path.
+     *
+     * @param[in]   aPath   the path of the file to check
+     *
+     * @retval TRUE if the file exists
+     * @returns FALSE otherwise
+     */
     static bool fileExists(const char* aPath);
 
+    /**
+     * Create a temp file that will be deleted on close.
+     *
+     * @returns A pointer to a FILE object that identifies the stream.
+     */
     static FILE* getTempFile();
 };
 
