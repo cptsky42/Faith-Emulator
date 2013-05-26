@@ -18,6 +18,7 @@ public:
     ~StringPacker();
 
     void addString(const char* aStr);
+    bool getString(char* aOutBuf, size_t aLen, uint8_t aIndex);
 
 private:
     uint8_t* mBuf;

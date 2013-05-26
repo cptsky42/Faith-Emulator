@@ -8,6 +8,7 @@
 
 #include "player.h"
 #include "msgtalk.h"
+#include "msgaction.h"
 #include <stdarg.h>
 
 Player :: Player(Client& aClient)
@@ -34,10 +35,14 @@ Player :: Player(Client& aClient)
     mProfession = 10;
     mMetempsychosis = 2;
 
-    mPosX = 50;
-    mPosY = 50;
-    mMapId = 2016;
+    mPosX = 530;
+    mPosY = 860;
+    mMapId = 1000;
     mDirection = 1;
+
+    mPrevMap = mMapId;
+    mPrevX = mPosX;
+    mPrevY = mPosY;
 }
 
 Player :: ~Player()
@@ -51,9 +56,8 @@ Player :: enterMap()
 //    SendLight();
 //    int	nKeepSecs = 0;		// keep light
 
-//	CMsgAction	msg;
-//	IF_OK(msg.Create(GetID(), GetPosX(), GetPosY(), nKeepSecs, actionMapARGB, GetMap()->GetLight()))
-//		SendMsg(&msg);
+    MsgAction msg(this, 0xFFFFFF, MsgAction::ACTION_MAP_ARGB); // TODO : get map color
+    send(&msg);
 
 //	CMapPtr pMap = GetMap();
 //	if(pMap)
@@ -69,6 +73,20 @@ Player :: enterMap()
 //		DetachStatus((IRole*)this, STATUS_XPFULL);
 
 //	CRole::AttachStatus(this->QueryRole(), STATUS_PK_PROTECT, 0, CHGMAP_LOCK_SECS);
+}
+
+void
+Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
+{
+    mPrevX = mPosX;
+    mPrevY = mPosY;
+
+    mPosX = aX;
+    mPosY = aY;
+    mDirection = aDir;
+    // mAction = Action.StandBy; // TODO
+
+    // IsInBattle = false, MagicIntone = false, Mining = false
 }
 
 void

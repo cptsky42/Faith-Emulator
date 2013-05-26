@@ -73,7 +73,7 @@ MsgAccount :: process(Client* aClient)
 
     aClient->setAccount(mInfo->Account);
 
-    if (true) // Database.Authenticate
+    if (true) // TODO: Database.Authenticate
     {
         fprintf(stdout, "Connection of %s on %s...\n",
                 mInfo->Account, mInfo->Server);
@@ -96,7 +96,7 @@ MsgAccount :: process(Client* aClient)
     }
     else
     {
-        // Bruteforce protection
-        // send bad password packet
+        // TODO: Bruteforce protection
+        // TODO: send bad password packet
     }
 }

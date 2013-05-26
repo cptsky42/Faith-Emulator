@@ -81,7 +81,7 @@ MsgConnect :: process(Client* aClient)
         cipher.generateKey(mInfo->Data, mInfo->AccountUID);
 
         Msg* msg= nullptr;
-        if (false)
+        if (false) // TODO: Check
         {
             msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_NEW_ROLE, MsgTalk::CHANNEL_ENTRANCE);
             client.send(msg);
@@ -113,9 +113,9 @@ MsgConnect :: process(Client* aClient)
             SAFE_DELETE(msg);
 
             // HACK !
-            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
-            client.send(msg);
-            SAFE_DELETE(msg);
+//            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
+//            client.send(msg);
+//            SAFE_DELETE(msg);
         }
 
         break;

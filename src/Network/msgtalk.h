@@ -95,7 +95,7 @@ public:
     #pragma pack(pop)
 
 public:
-    MsgTalk(const char* aHearer, const char* aSpeaker, const char* aWords,
+    MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
             Channel aChannel, uint32_t aColor = COLOR_WHITE);
 
     /**
@@ -125,7 +125,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(const char* aHearer, const char* aSpeaker, const char* aEmotion,
+    void create(const char* aSpeaker, const char* aHearer, const char* aEmotion,
                 const char* aWords, Channel aChannel, uint32_t aColor);
 
     /* internal swapping of the integers for neutral-endian support */

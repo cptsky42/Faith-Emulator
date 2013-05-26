@@ -69,8 +69,21 @@ MsgAction :: process(Client* aClient)
 
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
+
     switch (mInfo->Action)
     {
+    case ACTION_CHG_DIR:
+        {
+            if (player.getUniqId() != mInfo->UniqId)
+            {
+                // TODO disconnect
+                return;
+            }
+
+            player.setDirection((uint8_t)mInfo->Direction);
+            //BroadcastRoomMsg(false)
+            break;
+        }
     case ACTION_ENTER_MAP:
         {
             mInfo->PosX = player.getPosX();

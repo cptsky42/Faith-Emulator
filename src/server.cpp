@@ -18,7 +18,7 @@ using namespace std;
 /* static */
 const uint16_t Server::ACCSERVER_PORT = 9958;
 const uint16_t Server::MSGSERVER_PORT = 5816;
-const char* Server::SERVER_IP = "172.16.104.1";//"192.168.1.112";
+const char* Server::SERVER_IP = "70.80.200.10";//"172.16.104.1";
 
 Server :: Server()
 {

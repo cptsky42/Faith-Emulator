@@ -38,3 +38,32 @@ StringPacker :: addString(const char* aStr)
 
     *mBuf = ++mStrCount;
 }
+
+bool
+StringPacker :: getString(char* aOutBuf, size_t aLen, uint8_t aIndex)
+{
+    ASSERT(aOutBuf != nullptr);
+    ASSERT(aLen > 0);
+
+    bool success = false;
+
+    if (aIndex < mStrCount)
+    {
+        char* ptr = (char*)(mBuf + 1);
+        for (uint8_t i = 0; i < aIndex; ++i)
+        {
+            ptr += (uint8_t)*(ptr++); //the length...
+        }
+
+        uint8_t len = *((uint8_t*)ptr++);
+        if (aLen > len)
+        {
+            memcpy(aOutBuf, ptr, len);
+            aOutBuf[len] = '\0';
+
+            success = true;
+        }
+    }
+
+    return success;
+}

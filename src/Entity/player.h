@@ -21,6 +21,7 @@ public:
     ~Player();
 
     void enterMap();
+    void move(uint16_t aX, uint16_t aY, uint8_t);
 
     void sendSysMsg(const char* aFmt, ...);
 
@@ -92,6 +93,10 @@ private:
 
     uint16_t mMercenaryExp;
     uint16_t mMercenaryLevel;
+
+    uint16_t mPrevMap;
+    uint16_t mPrevX;
+    uint16_t mPrevY;
 };
 
 #endif // _FAITH_EMULATOR_PLAYER_H

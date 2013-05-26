@@ -58,6 +58,8 @@ public:
     uint16_t getPosY() { return mPosY; }
     uint8_t getDirection() { return mDirection; }
 
+    void setDirection(uint8_t aDirection) { mDirection = aDirection; }
+
 protected:
     Entity(int32_t aUniqId);
 

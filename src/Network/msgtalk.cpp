@@ -12,16 +12,16 @@
 #include "msguserattrib.h"
 #include <string.h>
 
-MsgTalk :: MsgTalk(const char* aHearer, const char* aSpeaker, const char* aWords,
+MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
                    Channel aChannel, uint32_t aColor)
     : Msg(sizeof(MsgInfo) +
-          (aHearer != nullptr ? strlen(aHearer) : 0)  + 1 +
           (aSpeaker != nullptr ? strlen(aSpeaker) : 0)  + 1 +
+          (aHearer != nullptr ? strlen(aHearer) : 0)  + 1 +
           /* (aEmotion != nullptr ? strlen(aEmotion) : 0) */ + 1 +
           (aWords != nullptr ? strlen(aWords) : 0) + 1)
 {
     mInfo = (MsgInfo*)mBuf;
-    create(aHearer, aSpeaker, "", aWords, aChannel, aColor); // HACK !
+    create(aSpeaker, aHearer, "", aWords, aChannel, aColor); // HACK !
 }
 
 MsgTalk :: MsgTalk(uint8_t** aBuf, size_t aLen)
@@ -42,16 +42,16 @@ MsgTalk :: ~MsgTalk()
 }
 
 void
-MsgTalk :: create(const char* aHearer, const char* aSpeaker, const char* aEmotion,
+MsgTalk :: create(const char* aSpeaker, const char* aHearer, const char* aEmotion,
                   const char* aWords, Channel aChannel, uint32_t aColor)
 {
-    ASSERT(aHearer != nullptr && aHearer[0] != '\0');
     ASSERT(aSpeaker != nullptr && aSpeaker[0] != '\0');
+    ASSERT(aHearer != nullptr && aHearer[0] != '\0');
     ASSERT(aEmotion != nullptr);
     ASSERT(aWords != nullptr && aWords[0] != '\0');
 
-    if (strlen(aHearer) < MAX_NAMESIZE &&
-        strlen(aSpeaker) < MAX_NAMESIZE &&
+    if (strlen(aSpeaker) < MAX_NAMESIZE &&
+        strlen(aHearer) < MAX_NAMESIZE &&
         strlen(aEmotion) < MAX_NAMESIZE &&
         strlen(aWords) < MAX_WORDSSIZE)
     {
@@ -64,8 +64,8 @@ MsgTalk :: create(const char* aHearer, const char* aSpeaker, const char* aEmotio
         mInfo->Timestamp = timeGetTime();
 
         StringPacker packer(mInfo->Buf);
-        packer.addString(aHearer);
         packer.addString(aSpeaker);
+        packer.addString(aHearer);
         packer.addString(aEmotion);
         packer.addString(aWords);
     }
@@ -82,6 +82,30 @@ MsgTalk :: process(Client* aClient)
     ASSERT(aClient != nullptr);
 
     Client& client = *aClient;
+
+    char speaker[MAX_NAMESIZE];
+    char hearer[MAX_NAMESIZE];
+    char words[MAX_WORDSSIZE];
+
+    StringPacker packer(mInfo->Buf);
+    packer.getString(speaker, sizeof(speaker), 0);
+    packer.getString(hearer, sizeof(hearer), 1);
+    packer.getString(words, sizeof(words), 3);
+
+    // commands
+    if (words[0] == '/')
+    {
+
+        return;
+    }
+
+    // TODO...
+    switch (mInfo->Channel)
+    {
+    default:
+        fprintf(stdout, "%s said %s to %s\n", speaker, words, hearer);
+        break;
+    }
 }
 
 void

@@ -70,13 +70,15 @@ public:
         actionTeamMemeberPos	=37,
         actionQueryPlayer		=38,
         actionAbortMagic		=39,
-        actionMapARGB			=40,
+        /** Set the color of the map */
+        ACTION_MAP_ARGB = 40,
         actionMapStatus			=41,		// abandon
         actionQueryTeamMember	=42,
         actionCreateBooth		=43,		// ø™ º∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
         actionSuspendBooth		=44,		//  ’∆∞⁄ÃØ
         actionResumeBooth		=45,		// ºÃ–¯∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
-        actionDestroyBooth		=46,		// Õ£÷π∞⁄ÃØ
+        /** Destroy the booth */
+        ACTION_DESTROY_BOOTH = 46,
         actionQueryCryOut		=47,		// ≤È—Ø∞⁄ÃØﬂ∫∫»
         actionPostCmd			=48,		// to client only
         actionQueryEquipment	=49,		// to server //idUserŒ™–Ë“™queryµƒPlayerID

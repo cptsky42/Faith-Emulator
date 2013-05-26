@@ -96,21 +96,10 @@ MsgWalk :: process(Client* aClient)
 //           }
 //       }
 
-    // TODO: Implement move()
-//    Player.PrevX = Player.X;
-//            Player.PrevY = Player.Y;
-
-//            Player.X = NewX;
-//            Player.Y = NewY;
-//            Player.Direction = Dir;
-//            Player.Action = (Int16)MsgAction.Emotion.StandBy;
-
-//            Player.IsInBattle = false;
-//            Player.MagicIntone = false;
-//            Player.Mining = false;
+    player.move(newX, newY, dir);
 
     client.send(this);
-//            Player.Screen.Move(Buffer);
+    //  Player.Screen.Move(Buffer);
 }
 
 void
