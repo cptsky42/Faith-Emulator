@@ -10,7 +10,7 @@
 #include "client.h"
 #include "networkclient.h"
 #include "msg.h"
-#include "Database/database.h"
+#include "database.h"
 #include <string>
 
 using namespace std;

@@ -9,6 +9,7 @@
 #include "msgaccount.h"
 #include "client.h"
 #include "server.h"
+#include "database.h"
 #include "msgconnect.h"
 #include <string>
 #include <string.h>
@@ -71,28 +72,31 @@ MsgAccount :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
-    aClient->setAccount(mInfo->Account);
+    Client& client = *aClient;
+    Database& db = Database::getInstance();
 
-    if (true) // TODO: Database.Authenticate
+    client.setAccount(mInfo->Account);
+
+    uint8_t seed[RC5::KEY_SIZE] =
+            { 0x3C, 0xDC, 0xFE, 0xE8, 0xC4, 0x54, 0xD6, 0x7E, 0x16, 0xA6, 0xF8, 0x1A, 0xE8, 0xD0, 0x38, 0xBE };
+
+    RC5 cipher;
+    cipher.generateKey(seed);
+    cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
+
+    fprintf(stderr, "Password = %s\n", mInfo->Password);
+
+    if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
     {
         fprintf(stdout, "Connection of %s on %s...\n",
                 mInfo->Account, mInfo->Server);
-
-        uint8_t seed[RC5::KEY_SIZE] =
-                { 0x3C, 0xDC, 0xFE, 0xE8, 0xC4, 0x54, 0xD6, 0x7E, 0x16, 0xA6, 0xF8, 0x1A, 0xE8, 0xD0, 0x38, 0xBE };
-
-        RC5 cipher;
-        cipher.generateKey(seed);
-        cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
-
-        fprintf(stderr, "Password = %s\n", mInfo->Password);
 
         // FIXME !
         int32_t accUID = 1;
         int32_t token = 1;
 
         MsgConnect msg(accUID, token, Server::SERVER_IP);
-        aClient->send(&msg);
+        client.send(&msg);
     }
     else
     {
