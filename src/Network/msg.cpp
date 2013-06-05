@@ -25,6 +25,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
     case MSG_ACCOUNT:
         msg = new MsgAccount(aBuf, aLen);
         break;
+    case MSG_LOGINACCOUNTEX:
+        msg = new MsgLoginAccountEx(aBuf, aLen);
+        break;
     case MSG_CONNECT:
         msg = new MsgConnect(aBuf, aLen);
         break;
@@ -95,7 +98,7 @@ Msg :: process(Client* aClient)
     fprintf(stdout, "Unknown msg[%04d], len=[%03d]\n",
             header->Type, header->Length);
 
-    //hexDump(mBuf, mLen);
+    dump(this);
 }
 
 /* static */

@@ -35,7 +35,9 @@ SOURCES += \
     src/Map/gamemap.cpp \
     src/IO/binarywriter.cpp \
     src/IO/binaryreader.cpp \
-    src/IO/finder.cpp
+    src/IO/finder.cpp \
+    src/Network/msgloginaccountex.cpp \
+    src/Network/msgloginreplyex.cpp
 
 HEADERS += \
     src/server.h \
@@ -72,7 +74,9 @@ HEADERS += \
     src/Map/gamemap.h \
     src/IO/binarywriter.h \
     src/IO/binaryreader.h \
-    src/IO/finder.h
+    src/IO/finder.h \
+    src/Network/msgloginaccountex.h \
+    src/Network/msgloginreplyex.h
 
 INCLUDEPATH += \
     src/Common \

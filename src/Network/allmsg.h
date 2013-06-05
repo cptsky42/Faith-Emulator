@@ -17,5 +17,7 @@
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
 #include "msgwalk.h"
+#include "msgloginaccountex.h"
+#include "msgloginreplyex.h"
 
 #endif // _FAITH_EMULATOR_ALL_MSG_H_
