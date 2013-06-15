@@ -58,6 +58,8 @@ public:
     uint16_t getPosY() { return mPosY; }
     uint8_t getDirection() { return mDirection; }
 
+    void setMapId(int16_t aMapId) { mMapId = aMapId; }
+    void setPosition(uint16_t aPosX, uint16_t aPosY) { mPosX = aPosX; mPosY = aPosY; }
     void setDirection(uint8_t aDirection) { mDirection = aDirection; }
 
 protected:

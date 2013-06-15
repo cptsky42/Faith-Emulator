@@ -10,6 +10,8 @@
 #include "stringpacker.h"
 #include "msgaction.h"
 #include "msguserattrib.h"
+#include "client.h"
+#include "player.h"
 #include <string.h>
 
 MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
@@ -82,6 +84,7 @@ MsgTalk :: process(Client* aClient)
     ASSERT(aClient != nullptr);
 
     Client& client = *aClient;
+    Player& player = *client.getPlayer();
 
     char speaker[MAX_NAMESIZE];
     char hearer[MAX_NAMESIZE];
@@ -95,7 +98,22 @@ MsgTalk :: process(Client* aClient)
     // commands
     if (words[0] == '/')
     {
+        if (true) // TODO: Real substring check
+        {
+            int mapId, x, y;
+            if (sscanf(words, "/mm %d %d %d", &mapId, &x, &y) == 3)
+            {
+                player.setMapId(mapId);
+                player.setPosition(x, y);
 
+                MsgAction msg(&player, player.getMapId(), MsgAction::ACTION_ENTER_MAP);
+                client.send(&msg);
+            }
+            else
+            {
+                player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");
+            }
+        }
         return;
     }
 
