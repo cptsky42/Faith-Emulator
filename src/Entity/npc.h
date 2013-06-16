@@ -15,6 +15,8 @@
 
 class Npc : public Entity
 {
+    // type: 6, 9, 21, 22, 23, 24
+
 public:
     Npc(int32_t aUID, const char* aName,
         uint8_t aType, int16_t aLook,

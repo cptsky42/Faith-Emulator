@@ -48,6 +48,9 @@ MsgNpcInfo :: create(Npc& aNpc)
     mInfo->Look = (int16_t)aNpc.getLook();
     mInfo->Type = aNpc.getType();
     mInfo->Sort = aNpc.getSort();
+    mInfo->Length = 0; // Unused by EoF
+    mInfo->Fat = 0; // Unused by EoF
+    mInfo->Buf[0] = 0;
 
     if (aNpc.getName() != nullptr)
     {

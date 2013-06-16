@@ -49,6 +49,6 @@ const uint16_t MSG_ACCOUNT      = MSG_GENERAL + 51;
 const uint16_t MSG_CONNECT      = MSG_GENERAL + 52;
 const uint16_t MSG_TRADE        = MSG_GENERAL + 56;
 
-const uint16_t MSG_NPCINFO        = MSG_GENERAL + 110;
+const uint16_t MSG_NPCINFO        = MSG_GENERAL + 1030;
 
 #endif // _FAITH_EMULATOR_NETWORK_DEF_H_

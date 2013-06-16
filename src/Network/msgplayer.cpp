@@ -63,8 +63,8 @@ MsgPlayer :: create(Player& aPlayer)
 //        mInfo->Look = aPlayer.getLook();
 //        mInfo->Hair = aPlayer.getHair();
 
-//        //mInfo->Length = 0; // Unused by EoF
-//        //mInfo->Fat = 0; // Unused by EoF
+        mInfo->Length = 0; // Unused by EoF
+        mInfo->Fat = 0; // Unused by EoF
 
 //        mInfo->WeaponRType = 510010;
 //        mInfo->WeaponLType = 510010;

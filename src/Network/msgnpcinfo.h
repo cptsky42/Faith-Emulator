@@ -26,9 +26,11 @@ public:
         int32_t UniqId;
         uint16_t PosX;
         uint16_t PosY;
-        int16_t Look;
-        int16_t Type;
-        int16_t Sort;
+        int16_t Look; // dir for statuary
+        int16_t Type; // frame for statuary
+        int16_t Sort; // pose for statuary
+        int8_t Length;
+        int8_t Fat;
         uint8_t Buf[1];
     }MsgInfo;
     #pragma pack(pop)

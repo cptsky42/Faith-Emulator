@@ -101,6 +101,7 @@ MsgTalk :: process(Client* aClient)
         if (true) // TODO: Real substring check
         {
             int mapId, x, y;
+            int type;
             if (sscanf(words, "/mm %d %d %d", &mapId, &x, &y) == 3)
             {
                 player.setMapId(mapId);
