@@ -45,7 +45,7 @@ MsgAction :: create(Entity* aEntity, int32_t aData, Action aAction)
     mInfo->Timestamp = timeGetTime();
     if (aEntity != nullptr)
     {
-        mInfo->UniqId = aEntity->getUniqId();
+        mInfo->UniqId = aEntity->getUID();
         mInfo->PosX = aEntity->getPosX();
         mInfo->PosY = aEntity->getPosY();
         mInfo->Direction = aEntity->getDirection();
@@ -75,7 +75,7 @@ MsgAction :: process(Client* aClient)
     {
     case ACTION_CHG_DIR:
         {
-            if (player.getUniqId() != mInfo->UniqId)
+            if (player.getUID() != mInfo->UniqId)
             {
                 // TODO disconnect
                 return;

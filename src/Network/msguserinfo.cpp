@@ -50,7 +50,7 @@ MsgUserInfo :: create(Player& aPlayer)
         mInfo->Header.Length = mLen;
         mInfo->Header.Type = MSG_USERINFO;
 
-        mInfo->UniqId = aPlayer.getUniqId();
+        mInfo->UniqId = aPlayer.getUID();
         mInfo->Look = aPlayer.getLook();
         mInfo->Hair = aPlayer.getHair();
         mInfo->Length = 0; // unused by EoF

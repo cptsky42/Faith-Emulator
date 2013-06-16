@@ -18,7 +18,7 @@ class Player : public Entity
 {
 public:
     Player(Client& aClient);
-    ~Player();
+    virtual ~Player();
 
     void enterMap();
     void move(uint16_t aX, uint16_t aY, uint8_t);

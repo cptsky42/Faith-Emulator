@@ -48,10 +48,10 @@ public:
     static const int32_t CELLS_PER_VIEW = 18;
 
 public:
-    ~Entity();
+    virtual ~Entity();
 
 public:
-    int32_t getUniqId() { return mUniqId; }
+    int32_t getUID() { return mUniqId; }
     int32_t getLook() { return mLook; }
     int16_t getMapId() { return mMapId; }
     uint16_t getPosX() { return mPosX; }

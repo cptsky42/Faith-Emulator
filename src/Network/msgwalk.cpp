@@ -56,7 +56,7 @@ MsgWalk :: process(Client* aClient)
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
 
-    if (player.getUniqId() != mInfo->UniqId)
+    if (player.getUID() != mInfo->UniqId)
     {
         // TODO: Disconnect
         return;

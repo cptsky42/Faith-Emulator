@@ -36,7 +36,9 @@ SOURCES += \
     src/IO/binarywriter.cpp \
     src/IO/binaryreader.cpp \
     src/IO/finder.cpp \
-    src/Network/msgplayer.cpp
+    src/Network/msgplayer.cpp \
+    src/Network/msgnpcinfo.cpp \
+    src/Entity/npc.cpp
 
 HEADERS += \
     src/server.h \
@@ -74,7 +76,9 @@ HEADERS += \
     src/IO/binarywriter.h \
     src/IO/binaryreader.h \
     src/IO/finder.h \
-    src/Network/msgplayer.h
+    src/Network/msgplayer.h \
+    src/Network/msgnpcinfo.h \
+    src/Entity/npc.h
 
 INCLUDEPATH += \
     src/Common \

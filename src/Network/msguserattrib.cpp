@@ -42,7 +42,7 @@ MsgUserAttrib :: create(Entity* aEntity, int32_t aData, UserAttrType aType)
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_USERATTRIB;
 
-    mInfo->UniqId = aEntity != nullptr ? aEntity->getUniqId() : 0;
+    mInfo->UniqId = aEntity != nullptr ? aEntity->getUID() : 0;
     mInfo->Amount = 1;
 
     mInfo->Attrib[0].Type = (int32_t)aType;
