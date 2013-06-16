@@ -35,7 +35,8 @@ SOURCES += \
     src/Map/gamemap.cpp \
     src/IO/binarywriter.cpp \
     src/IO/binaryreader.cpp \
-    src/IO/finder.cpp
+    src/IO/finder.cpp \
+    src/Network/msgplayer.cpp
 
 HEADERS += \
     src/server.h \
@@ -72,7 +73,8 @@ HEADERS += \
     src/Map/gamemap.h \
     src/IO/binarywriter.h \
     src/IO/binaryreader.h \
-    src/IO/finder.h
+    src/IO/finder.h \
+    src/Network/msgplayer.h
 
 INCLUDEPATH += \
     src/Common \

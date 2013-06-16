@@ -13,6 +13,7 @@
 #include "msgconnect.h"
 #include "msgtalk.h"
 #include "msgaction.h"
+#include "msgplayer.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"

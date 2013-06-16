@@ -30,7 +30,7 @@ public:
         /** The look of the player */
         int32_t Look;
         /** The hair of the player */
-        int16_t Hair;
+        uint16_t Hair;
         /** The length of the player (unused) */
         int8_t Length;
         /** The fat of the player (unused) */

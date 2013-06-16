@@ -86,7 +86,8 @@ MsgAccount :: process(Client* aClient)
 
     fprintf(stderr, "Password = %s\n", mInfo->Password);
 
-    if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
+    // TODO: Uncomment me !
+    if (true)//if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
     {
         fprintf(stdout, "Connection of %s on %s...\n",
                 mInfo->Account, mInfo->Server);

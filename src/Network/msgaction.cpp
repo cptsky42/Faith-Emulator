@@ -10,6 +10,7 @@
 #include "client.h"
 #include "entity.h"
 #include "player.h"
+#include "msgplayer.h"
 
 MsgAction :: MsgAction(Entity* aEntity, int32_t aData, Action aAction)
     : Msg(sizeof(MsgInfo))
