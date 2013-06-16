@@ -12,7 +12,7 @@
 
 MsgNpcInfo :: MsgNpcInfo(Npc& aNpc)
     : Msg(sizeof(MsgInfo) +
-          (aNpc.getName() != nullptr ? strlen(aNpc.getName()) + 1 : 0))  // TODO: HACK
+          (aNpc.getName() != nullptr ? strlen(aNpc.getName()) + 1 : 0))
 {
     mInfo = (MsgInfo*)mBuf;
     create(aNpc);

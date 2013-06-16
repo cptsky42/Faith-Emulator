@@ -16,7 +16,11 @@
 
 #include <stdio.h>
 
-#define LOG(fmt, ...) \
-    fprintf(stderr, fmt "\n", ## __VA_ARGS__)
+#ifndef _MSC_VER
+#define __FUNCTION__ __func__
+#endif // _MSC_VER
+
+#define BL_LOG(fmt, ...) \
+    fprintf(stderr, "[%s:%s():%d] " fmt "\n", __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 #endif // _FAITH_EMULATOR_LOG_H_

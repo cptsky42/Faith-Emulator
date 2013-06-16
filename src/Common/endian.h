@@ -95,8 +95,12 @@
  */
 inline int16_t bswap16(int16_t x)
 {
+    #if ((__GNUC__ * 100) + __GNUC_MINOR__) >= 480
+    return __builtin_bswap16(x); // GCC 4.8+
+    #else
     return ((((uint16_t)(x) & 0xFF00) >> 8) | \
             (((uint16_t)(x) & 0x00FF) << 8));
+    #endif
 }
 
 /**

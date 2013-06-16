@@ -20,6 +20,7 @@
 #include "endian.h"
 #include "err.h"
 #include "myassert.h"
+#include "unicode.h"
 #include "log.h"
 #include "strres.h"
 

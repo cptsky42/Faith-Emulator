@@ -56,46 +56,56 @@
 
 
 
-
-
 #if defined(__i386__) || defined(__i386) || defined(__X86__) || \
     defined(_X86_) || defined(_M_IX86)
-#define TARGET_ARCH "x86"
+#define TARGET_INSTR "x86"
+#define TARGET_ARCH "Intel 32-bit"
 
 #elif defined(__x86_64__) || defined(__amd64__) || defined(__x86_64) || \
     defined(__amd64) || defined(_M_X64) || defined(_M_AMD64)
-#define TARGET_ARCH "x86_x64"
+#define TARGET_INSTR "x86_x64"
+#define TARGET_ARCH "Intel 64-bit"
 
 #elif defined(__ppc__) || defined(__powerpc__) || \
     defined(_M_MPPC) || defined(_M_PPC)
-#define TARGET_ARCH "ppc"
+#define TARGET_INSTR "ppc"
+#define TARGET_ARCH "PowerPC 32-bit"
 
 #elif defined(__ppc64__)
-#define TARGET_ARCH "ppc64"
+#define TARGET_INSTR "ppc64"
+#define TARGET_ARCH "PowerPC 64-bit"
 
 #elif defined(__ia64__) || defined(__IA64__) || defined(__ia64) || \
     defined(__IA64) || defined(__itanium__) || defined(_M_IA64)
-#define TARGET_ARCH "ia64"
+#define TARGET_INSTR "ia64"
+#define TARGET_ARCH "Itanium 64-bit"
 
 #elif defined(__arm__) || defined(_ARM)
-#define TARGET_ARCH "arm"
+#define TARGET_INSTR "arm"
+#define TARGET_ARCH "ARM"
 
 #elif defined(__mips__) || defined(__MIPS__) || defined(__mips)
-#define TARGET_ARCH "mips"
+#define TARGET_INSTR "mips"
+#define TARGET_ARCH "MIPS"
 
 #elif defined(__sparc__) || defined(__sparc)
-#define TARGET_ARCH "sparc"
+#define TARGET_INSTR "sparc"
+#define TARGET_ARCH "SPARC"
 
 #elif defined(__alpha__) || defined(__alpha) || defined(_M_ALPHA)
-#define TARGET_ARCH "alpha"
+#define TARGET_INSTR "alpha"
+#define TARGET_ARCH "Alpha"
 
 #elif defined(__hppa__) || defined (__hppa) || defined(__HPPA__)
-#define TARGET_ARCH "hppa"
+#define TARGET_INSTR "hppa"
+#define TARGET_ARCH "HP/PA"
 
 #elif defined(__m68k__) || defined(__MC68K__) || defined(M68000)
-#define TARGET_ARCH "m68k"
+#define TARGET_INSTR "m68k"
+#define TARGET_ARCH "Motorola 68k"
 
 #else
+#define TARGET_INSTR "uknw"
 #define TARGET_ARCH "unknown"
 
 #endif // TARGET_ARCH

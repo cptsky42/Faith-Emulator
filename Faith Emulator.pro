@@ -78,7 +78,8 @@ HEADERS += \
     src/IO/finder.h \
     src/Network/msgplayer.h \
     src/Network/msgnpcinfo.h \
-    src/Entity/npc.h
+    src/Entity/npc.h \
+    src/Common/unicode.h
 
 INCLUDEPATH += \
     src/Common \
