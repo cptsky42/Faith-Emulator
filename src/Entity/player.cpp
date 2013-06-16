@@ -98,7 +98,7 @@ Player :: sendSysMsg(const char* aFmt, ...)
     char buf[MAX_WORDSSIZE];
     vsprintf(buf, aFmt, args);
 
-    MsgTalk msg(STR_SYSTEM_NAME, getName(), buf, MsgTalk::CHANNEL_SYSTEM, MsgTalk::COLOR_RED);
+    MsgTalk msg(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, buf, MsgTalk::CHANNEL_SYSTEM, MsgTalk::COLOR_RED);
     send(&msg);
 
     va_end(args);
