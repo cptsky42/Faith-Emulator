@@ -19,6 +19,9 @@ class Player;
 
 class Client
 {
+    // !!! class has pointer data members !!!
+    PROHIBIT_COPY(Client);
+
 public:
     enum Status
     {

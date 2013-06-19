@@ -10,6 +10,7 @@
 #define _FAITH_EMULATOR_DATABASE_H_
 
 #include "common.h"
+#include "env.h"
 #include <QtSql/QSqlDatabase>
 
 class QSqlQuery;
@@ -19,7 +20,7 @@ class Player;
  * The global database class for interation with the SQL-like database.
  * It is a singleton and will be created when getting the instance.
  */
-class Database
+class Database : public Environment::Global
 {
     // the database can manipulate the Player data...
     friend class Player;
@@ -35,7 +36,7 @@ public:
 
 public:
     /* destructor */
-    ~Database();
+    virtual ~Database();
 
     /**
      * Establish a connection to the host using the specified account.
@@ -63,6 +64,15 @@ public:
      * @returns Error code otherwise
      */
     err_t authenticate(const char* aAccount, const char* aPassword);
+
+    /**
+     * Load all NPCs in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllNPCs();
 
 private:
     /* constructor */

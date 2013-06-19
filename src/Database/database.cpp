@@ -8,6 +8,7 @@
 
 #include "database.h"
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlResult>
 #include <QVariant>
 
 /* static */
@@ -91,6 +92,37 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
         {
             LOG("The cmd should return only one result, not %d", query.size());
             err = ERROR_NOT_FOUND; // suppose the account is not found
+        }
+    }
+    else
+    {
+        LOG("Failed to execute the following cmd : %s", cmd);
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
+err_t
+Database :: loadAllNPCs()
+{
+    const char* cmd = "SELECT * FROM npc";
+
+    err_t err = ERROR_SUCCESS;
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+
+    if (query.exec())
+    {
+        while (query.next())
+        {
+//            QString password = query.value(0).toString();
+//            if (password.compare(aPassword) != 0)
+//            {
+//                // the Account/Password pair is not found
+//                err = ERROR_NOT_FOUND;
+//            }
         }
     }
     else

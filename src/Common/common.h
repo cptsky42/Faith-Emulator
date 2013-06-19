@@ -50,6 +50,18 @@
 
 /*
  *****************************************************
+ * Protection macros
+ ****************************************************
+ */
+
+// Prohibit the copy of the object
+#define PROHIBIT_COPY(__class)                   \
+    private:                                        \
+        __class(const __class&);                    \
+        __class& operator=(const __class&)
+
+/*
+ *****************************************************
  * Cross-compiling definitions
  ****************************************************
  */

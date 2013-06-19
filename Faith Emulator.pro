@@ -40,7 +40,9 @@ SOURCES += \
     src/Network/msgnpcinfo.cpp \
     src/Entity/npc.cpp \
     src/Entity/advancedentity.cpp \
-    src/Entity/monster.cpp
+    src/Entity/monster.cpp \
+    src/world.cpp \
+    src/Common/env.cpp
 
 HEADERS += \
     src/server.h \
@@ -83,7 +85,9 @@ HEADERS += \
     src/Entity/npc.h \
     src/Common/unicode.h \
     src/Entity/advancedentity.h \
-    src/Entity/monster.h
+    src/Entity/monster.h \
+    src/world.h \
+    src/Common/env.h
 
 INCLUDEPATH += \
     src/Common \
