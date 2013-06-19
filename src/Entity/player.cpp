@@ -12,7 +12,7 @@
 #include <stdarg.h>
 
 Player :: Player(Client& aClient)
-    : Entity(1000000), mClient(aClient)
+    : AdvancedEntity(1000000), mClient(aClient)
 {
     mName = "CptSky[PM]";
     mMate = "None";

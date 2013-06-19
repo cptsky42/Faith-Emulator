@@ -10,11 +10,11 @@
 #define _FAITH_EMULATOR_PLAYER_H
 
 #include "common.h"
-#include "entity.h"
+#include "advancedentity.h"
 #include "client.h"
 #include <string>
 
-class Player : public Entity
+class Player : public AdvancedEntity
 {
 public:
     Player(Client& aClient);
@@ -29,12 +29,11 @@ public:
     inline void send(uint8_t* aBuf, size_t aLen) { mClient.send(aBuf, aLen); }
 
 public:
-    const char* getName() { return mName.c_str(); }
+
     const char* getMate() { return mMate.c_str(); }
 
     int16_t getHair() { return mHair; }
 
-    uint8_t getLevel() { return mLevel; }
     uint8_t getProfession() { return mProfession; }
     uint8_t getMetempsychosis() { return mMetempsychosis; }
     int32_t getExp() { return mExp; }
@@ -45,8 +44,6 @@ public:
     uint16_t getSpirit() { return mSpirit; }
     uint16_t getAddPoints() { return mAddPoints; }
 
-    uint16_t getCurHP() { return mCurHP; }
-    uint16_t getMaxHP() { return mMaxHP; }
     uint16_t getCurMP() { return mCurMP; }
     uint16_t getMaxMP() { return mMaxMP; }
 
@@ -63,12 +60,10 @@ public:
 private:
     Client& mClient;
 
-    std::string mName;
     std::string mMate;
 
     int16_t mHair;
 
-    uint8_t mLevel;
     uint8_t mProfession;
     uint8_t mMetempsychosis;
     int32_t mExp;
@@ -79,8 +74,6 @@ private:
     uint16_t mSpirit;
     uint16_t mAddPoints;
 
-    uint16_t mCurHP;
-    uint16_t mMaxHP;
     uint16_t mCurMP;
     uint16_t mMaxMP;
 

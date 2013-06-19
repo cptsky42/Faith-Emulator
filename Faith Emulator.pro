@@ -38,7 +38,9 @@ SOURCES += \
     src/IO/finder.cpp \
     src/Network/msgplayer.cpp \
     src/Network/msgnpcinfo.cpp \
-    src/Entity/npc.cpp
+    src/Entity/npc.cpp \
+    src/Entity/advancedentity.cpp \
+    src/Entity/monster.cpp
 
 HEADERS += \
     src/server.h \
@@ -79,7 +81,9 @@ HEADERS += \
     src/Network/msgplayer.h \
     src/Network/msgnpcinfo.h \
     src/Entity/npc.h \
-    src/Common/unicode.h
+    src/Common/unicode.h \
+    src/Entity/advancedentity.h \
+    src/Entity/monster.h
 
 INCLUDEPATH += \
     src/Common \

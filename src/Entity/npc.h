@@ -15,6 +15,7 @@
 
 class Npc : public Entity
 {
+public:
     // type: 6, 9, 21, 22, 23, 24
 
 public:
@@ -25,14 +26,12 @@ public:
     virtual ~Npc();
 
 public:
-    const char* getName() { return (mName.empty() ? nullptr : mName.c_str()); }
-
     uint8_t getType() { return mType; }
     uint8_t getBase() { return mBase; }
     uint8_t getSort() { return mSort; }
 
 private:
-    std::string mName;
+
     uint8_t mType;
     uint8_t mBase;
     uint8_t mSort;

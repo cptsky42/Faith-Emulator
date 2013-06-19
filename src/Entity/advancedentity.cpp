@@ -6,19 +6,20 @@
  * sections in the LICENSE file.
  */
 
-#include "entity.h"
+#include "advancedentity.h"
 
-Entity :: Entity(int32_t aUID)
-    : mUID(aUID)
+AdvancedEntity :: AdvancedEntity(int32_t aUID)
+    : Entity(aUID)
 {
-    mLook = 0;
-    mMapId = 0;
-    mPosX = 0;
-    mPosY = 0;
-    mDirection = 0;
+    mName = "Unknown";
+
+    mLevel = 1;
+
+    mCurHP = 0;
+    mMaxHP = 0;
 }
 
-Entity :: ~Entity()
+AdvancedEntity :: ~AdvancedEntity()
 {
 
 }
