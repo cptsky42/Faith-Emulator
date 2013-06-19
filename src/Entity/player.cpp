@@ -7,9 +7,15 @@
  */
 
 #include "player.h"
+#include "world.h"
+#include "npc.h"
 #include "msgtalk.h"
 #include "msgaction.h"
+#include "msgnpcinfo.h"
 #include <stdarg.h>
+#include <map>
+
+using namespace std;
 
 Player :: Player(Client& aClient)
     : AdvancedEntity(1000000), mClient(aClient)
@@ -35,8 +41,8 @@ Player :: Player(Client& aClient)
     mProfession = 10;
     mMetempsychosis = 2;
 
-    mPosX = 530;
-    mPosY = 860;
+    mPosX = 517;
+    mPosY = 832;
     mMapId = 1000;
     mDirection = 1;
 
@@ -58,6 +64,21 @@ Player :: enterMap()
 
     MsgAction msg(this, 0xFFFFFF, MsgAction::ACTION_MAP_ARGB); // TODO : get map color
     send(&msg);
+
+    // TODO: HACK!
+    World& world = World::getInstance();
+    for (map<int32_t, Npc*>::iterator
+            it = world.AllNPCs.begin(), end = world.AllNPCs.end();
+         it != end; ++it)
+    {
+        Npc* npc = it->second;
+
+        if (npc->getMapId() == mMapId)
+        {
+            MsgNpcInfo info(*npc);
+            send(&info);
+        }
+    }
 
 //	CMapPtr pMap = GetMap();
 //	if(pMap)

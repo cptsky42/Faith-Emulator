@@ -7,6 +7,8 @@
  */
 
 #include "database.h"
+#include "world.h"
+#include "npc.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlResult>
 #include <QVariant>
@@ -115,14 +117,24 @@ Database :: loadAllNPCs()
 
     if (query.exec())
     {
+        World& world = World::getInstance();
         while (query.next())
         {
-//            QString password = query.value(0).toString();
-//            if (password.compare(aPassword) != 0)
-//            {
-//                // the Account/Password pair is not found
-//                err = ERROR_NOT_FOUND;
-//            }
+            Npc* npc = new Npc(
+                           (int32_t)query.value(0).toInt(),
+                           nullptr,
+                           (uint8_t)query.value(2).toInt(),
+                           (int16_t)query.value(3).toInt(),
+                           (int16_t)query.value(4).toInt(),
+                           (uint16_t)query.value(5).toInt(),
+                           (uint16_t)query.value(6).toInt(),
+                           (uint8_t)query.value(9).toInt(),
+                           (uint8_t)query.value(10).toInt());
+
+            ASSERT(npc != nullptr);
+            ASSERT(world.AllNPCs.find(npc->getUID()) == world.AllNPCs.end());
+
+            world.AllNPCs[npc->getUID()] = npc;
         }
     }
     else

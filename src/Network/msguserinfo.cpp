@@ -13,7 +13,7 @@
 
 MsgUserInfo :: MsgUserInfo(Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
-          strlen(aPlayer.getName())  + 1 +
+          strlen(aPlayer.getName()) + 1 +
           strlen(aPlayer.getMate()) + 1)
 {
     mInfo = (MsgInfo*)mBuf;

@@ -29,7 +29,6 @@ public:
     inline void send(uint8_t* aBuf, size_t aLen) { mClient.send(aBuf, aLen); }
 
 public:
-
     const char* getMate() { return mMate.c_str(); }
 
     int16_t getHair() { return mHair; }

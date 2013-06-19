@@ -7,6 +7,9 @@
  */
 
 #include "world.h"
+#include "npc.h"
+
+using namespace std;
 
 /* static */
 World* World::sInstance = nullptr;
@@ -24,6 +27,7 @@ World :: getInstance()
 }
 
 World :: World()
+    : AllNPCs(mAllNPCs)
 {
 
 }

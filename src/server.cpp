@@ -29,6 +29,8 @@ Server :: Server()
         // failed to connect
     }
 
+    db.loadAllNPCs();
+
     mAccServer.listen(ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;
     mAccServer.onReceive = &Server::receiveHandler;

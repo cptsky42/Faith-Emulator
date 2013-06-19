@@ -11,6 +11,9 @@
 
 #include "common.h"
 #include "env.h"
+#include <map>
+
+class Npc;
 
 class World : public Environment::Global
 {
@@ -21,12 +24,18 @@ public:
     /* destructor */
     virtual ~World();
 
+public:
+    std::map<int32_t, Npc*>& AllNPCs;
+
 private:
     /* constructor */
     World();
 
 private:
     static World* sInstance; //!< static instance of the singleton
+
+private:
+    std::map<int32_t, Npc*> mAllNPCs;
 };
 
 #endif // _FAITH_EMULATOR_WORLD_H_
