@@ -9,14 +9,23 @@
 #include "msgplayer.h"
 #include "stringpacker.h"
 #include "player.h"
+#include "monster.h"
 #include <string.h>
 
 MsgPlayer :: MsgPlayer(Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
-          strlen(aPlayer.getName()) + 1 + 10)  // TODO: HACK
+          strlen(aPlayer.getName()) + 1)
 {
     mInfo = (MsgInfo*)mBuf;
     create(aPlayer);
+}
+
+MsgPlayer :: MsgPlayer(Monster& aMonster)
+    : Msg(sizeof(MsgInfo) +
+          strlen(aMonster.getName()) + 1)
+{
+    mInfo = (MsgInfo*)mBuf;
+    create(aMonster);
 }
 
 MsgPlayer :: MsgPlayer(uint8_t** aBuf, size_t aLen)
@@ -43,50 +52,82 @@ MsgPlayer :: create(Player& aPlayer)
 
     if (strlen(aPlayer.getName()) < MAX_NAMESIZE)
     {
-        LOG("%d", mLen);
-        memset(mInfo, 0, mLen);
-
         mInfo->Header.Length = mLen;
         mInfo->Header.Type = MSG_PLAYER;
 
-//        mInfo->UniqId = 400002;
-//        mInfo->Look = 116;
+        mInfo->UniqId = aPlayer.getUID();
+        mInfo->Look = aPlayer.getLook();
 
-//        mInfo->Life = 100;
-//        mInfo->Level = 12;
+        mInfo->Status = 0; // TODO: Implement me
+        mInfo->SynId_Rank = 0; // TODO: (aPlayer.getSynRank() << MASK_RANK_SHIFT) | (aPlayer.getSynId() & MASK_SYNID);
 
+        mInfo->WeaponRType = 0; // TODO: Implement me
+        mInfo->WeaponLType = 0; // TODO: Implement me
+        mInfo->MountType = 0; // TODO: Implement me
+        mInfo->MantleType = 0; // TODO: Implement me
 
+        mInfo->PosX = aPlayer.getPosX();
+        mInfo->PosY = aPlayer.getPosY();
 
-        // TODO... fill
-//        mInfo->UniqId = aPlayer.getUniqId() + 10;
-//        mInfo->Status = 0;//aPlayer.getEffect();
-//        mInfo->Look = aPlayer.getLook();
-//        mInfo->Hair = aPlayer.getHair();
-
+        mInfo->Hair = aPlayer.getHair();
         mInfo->Length = 0; // Unused by EoF
         mInfo->Fat = 0; // Unused by EoF
 
-//        mInfo->WeaponRType = 510010;
-//        mInfo->WeaponLType = 510010;
-//        mInfo->MantleType = 101;
-//        mInfo->MountType = 699101;
-
-//        //mInfo->SynId_Rank = 132000;//(aPlayer.getSynRank() << MASK_RANK_SHIFT) | (aPlayer.getSynId() & MASK_SYNID);
-
-        mInfo->PosX = 535;
-        mInfo->PosY = 863;
         mInfo->Direction = aPlayer.getDirection();
-        mInfo->Pose = 100; //aPlayer.getPose();
+        mInfo->Pose = aPlayer.getPose();
 
         StringPacker packer(mInfo->Buf);
-        packer.addString("GhostSpider");
-
-        Msg::dump(this);
+        packer.addString(aPlayer.getName());
     }
     else
     {
         LOG("Invalid length: name=%zu",
             strlen(aPlayer.getName()));
+    }
+}
+
+void
+MsgPlayer :: create(Monster& aMonster)
+{
+    ASSERT(&aMonster != nullptr);
+    ASSERT(aMonster.getName() != nullptr && aMonster.getName()[0] != '\0');
+
+    if (strlen(aMonster.getName()) < MAX_NAMESIZE)
+    {
+        mInfo->Header.Length = mLen;
+        mInfo->Header.Type = MSG_PLAYER;
+
+        mInfo->UniqId = aMonster.getUID();
+        mInfo->Look = aMonster.getLook();
+
+        mInfo->Status = 0; // TODO: Implement me
+        mInfo->OwnerUID = 0; // TODO: Pet
+
+        mInfo->WeaponRType = 0;
+        mInfo->WeaponLType = 0;
+        mInfo->MountType = 0;
+        mInfo->MantleType = 0;
+
+        mInfo->Life = aMonster.getCurHP();
+        mInfo->Level = aMonster.getLevel();
+
+        mInfo->PosX = aMonster.getPosX();
+        mInfo->PosY = aMonster.getPosY();
+
+        mInfo->Hair = 0;
+        mInfo->Length = 0; // Unused by EoF
+        mInfo->Fat = 0; // Unused by EoF
+
+        mInfo->Direction = aMonster.getDirection();
+        mInfo->Pose = aMonster.getPose();
+
+        StringPacker packer(mInfo->Buf);
+        packer.addString(aMonster.getName());
+    }
+    else
+    {
+        LOG("Invalid length: name=%zu",
+            strlen(aMonster.getName()));
     }
 }
 
@@ -97,5 +138,34 @@ MsgPlayer :: swap(uint8_t* aBuf)
 
     MsgInfo* info = (MsgInfo*)aBuf;
 
-    // TODO: swap
+    int uid = info->UniqId;
+
+    info->UniqId = bswap32(info->UniqId);
+    info->Look = bswap32(info->Look);
+    info->Status = bswap64(info->Status);
+
+    info->WeaponRType = bswap32(info->WeaponRType);
+    info->WeaponLType = bswap32(info->WeaponLType);
+
+    info->MantleType = bswap16(info->MantleType);
+    info->PosX = bswap16(info->PosX);
+    info->PosY = bswap16(info->PosY);
+    info->Hair = bswap16(info->Hair);
+    info->Pose = bswap16(info->Pose);
+    if (Entity::isPlayer(uid))
+    {
+        info->SynId_Rank = bswap32(info->SynId_Rank);
+        info->MountType = bswap32(info->MountType);
+    }
+    else if (Entity::isMonster(uid))
+    {
+        info->OwnerUID = bswap32(info->OwnerUID);
+        info->Life = bswap16(info->Life);
+        info->Level = bswap16(info->Level);
+    }
+    else
+    {
+        /// unknown UID
+        ASSERT(false);
+    }
 }

@@ -22,15 +22,23 @@ public:
     {
         /** Generic header of all msgs */
         Msg::Header Header;
-        /** The unique Id of the npc */
+        /** The unique Id of the NPC */
         int32_t UniqId;
+        /** The X coord of the NPC */
         uint16_t PosX;
+        /** The Y coord of the NPC */
         uint16_t PosY;
-        int16_t Look; // dir for statuary
-        int16_t Type; // frame for statuary
-        int16_t Sort; // pose for statuary
+        /** The look of the NPC or the direction for a statuary */
+        int16_t Look;
+        /** The type of the NPC, or the frame for a statuary */
+        int16_t Type;
+        /** The sort of the NPC, or the pose for a statuary */
+        int16_t Sort;
+        /** The length of the NPC (unused) */
         int8_t Length;
+        /** The fat of the NPC (unused) */
         int8_t Fat;
+        /** Name of the NPC (not compulsary) */
         uint8_t Buf[1];
     }MsgInfo;
     #pragma pack(pop)

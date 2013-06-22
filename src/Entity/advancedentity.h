@@ -31,6 +31,9 @@ public:
     /** Get the entity's max hit points. */
     uint16_t getMaxHP() { return mMaxHP; }
 
+    /** Get the entity's pose. */
+    uint16_t getPose() { return mPose; }
+
 protected:
     /* constructor */
     AdvancedEntity(int32_t aUID);
@@ -41,11 +44,13 @@ protected:
     uint16_t mCurHP; //!< Entity current HP
     uint16_t mMaxHP; //!< Entity max HP
 
-    int32_t mMinAtk;
-    int32_t mMaxAtk;
-    int32_t mDefense;
-    uint8_t mDexterity;
-    uint8_t mDodge;
+    int32_t mMinAtk; //!< Entity minimum attack
+    int32_t mMaxAtk; //!< Entity maximum attack
+    int32_t mDefense; //!< Entity defense
+    uint8_t mDexterity; //!< Entity dexterity
+    uint8_t mDodge; //!< Entity dodge
+
+    uint16_t mPose; //!< Entity pose
 };
 
 #endif // _FAITH_EMULATOR_ADVANCED_ENTITY_H

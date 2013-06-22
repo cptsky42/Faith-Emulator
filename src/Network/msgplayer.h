@@ -34,10 +34,13 @@ public:
 
         union
         {
+            /** The status of the entity */
             uint64_t Status;
             struct
             {
+                /** The life of the statuary */
                 uint16_t StatuaryLife;
+                /** The frame of the statuary */
                 uint16_t StaturayFrame;
             };
         };
@@ -45,32 +48,47 @@ public:
 
         union
         {
+            /** Legion Id and rank of the player */
             int32_t SynId_Rank;
+            /** Owner unique Id of the monster. */
             int32_t OwnerUID;
         };
 
+        /** Right hand weapon Id. */
         int32_t WeaponRType;
+        /** Left hand weapon Id. */
         int32_t WeaponLType;
 
         union
         {
+            /** Mount Id. */
             int32_t MountType;
             struct
             {
+                /** Current life of the monster. */
                 uint16_t Life;
+                /** Level of the monstre. */
                 uint16_t Level;
             };
         };
 
+        /** Mantle Id. */
         int16_t MantleType;
+        /** The X coord of the entity. */
         uint16_t PosX;
+        /** The Y coord of the entity. */
         uint16_t PosY;
+        /** The hair of the player. */
         uint16_t Hair;
+        /** The length of the entity (unused) */
         int8_t Length;
+        /** The fat of the entity (unused) */
         int8_t Fat;
+        /** The cardinal direction of the entity. */
         int8_t Direction;
-        int8_t Pose;
-        uint8_t Unknown; // ActionSpeed; TutorLevel; MercenaryLevel; NobilityRank;
+        /**  The pose of the entity. */
+        uint16_t Pose;
+        /** The name of the entity */
         uint8_t Buf[1];
     }MsgInfo;
     #pragma pack(pop)
