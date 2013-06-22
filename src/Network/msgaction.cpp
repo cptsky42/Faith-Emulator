@@ -132,6 +132,11 @@ MsgAction :: process(Client* aClient)
             player.sendSysMsg(msg);
             break;
         }
+    case ACTION_DESTROY_BOOTH:
+        {
+            // TODO: Implement booths
+            break;
+        }
     default:
         {
             fprintf(stdout, "Unknown action[%04u], data=[%d]\n",

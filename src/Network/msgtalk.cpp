@@ -102,12 +102,18 @@ MsgTalk :: process(Client* aClient)
         {
             int mapId, x, y;
             int type;
+            int param;
             if (sscanf(words, "/mm %d %d %d", &mapId, &x, &y) == 3)
             {
                 player.setMapId(mapId);
                 player.setPosition(x, y);
 
                 MsgAction msg(&player, player.getMapId(), MsgAction::ACTION_ENTER_MAP);
+                client.send(&msg);
+            }
+            else if (sscanf(words, "/action %d %d", &type, &param))
+            {
+                MsgAction msg(&player, param, (MsgAction::Action)type);
                 client.send(&msg);
             }
             else

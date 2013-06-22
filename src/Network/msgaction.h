@@ -35,8 +35,8 @@ public:
         actionBroadcastPos		=4,
         actionDivorce			=5,
         actionSelfUnfreeze		=6,
-        actionChgMap			=7,
-        actionFlyMap			=8,
+        ACTION_CHG_MAP = 7, // portal
+        ACTION_FLY_MAP = 8, // chg map
         actionChgWeather		=9,
         actionFireworks			=10,
         actionDie				=11,
@@ -44,29 +44,33 @@ public:
         actionWalk				=13,
         /** Set the position of an entity entering in a new map */
         ACTION_ENTER_MAP = 14,
-        actionGetItemSet		=15,
-        actionGetGoodFriend		=16,
+        actionGetItemSet		=15, // get item set, client answer with 16
+        actionGetGoodFriend		=16, // get good friend, client answer with 27
         actionForward			=17,
         actionLeaveMap			=18,		// ∑˛ŒÒ∆˜->øÕªß∂À,idPlayer
         actionJump				=19,
         actionRun				=20,
         actionEquip				=21,
         actionUnequip			=22,
-        actionUplev				=23,
+        /** Signal to the client that the player gained a level */
+        ACTION_UP_LEVEL = 23,
         actionXpCLear			=24,
         actionReborn			=25,
-        actionDelRole			=26,
-        actionGetWeaponSkillSet	=27,
-        actionGetMagicSet		=28,
+        /** Delete the current role. */
+        ACTION_DELETE_ROLE = 26,
+        actionGetWeaponSkillSet	=27, // get weapon skill set, client answer with 28
+        actionGetMagicSet		=28, // get magic set, client answer with 30
         /** Set the Pk mode of an entity */
         ACTION_SET_PKMODE = 29,
-        actionGetSynAttr		=30,
+        actionGetSynAttr		=30, // get syn attr
         actionGhost				=31,
-        actionSynchro			=32,
+        /** Synchronize the position (the client will send its coords) as answer */
+        ACTION_SYNCRHO = 32, // Unknown action[0032], data=[54788624]
         actionQueryFriendInfo	=33,
         actionQueryLeaveWord	=34,
-        actionChangeFace		=35,
-        actionMine				=36,
+        /** Change the face of the entity */
+        ACTION_CHANGE_FACE = 35,
+        actionMine				=36, // action 290 ?
         actionTeamMemeberPos	=37,
         actionQueryPlayer		=38,
         actionAbortMagic		=39,
@@ -74,7 +78,7 @@ public:
         ACTION_MAP_ARGB = 40,
         actionMapStatus			=41,		// abandon
         actionQueryTeamMember	=42,
-        actionCreateBooth		=43,		// ø™ º∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
+        ACTION_CREATE_BOOTH = 43, // ø™ º∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
         actionSuspendBooth		=44,		//  ’∆∞⁄ÃØ
         actionResumeBooth		=45,		// ºÃ–¯∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
         /** Destroy the booth */
@@ -85,25 +89,28 @@ public:
         actionAbortTransform	=50,		// to server
         actionCombineSubSyn		=51,		// to client, idUser-> idSubSyn, idTarget-> idTargetSyn
         actionLanding			=52,		// to server only
-        actionGetMoney			=53,		// to client only // ºÒµΩ500“‘º∞500“‘…œ«Æ£¨÷ª¥´∏¯◊‘º∫£¨dwDataŒ™ºÒµΩµƒ«Æ
+        /** Signal to the client that the player picked up some money. */
+        ACTION_GET_MONEY = 53, // to client only // ºÒµΩ500“‘º∞500“‘…œ«Æ£¨÷ª¥´∏¯◊‘º∫£¨dwDataŒ™ºÒµΩµƒ«Æ
         actionDischarge			=54,		// to server
         actionQueryEnemyInfo	=55,		// to server
         actionMoveStop			=56,		// data=milli secs.
-        actionKickBack			=57,		// to client	idUser is Player ID, unPosX unPosY is Player pos
+        /** Kick back the player at a previous position (the client answer with ACTION_SYNCHRO) */
+        ACTION_KICK_BACK = 57, // to client	idUser is Player ID, unPosX unPosY is Player pos
         actionDropMagic			=58,		// to client only, data is magic type
         actionDropSkill			=59,		// to client only, data is weapon skill type
         actionSoundEffect		=60,		// to client only, client play sound effect, dwData is monster type
 
         actionQueryMedal		=61,		// to server	idUser is Player ID, dwData is medal
         actionDelMedal			=62,		// to server	idUser is Player ID, dwData is medal
-        actionAddMedal			=63,		// to client	idUser is Player ID, dwData is medal
-        actionSelectMedal		=64,		// to server	idUser is Player ID, dwData is medal
+        ACTION_ADD_MEDAL = 63, // to client	idUser is Player ID, dwData is medal
+        ACTION_SELECT_MEDAL = 64, // to server	idUser is Player ID, dwData is medal
+        // Display Med panel
 
         actionQueryHonorTitle	=65,		// to server	idUser is Player ID, dwData is title
         actionDelHonorTitle		=66,		// to server	idUser is Player ID, dwData is title
         actionAddHonorTitle		=67,		// to client	idUser is Player ID, dwData is title
         actionSelectHonorTitle	=68,		// to server	idUser is Player ID, dwData is title
-        actionOpenDialog		=69,		// to client only, open a dialog, dwData is id of dialog
+        ACTION_OPEN_DIALOG = 69, // to client only, open a dialog, dwData is id of dialog
         actionFlashStatus		=70,		// broadcast to client only, team member only. dwData is dwStatus
 
         actionQuerySynInfo		=71,		// ≤È—Ø∞Ô≈…–≈œ¢		// to server synicate id

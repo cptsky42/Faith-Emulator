@@ -113,9 +113,9 @@ MsgConnect :: process(Client* aClient)
             SAFE_DELETE(msg);
 
             // HACK !
-//            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
-//            client.send(msg);
-//            SAFE_DELETE(msg);
+            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
+            client.send(msg);
+            SAFE_DELETE(msg);
         }
 
         break;

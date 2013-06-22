@@ -17,13 +17,6 @@
 
 using namespace std;
 
-MsgAccount :: MsgAccount(const char* aAccount, const char* aPassword, const char* aServer)
-    : Msg(sizeof(MsgInfo))
-{
-    mInfo = (MsgInfo*)mBuf;
-    create(aAccount, aPassword, aServer);
-}
-
 MsgAccount :: MsgAccount(uint8_t** aBuf, size_t aLen)
     : Msg(aBuf, aLen)
 {
@@ -39,32 +32,6 @@ MsgAccount :: MsgAccount(uint8_t** aBuf, size_t aLen)
 MsgAccount :: ~MsgAccount()
 {
 
-}
-
-void
-MsgAccount :: create(const char* aAccount, const char* aPassword, const char* aServer)
-{
-    ASSERT(aAccount != nullptr && aAccount[0] != '\0');
-    ASSERT(aPassword != nullptr && aPassword[0] != '\0');
-    ASSERT(aServer != nullptr && aServer[0] != '\0');
-
-    if (strlen(aAccount) < MAX_NAMESIZE &&
-            strlen(aPassword) < MAX_NAMESIZE &&
-            strlen(aServer) < MAX_NAMESIZE)
-    {
-        mInfo->Header.Length = mLen;
-        mInfo->Header.Type = MSG_ACCOUNT;
-
-        strcpy(mInfo->Account, aAccount);
-        // TODO: Encrypt password
-        strcpy(mInfo->Password, aPassword);
-        strcpy(mInfo->Server, aServer);
-    }
-    else
-    {
-        LOG("Invalid length: account=%zu, password=%zu, server=%zu",
-               strlen(aAccount), strlen(aPassword), strlen(aServer));
-    }
 }
 
 void
