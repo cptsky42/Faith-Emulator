@@ -38,12 +38,11 @@ public:
     };
 
 public:
-    /* destructor */
-    virtual ~Monster();
-
-protected:
     /* constructor */
     Monster(int32_t aUID, Monster::Info& aInfo);
+
+    /* destructor */
+    virtual ~Monster();
 
 private:
     int32_t mId;

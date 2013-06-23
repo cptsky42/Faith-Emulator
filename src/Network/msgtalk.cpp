@@ -10,6 +10,7 @@
 #include "stringpacker.h"
 #include "msgaction.h"
 #include "msguserattrib.h"
+#include "msgiteminfo.h"
 #include "client.h"
 #include "player.h"
 #include <string.h>
@@ -114,6 +115,14 @@ MsgTalk :: process(Client* aClient)
             else if (sscanf(words, "/action %d %d", &type, &param))
             {
                 MsgAction msg(&player, param, (MsgAction::Action)type);
+                client.send(&msg);
+            }
+            else if (sscanf(words, "/item %d %d", &type, &param))
+            {
+                int data[2];
+                data[0] = type;
+                data[1] = param;
+                MsgItemInfo msg(data, MsgItemInfo::ACTION_ADD_ITEM);
                 client.send(&msg);
             }
             else

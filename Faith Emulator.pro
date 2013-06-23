@@ -42,7 +42,8 @@ SOURCES += \
     src/Entity/advancedentity.cpp \
     src/Entity/monster.cpp \
     src/world.cpp \
-    src/Common/env.cpp
+    src/Common/env.cpp \
+    src/item.cpp
 
 HEADERS += \
     src/server.h \
@@ -87,7 +88,8 @@ HEADERS += \
     src/Entity/advancedentity.h \
     src/Entity/monster.h \
     src/world.h \
-    src/Common/env.h
+    src/Common/env.h \
+    src/item.h
 
 INCLUDEPATH += \
     src/Common \

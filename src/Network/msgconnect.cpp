@@ -111,11 +111,6 @@ MsgConnect :: process(Client* aClient)
             msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
             client.send(msg);
             SAFE_DELETE(msg);
-
-            // HACK !
-            msg = new MsgItemInfo(nullptr, MsgItemInfo::ACTION_ADD_ITEM);
-            client.send(msg);
-            SAFE_DELETE(msg);
         }
 
         break;

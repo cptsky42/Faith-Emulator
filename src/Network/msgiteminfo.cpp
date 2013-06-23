@@ -41,12 +41,12 @@ MsgItemInfo :: create(void* aItem, Action aAction)
     mInfo->Header.Type = MSG_ITEMINFO;
 
     mInfo->UniqId = 1000000;
-    mInfo->Type = 132000;
+    mInfo->Type = ((int*)aItem)[0];
     mInfo->Amount = 1099;
     mInfo->AmountLimit = 10099;
     mInfo->Action = (uint8_t)aAction;
     mInfo->Ident = 0;
-    mInfo->Position = 3;
+    mInfo->Position = ((int*)aItem)[1];
     mInfo->Gem1 = 5; // Familiary of the horse
     mInfo->Gem2 = 10;
     mInfo->Magic1 = 11;
