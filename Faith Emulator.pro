@@ -43,7 +43,39 @@ SOURCES += \
     src/Entity/monster.cpp \
     src/world.cpp \
     src/Common/env.cpp \
-    src/item.cpp
+    src/item.cpp \
+    src/third_party/lua-5.2.2/src/lzio.c \
+    src/third_party/lua-5.2.2/src/lvm.c \
+    src/third_party/lua-5.2.2/src/lundump.c \
+    src/third_party/lua-5.2.2/src/ltm.c \
+    src/third_party/lua-5.2.2/src/ltablib.c \
+    src/third_party/lua-5.2.2/src/ltable.c \
+    src/third_party/lua-5.2.2/src/lstrlib.c \
+    src/third_party/lua-5.2.2/src/lstring.c \
+    src/third_party/lua-5.2.2/src/lstate.c \
+    src/third_party/lua-5.2.2/src/lparser.c \
+    src/third_party/lua-5.2.2/src/loslib.c \
+    src/third_party/lua-5.2.2/src/lopcodes.c \
+    src/third_party/lua-5.2.2/src/lobject.c \
+    src/third_party/lua-5.2.2/src/loadlib.c \
+    src/third_party/lua-5.2.2/src/lmem.c \
+    src/third_party/lua-5.2.2/src/lmathlib.c \
+    src/third_party/lua-5.2.2/src/llex.c \
+    src/third_party/lua-5.2.2/src/liolib.c \
+    src/third_party/lua-5.2.2/src/linit.c \
+    src/third_party/lua-5.2.2/src/lgc.c \
+    src/third_party/lua-5.2.2/src/lfunc.c \
+    src/third_party/lua-5.2.2/src/ldump.c \
+    src/third_party/lua-5.2.2/src/ldo.c \
+    src/third_party/lua-5.2.2/src/ldebug.c \
+    src/third_party/lua-5.2.2/src/ldblib.c \
+    src/third_party/lua-5.2.2/src/lctype.c \
+    src/third_party/lua-5.2.2/src/lcorolib.c \
+    src/third_party/lua-5.2.2/src/lcode.c \
+    src/third_party/lua-5.2.2/src/lbitlib.c \
+    src/third_party/lua-5.2.2/src/lbaselib.c \
+    src/third_party/lua-5.2.2/src/lauxlib.c \
+    src/third_party/lua-5.2.2/src/lapi.c
 
 HEADERS += \
     src/server.h \
@@ -89,7 +121,32 @@ HEADERS += \
     src/Entity/monster.h \
     src/world.h \
     src/Common/env.h \
-    src/item.h
+    src/item.h \
+    src/third_party/lua-5.2.2/src/lzio.h \
+    src/third_party/lua-5.2.2/src/lvm.h \
+    src/third_party/lua-5.2.2/src/lundump.h \
+    src/third_party/lua-5.2.2/src/lualib.h \
+    src/third_party/lua-5.2.2/src/luaconf.h \
+    src/third_party/lua-5.2.2/src/lua.hpp \
+    src/third_party/lua-5.2.2/src/lua.h \
+    src/third_party/lua-5.2.2/src/ltm.h \
+    src/third_party/lua-5.2.2/src/ltable.h \
+    src/third_party/lua-5.2.2/src/lstring.h \
+    src/third_party/lua-5.2.2/src/lstate.h \
+    src/third_party/lua-5.2.2/src/lparser.h \
+    src/third_party/lua-5.2.2/src/lopcodes.h \
+    src/third_party/lua-5.2.2/src/lobject.h \
+    src/third_party/lua-5.2.2/src/lmem.h \
+    src/third_party/lua-5.2.2/src/llimits.h \
+    src/third_party/lua-5.2.2/src/llex.h \
+    src/third_party/lua-5.2.2/src/lgc.h \
+    src/third_party/lua-5.2.2/src/lfunc.h \
+    src/third_party/lua-5.2.2/src/ldo.h \
+    src/third_party/lua-5.2.2/src/ldebug.h \
+    src/third_party/lua-5.2.2/src/lctype.h \
+    src/third_party/lua-5.2.2/src/lcode.h \
+    src/third_party/lua-5.2.2/src/lauxlib.h \
+    src/third_party/lua-5.2.2/src/lapi.h
 
 INCLUDEPATH += \
     src/Common \
@@ -100,4 +157,5 @@ INCLUDEPATH += \
     src/Entity \
     src/IO \
     src/Map \
-    src
+    src \
+    src/third_party/lua-5.2.2/src \
