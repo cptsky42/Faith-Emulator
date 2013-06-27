@@ -247,7 +247,7 @@
 #define	STR_CANNOT_RANK				"ÎÞ·¨ÉèÖÃ¾üÏÎ!"
 #define	STR_NOT_ENOUGH_LEV			"ÄãµÄµÈ¼¶²»×ã%d¼¶!"
 #define	STR_LEVEL_NOT_ENOUGH	    "%sµÈ¼¶²»×ã»ò¶Ô¾üÍÅµÄ¹±Ï×²»¹»£¬²»ÄÜ³öÈÎ¸ÃÖ°Îñ!"
-#define	STR_INVALID_NAME	        "This name contains invalid characters.
+#define	STR_INVALID_NAME	        "This name contains invalid characters."
 #define	STR_INVALID_MSG	            "·Ç·¨ÏûÏ¢£¡"
 #define	STR_MAGIC_FAILED            "Ä§·¨Ê¹ÓÃÊ§°Ü£¡"
 #define	STR_CANNOT_DEPOSIT	        "´íÎó£º´ËÎïÆ·²»ÒË´æ·Å!"
@@ -262,7 +262,7 @@
 #define	STR_PK_FORBIDDEN	        "´Ë´¦½ûÖ¹Å¹¶·¡£"
 #define	STR_MSG_SENT	   		    "ÁôÑÔ³É¹¦£¬¶Ô·½ÉÏÏßºó¾ÍÄÜ¿´µ½ÄãµÄÁôÑÔ¡£"
 #define	STR_MSG_FAILED				"Ã¿¸öºÃÓÑÁôÑÔ¼ä¸ô²»ÄÜÉÙÓÚ%d·ÖÖÓ£¬ÁôÑÔÊ§°Ü¡£"
-#define	STR_INVALID_COORDINATE	    "Invalid coordinates.
+#define	STR_INVALID_COORDINATE	    "Invalid coordinates."
 #define	STR_GONE	                "×ßÁË"
 #define	STR_JUMPED	                "ÌøÁË"
 #define	STR_CONNECTION_OFF	        "Your session has expired."
