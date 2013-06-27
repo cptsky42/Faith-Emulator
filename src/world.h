@@ -14,6 +14,7 @@
 #include <map>
 
 class Npc;
+class NpcTask;
 
 class World : public Environment::Global
 {
@@ -26,6 +27,7 @@ public:
 
 public:
     std::map<int32_t, Npc*>& AllNPCs;
+    std::map<int32_t, NpcTask*>& AllTasks;
 
 private:
     /* constructor */
@@ -36,6 +38,7 @@ private:
 
 private:
     std::map<int32_t, Npc*> mAllNPCs;
+    std::map<int32_t, NpcTask*> mAllTasks;
 };
 
 #endif // _FAITH_EMULATOR_WORLD_H_

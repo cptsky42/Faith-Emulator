@@ -13,6 +13,8 @@
 #include "entity.h"
 #include <string>
 
+class NpcTask;
+
 class Npc : public Entity
 {
 public:
@@ -30,11 +32,14 @@ public:
     uint8_t getBase() { return mBase; }
     uint8_t getSort() { return mSort; }
 
-private:
+    void linkTask(NpcTask* aTask) { mTask = aTask; }
 
+private:
     uint8_t mType;
     uint8_t mBase;
     uint8_t mSort;
+
+    NpcTask* mTask;
 };
 
 #endif // _FAITH_EMULATOR_NPC_H

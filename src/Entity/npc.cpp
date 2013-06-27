@@ -7,6 +7,7 @@
  */
 
 #include "npc.h"
+#include "npctask.h"
 
 Npc :: Npc(int32_t aUID, const char* aName,
            uint8_t aType, int16_t aLook,
@@ -29,6 +30,8 @@ Npc :: Npc(int32_t aUID, const char* aName,
 
     mBase = aBase;
     mSort = aSort;
+
+    mTask = nullptr;
 }
 
 Npc :: ~Npc()

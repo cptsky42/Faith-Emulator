@@ -75,7 +75,11 @@ SOURCES += \
     src/third_party/lua-5.2.2/src/lbitlib.c \
     src/third_party/lua-5.2.2/src/lbaselib.c \
     src/third_party/lua-5.2.2/src/lauxlib.c \
-    src/third_party/lua-5.2.2/src/lapi.c
+    src/third_party/lua-5.2.2/src/lapi.c \
+    src/Script/script.cpp \
+    src/Script/npctask.cpp \
+    src/Network/msgnpc.cpp \
+    src/Network/msgdialog.cpp
 
 HEADERS += \
     src/server.h \
@@ -146,12 +150,17 @@ HEADERS += \
     src/third_party/lua-5.2.2/src/lctype.h \
     src/third_party/lua-5.2.2/src/lcode.h \
     src/third_party/lua-5.2.2/src/lauxlib.h \
-    src/third_party/lua-5.2.2/src/lapi.h
+    src/third_party/lua-5.2.2/src/lapi.h \
+    src/Script/script.h \
+    src/Script/npctask.h \
+    src/Network/msgnpc.h \
+    src/Network/msgdialog.h
 
 INCLUDEPATH += \
     src/Common \
     src/Network \
     src/Network/Sockets \
+    src/Script \
     src/Security/Cryptography \
     src/Database \
     src/Entity \

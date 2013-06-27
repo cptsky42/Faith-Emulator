@@ -301,7 +301,7 @@
 #define	STR_SILVER_ORE	            "µÃµ½Ò»¸öÒø¿óÊ¯£¡"
 #define	STR_GAIN_GEM	            "¹§Ï²»ñµÃÒ»¿Å±¦Ê¯£¡"
 #define	STR_UNQUALIFIED	            "´íÎó£ºÌõ¼þ¼ì²éÊ§°Ü£¡"
-#define	STR_DIE	                    "ÄúÒÑ¾­ËÀÁË!"
+#define	STR_DIE                     "You're dead !"
 #define	STR_DONOT_GIVE_UP	        "¸óÏÂÉí¸ºÖØÈÎ£¬Ôõ¿É×Ô±©×ÔÆú£¿"
 #define	STR_CANNOT_JUMP	            "Äú²»ÄÜÌø£¡"
 #define	STR_CHEAT	                "[×÷±×]ÄãÒª·ÖÅäµÄµãÊý´óÓÚÓµÓÐµÄ¿É·ÖÅäµãÊý¡£"

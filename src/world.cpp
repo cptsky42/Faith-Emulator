@@ -8,6 +8,7 @@
 
 #include "world.h"
 #include "npc.h"
+#include "npctask.h"
 
 using namespace std;
 
@@ -27,12 +28,28 @@ World :: getInstance()
 }
 
 World :: World()
-    : AllNPCs(mAllNPCs)
+    : AllNPCs(mAllNPCs), AllTasks(mAllTasks)
 {
 
 }
 
 World :: ~World()
 {
+    for (map<int32_t, Npc*>::iterator
+            it = mAllNPCs.begin(), end = mAllNPCs.end();
+         it != end; ++it)
+    {
+        Npc* npc = it->second;
+        SAFE_DELETE(npc);
+    }
+    mAllNPCs.clear();
 
+    for (map<int32_t, NpcTask*>::iterator
+            it = mAllTasks.begin(), end = mAllTasks.end();
+         it != end; ++it)
+    {
+        NpcTask* task = it->second;
+        SAFE_DELETE(task);
+    }
+    mAllTasks.clear();
 }

@@ -11,6 +11,7 @@
 #include "networkclient.h"
 #include "msg.h"
 #include "database.h"
+#include "npctask.h"
 #include <string>
 
 using namespace std;
@@ -29,6 +30,10 @@ Server :: Server()
         // failed to connect
     }
 
+    // load Lua VM
+    NpcTask::registerFunctions(); // TODO: Only one call for all ?
+
+    // load database
     db.loadAllNPCs();
 
     mAccServer.listen(ACCSERVER_PORT);
