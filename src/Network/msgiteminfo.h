@@ -29,6 +29,7 @@ public:
     #pragma pack(1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
         int32_t UniqId;
         int32_t Type;

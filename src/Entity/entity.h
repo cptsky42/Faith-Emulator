@@ -16,6 +16,8 @@
  */
 class Entity
 {
+    PROHIBIT_COPY(Entity); // constant UID, should be unique...
+
 public:
     /** First valid UID for a NPC. */
     static const int32_t SCENEID_FIRST     = 1;

@@ -17,6 +17,8 @@ class NpcTask;
 
 class Npc : public Entity
 {
+    PROHIBIT_COPY(Npc); // constant UID, should be unique...
+
 public:
     // type: 6, 9, 21, 22, 23, 24
 

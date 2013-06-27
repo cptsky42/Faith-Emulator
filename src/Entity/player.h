@@ -16,6 +16,8 @@
 
 class Player : public AdvancedEntity
 {
+    PROHIBIT_COPY(Player); // constant UID, should be unique...
+
 public:
     Player(Client& aClient);
     virtual ~Player();

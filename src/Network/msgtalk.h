@@ -85,6 +85,7 @@ public:
     #pragma pack(1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
         uint32_t Color; // ARGB code
         int16_t Channel;

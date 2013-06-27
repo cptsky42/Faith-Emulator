@@ -21,6 +21,7 @@ public:
     #pragma pack(1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
         int32_t AccountUID;
         int32_t Data;

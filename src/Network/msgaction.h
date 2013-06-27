@@ -146,11 +146,16 @@ public:
         actionDisappear							=97
     };
 
+    /** List of all PK modes. */
     enum PkMode
     {
+        /** Can attack any player and monster. */
         PKMODE_FREE = 0,
+        /** Can only attack monsters. */
         PKMODE_SAFE = 1,
+        /** Can attack any monster and enemies. */
         PKMODE_TEAM = 2,
+        /** Can attack any monster and PKers. */
         PKMODE_ARRESTMENT = 3
     };
 

@@ -18,6 +18,8 @@
  */
 class AdvancedEntity : public Entity
 {
+    PROHIBIT_COPY(AdvancedEntity); // constant UID, should be unique...
+
 public:
     /* destructor */
     virtual ~AdvancedEntity();

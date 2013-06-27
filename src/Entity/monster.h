@@ -15,6 +15,8 @@
 
 class Monster : public AdvancedEntity
 {
+    PROHIBIT_COPY(Monster); // constant UID, should be unique...
+
 public:
     struct Info
     {
