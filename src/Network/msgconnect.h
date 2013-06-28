@@ -13,7 +13,7 @@
 #include "msg.h"
 
 /**
- *
+ * Msg sent by the AccServer to answer to a connection request.
  */
 class MsgConnect : public Msg
 {
@@ -23,13 +23,23 @@ public:
     {
         /** Generic header of all msgs */
         Msg::Header Header;
+        /** THe account UID (key B) */
         int32_t AccountUID;
+        /** The token / session ID of the connection (key A) */
         int32_t Data;
+        /** The information (IP address) of the game server */
         char Info[MAX_NAMESIZE];
     }MsgInfo;
     #pragma pack(pop)
 
 public:
+    /**
+     * Create a new MsgConnect for the specified account.
+     *
+     * @param aAccUID[in]   the account UID
+     * @param aData[in]     the session ID
+     * @param aInfo[in]     the game server IP address
+     */
     MsgConnect(int32_t aAccUID, int32_t aData, const char* aInfo);
 
     /**

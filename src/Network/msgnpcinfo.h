@@ -14,6 +14,9 @@
 
 class Npc;
 
+/**
+ * Msg sent by the MsgServer to the client to spawn a Npc.
+ */
 class MsgNpcInfo : public Msg
 {
 public:
@@ -50,7 +53,6 @@ public:
      * @param[in]   aNpc     a reference to the npc object
      */
     MsgNpcInfo(Npc& aNpc);
-
 
     /**
      * Create a message object from the specified buffer.

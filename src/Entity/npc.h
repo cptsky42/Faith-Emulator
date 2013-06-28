@@ -23,10 +23,13 @@ public:
     // type: 6, 9, 21, 22, 23, 24
 
 public:
+    /* constructor */
     Npc(int32_t aUID, const char* aName,
         uint8_t aType, int16_t aLook,
         int16_t aMapId, uint16_t aPosX, uint16_t aPosY,
         uint8_t aBase, uint8_t aSort);
+
+    /* destructor */
     virtual ~Npc();
 
 public:

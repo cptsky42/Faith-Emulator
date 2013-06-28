@@ -15,10 +15,15 @@
 class Player;
 class Monster;
 
+/**
+ * Msg sent by the MsgServer to spawn a player or a monster.
+ */
 class MsgPlayer : public Msg
 {
 public:
+    /** Legion ID mask on a 32-bit integer. */
     static const int32_t MASK_SYNID = INT32_C(0x00FFFFFF);
+    /** Legion rank shift on a 32-bit integer. */
     static const int32_t MASK_RANK_SHIFT = INT32_C(24);
 
 public:
@@ -44,7 +49,6 @@ public:
                 uint16_t StaturayFrame;
             };
         };
-
 
         union
         {

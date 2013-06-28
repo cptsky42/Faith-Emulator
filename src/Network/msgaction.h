@@ -35,8 +35,10 @@ public:
         actionBroadcastPos		=4,
         actionDivorce			=5,
         actionSelfUnfreeze		=6,
-        ACTION_CHG_MAP = 7, // portal
-        ACTION_FLY_MAP = 8, // chg map
+        /** Signal to the server that the client entered in a portal. */
+        ACTION_CHG_MAP = 7,
+        /** Signal to the client that the player is changing map. */
+        ACTION_FLY_MAP = 8,
         actionChgWeather		=9,
         actionFireworks			=10,
         actionDie				=11,
@@ -44,8 +46,10 @@ public:
         actionWalk				=13,
         /** Set the position of an entity entering in a new map */
         ACTION_ENTER_MAP = 14,
-        actionGetItemSet		=15, // get item set, client answer with 16
-        actionGetGoodFriend		=16, // get good friend, client answer with 27
+        /** Get the items (client request). The next step is the friends. */
+        ACTION_GET_ITEM_SET = 15,
+        /** Get the friends (client request). The next step is the weapon skills. */
+        ACTION_GET_GOOD_FRIEND = 16,
         actionForward			=17,
         actionLeaveMap			=18,		// ∑˛ŒÒ∆˜->øÕªß∂À,idPlayer
         actionJump				=19,
@@ -58,11 +62,14 @@ public:
         actionReborn			=25,
         /** Delete the current role. */
         ACTION_DELETE_ROLE = 26,
-        actionGetWeaponSkillSet	=27, // get weapon skill set, client answer with 28
-        actionGetMagicSet		=28, // get magic set, client answer with 30
+        /** Get the weapon skills (client request). The next step is the magics. */
+        ACTION_GET_WEAPON_SKILL_SET = 27,
+        /** Get the magics (client request). The next step is the legion attributes. */
+        ACTION_GET_MAGIC_SET = 28,
         /** Set the Pk mode of an entity */
         ACTION_SET_PKMODE = 29,
-        actionGetSynAttr		=30, // get syn attr
+        /** Get the legion attributes. */
+        ACTION_GET_SYN_ATTR = 30,
         actionGhost				=31,
         /** Synchronize the position (the client will send its coords) as answer */
         ACTION_SYNCRHO = 32, // Unknown action[0032], data=[54788624]
@@ -78,7 +85,8 @@ public:
         ACTION_MAP_ARGB = 40,
         actionMapStatus			=41,		// abandon
         actionQueryTeamMember	=42,
-        ACTION_CREATE_BOOTH = 43, // ø™ º∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
+        /** Signal to client/server a new booth. */
+        ACTION_CREATE_BOOTH = 43, // UID: playerID; PosX,Y: playerpos; unDir:dirofbooth; idTarget:idnpc;
         actionSuspendBooth		=44,		//  ’∆∞⁄ÃØ
         actionResumeBooth		=45,		// ºÃ–¯∞⁄ÃØ server/client; idUser: playerID; unPosX,unPosY: playerpos; unDir:dirofbooth; idTarget:idnpc;
         /** Destroy the booth */
