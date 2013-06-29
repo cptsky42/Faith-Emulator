@@ -9,8 +9,8 @@
 #include "msg.h"
 #include "allmsg.h"
 #include "client.h"
-#include <xmmintrin.h>
 
+//#include <xmmintrin.h>
 //static void X_aligned_memcpy_sse2(void* dest, const void* src, const unsigned long size_t)
 //{
 //  __asm

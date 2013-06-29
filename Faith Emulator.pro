@@ -84,16 +84,9 @@ SOURCES += \
 HEADERS += \
     src/server.h \
     src/client.h \
-    src/Network/Sockets/tcpserver.h \
-    src/Network/Sockets/networkclient.h \
-    src/Security/Cryptography/tqcipher.h \
-    src/Network/msg.h \
-    src/Network/msgaccount.h \
-    src/Network/networkdef.h \
-    src/Network/msgconnect.h \
-    src/Network/allmsg.h \
-    src/Network/msgtalk.h \
-    src/Network/stringpacker.h \
+    src/world.h \
+    src/item.h \
+    src/strres.h \
     src/Common/common.h \
     src/Common/arch.h \
     src/Common/def.h \
@@ -102,30 +95,41 @@ HEADERS += \
     src/Common/log.h \
     src/Common/myassert.h \
     src/Common/endian.h \
-    src/Network/msgaction.h \
-    src/Network/msguserinfo.h \
-    src/Network/msguserattrib.h \
+    src/Common/env.h \
+    src/Common/unicode.h \
     src/Database/database.h \
-    src/Network/msgiteminfo.h \
-    src/Security/Cryptography/rc5.h \
     src/Entity/entity.h \
     src/Entity/player.h \
-    src/strres.h \
-    src/Network/msgwalk.h \
-    src/Map/mapmanager.h \
-    src/Map/gamemap.h \
+    src/Entity/npc.h \
+    src/Entity/advancedentity.h \
+    src/Entity/monster.h \
     src/IO/binarywriter.h \
     src/IO/binaryreader.h \
     src/IO/finder.h \
+    src/Map/mapmanager.h \
+    src/Map/gamemap.h \
+    src/Network/Sockets/tcpserver.h \
+    src/Network/Sockets/networkclient.h \
+    src/Network/msg.h \
+    src/Network/msgaccount.h \
+    src/Network/networkdef.h \
+    src/Network/msgconnect.h \
+    src/Network/allmsg.h \
+    src/Network/msgtalk.h \
+    src/Network/stringpacker.h \
+    src/Network/msgaction.h \
+    src/Network/msguserinfo.h \
+    src/Network/msguserattrib.h \
+    src/Network/msgiteminfo.h \
+    src/Network/msgwalk.h \
     src/Network/msgplayer.h \
     src/Network/msgnpcinfo.h \
-    src/Entity/npc.h \
-    src/Common/unicode.h \
-    src/Entity/advancedentity.h \
-    src/Entity/monster.h \
-    src/world.h \
-    src/Common/env.h \
-    src/item.h \
+    src/Network/msgnpc.h \
+    src/Network/msgdialog.h \
+    src/Script/script.h \
+    src/Script/npctask.h \
+    src/Security/Cryptography/tqcipher.h \
+    src/Security/Cryptography/rc5.h \
     src/third_party/lua-5.2.2/src/lzio.h \
     src/third_party/lua-5.2.2/src/lvm.h \
     src/third_party/lua-5.2.2/src/lundump.h \
@@ -150,21 +154,17 @@ HEADERS += \
     src/third_party/lua-5.2.2/src/lctype.h \
     src/third_party/lua-5.2.2/src/lcode.h \
     src/third_party/lua-5.2.2/src/lauxlib.h \
-    src/third_party/lua-5.2.2/src/lapi.h \
-    src/Script/script.h \
-    src/Script/npctask.h \
-    src/Network/msgnpc.h \
-    src/Network/msgdialog.h
+    src/third_party/lua-5.2.2/src/lapi.h
 
 INCLUDEPATH += \
+    src \
     src/Common \
-    src/Network \
-    src/Network/Sockets \
-    src/Script \
-    src/Security/Cryptography \
     src/Database \
     src/Entity \
     src/IO \
     src/Map \
-    src \
+    src/Network \
+    src/Network/Sockets \
+    src/Script \
+    src/Security/Cryptography \
     src/third_party/lua-5.2.2/src \

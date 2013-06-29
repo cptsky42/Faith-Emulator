@@ -16,6 +16,8 @@
 err_t
 NpcTask :: registerFunctions()
 {
+    err_t err = ERROR_SUCCESS;
+
     lua_State* state = Script::getState();
 
     // MsgDialog Lua methods
@@ -26,6 +28,8 @@ NpcTask :: registerFunctions()
 
     // Getters / Setters Lua methods
     lua_register(state, "getMoney", NpcTask::getMoney);
+
+    return err;
 }
 
 NpcTask :: NpcTask(int32_t aUID, const char* aPath)
@@ -45,12 +49,16 @@ NpcTask :: ~NpcTask()
 err_t
 NpcTask :: execute(Client& aClient, int32_t aParam)
 {
+    err_t err = ERROR_SUCCESS;
+
     lua_State* state = Script::getState();
 
     lua_getglobal(state, mFct.c_str());
     lua_pushinteger(state, (ptrdiff_t)&aClient);
     lua_pushinteger(state, aParam);
     lua_call(state, 2, 0);  /* call Lua function */
+
+    return err;
 }
 
 

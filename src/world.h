@@ -16,9 +16,19 @@
 class Npc;
 class NpcTask;
 
+/**
+ * Global world object containing all entities, tasks, etc.
+ * It is a singleton and will be created when getting the instance.
+ */
 class World : public Environment::Global
 {
 public:
+    /**
+     * Get the World singleton. If the object does not exist yet,
+     * it will be created.
+     *
+     * @returns A reference to the singleton
+     */
     static World& getInstance();
 
 public:
@@ -26,7 +36,9 @@ public:
     virtual ~World();
 
 public:
+    /** All NPCs in the world. */
     std::map<int32_t, Npc*>& AllNPCs;
+    /** All tasks in the world. */
     std::map<int32_t, NpcTask*>& AllTasks;
 
 private:
@@ -37,8 +49,8 @@ private:
     static World* sInstance; //!< static instance of the singleton
 
 private:
-    std::map<int32_t, Npc*> mAllNPCs;
-    std::map<int32_t, NpcTask*> mAllTasks;
+    std::map<int32_t, Npc*> mAllNPCs; //!< internal map
+    std::map<int32_t, NpcTask*> mAllTasks; //!< internal map
 };
 
 #endif // _FAITH_EMULATOR_WORLD_H_

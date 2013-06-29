@@ -42,6 +42,7 @@ public:
     virtual err_t execute(Client& aClient, int32_t aParam) = 0;
 
 protected:
+    /* constructor */
     Script(int32_t aUID, const char* aPath);
 
 protected:
