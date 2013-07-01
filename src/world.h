@@ -36,6 +36,9 @@ public:
     virtual ~World();
 
 public:
+    bool queryNpc(Npc** aOutNpc, int32_t aUID);
+
+    // TODO: remove them for thread-safe methods
     /** All NPCs in the world. */
     std::map<int32_t, Npc*>& AllNPCs;
     /** All tasks in the world. */

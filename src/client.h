@@ -16,6 +16,7 @@
 class NetworkClient;
 class Msg;
 class Player;
+class NpcTask;
 
 class Client
 {
@@ -59,6 +60,8 @@ public:
     void setAccount(const std::string& aAccount) { mAccount = aAccount; }
     void setStatus(Status aStatus) { mStatus = aStatus; }
 
+    void setCurTask(const NpcTask& aTask) { mCurTask = &aTask; }
+
 private:
     NetworkClient* mSocket; //!< the TCP/IP socket wrapper of the client
     TqCipher mCipher; //!< the cipher of the client
@@ -71,6 +74,8 @@ private:
     std::string mCharacter; //!< the character name
 
     Player* mPlayer; //!< the character linked to this client
+
+    const NpcTask* mCurTask; //!< the current NPC task
 };
 
 #endif // _FAITH_EMULATOR_CLIENT_H

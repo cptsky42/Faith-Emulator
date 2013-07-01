@@ -9,6 +9,11 @@
 #include "msgnpc.h"
 #include "client.h"
 #include "player.h"
+#include "npc.h"
+#include "world.h"
+#include <map>
+
+using namespace std;
 
 MsgNpc :: MsgNpc(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
     : Msg(sizeof(MsgInfo))
@@ -65,60 +70,70 @@ MsgNpc :: process(Client* aClient)
     {
     case EVENT_BEACTIVED:
         {
-//          CNpc* pNpc;
-//			IRole* pRole = RoleManager()->QuerySet()->GetObj(m_pInfo->id);
-//			if (pRole && pRole->QueryObj(OBJ_NPC, IPP_OF(pNpc)) && pUser->GetMapID() == pNpc->GetMapID())
-//			{
-//				pNpc->ActivateNpc(pUser->QueryRole(), 0);
-//			}
+            World& world = World::getInstance();
+            Npc* npc = nullptr;
+            if (world.queryNpc(&npc, mInfo->Id) &&
+                player.getMapId() == npc->getMapId())
+            {
+                LOG("Activating npc %d for client %p...",
+                    npc->getUID(), &client);
+
+                npc->activateNpc(client, 0);
+            }
             break;
         }
-    case EVENT_DELNPC:
-        {
-            //			CNpc* pNpc;
-            //			IRole* pRole = RoleManager()->QuerySet()->GetObj(m_pInfo->id);
-            //			if (pRole && pRole->QueryObj(OBJ_NPC, IPP_OF(pNpc)) && pUser->GetMapID() == pNpc->GetMapID())
-            //			{
-            //				if(pNpc->IsDeleted())
-            //					return ;
+//    case EVENT_DELNPC:
+//        {
+//            //			CNpc* pNpc;
+//            //			IRole* pRole = RoleManager()->QuerySet()->GetObj(m_pInfo->id);
+//            //			if (pRole && pRole->QueryObj(OBJ_NPC, IPP_OF(pNpc)) && pUser->GetMapID() == pNpc->GetMapID())
+//            //			{
+//            //				if(pNpc->IsDeleted())
+//            //					return ;
 
-            //				if(pNpc->IsDelEnable() && pNpc->IsOwnerOf(pUser))		// °ïÅÉÖù×Ó²»ÄÜÉ¾³ý
-            //				{
-            //					if(pNpc->IsRecycleEnable())
-            //					{
-            //						// Ö»¼ì²éÆÕÍ¨±³°üÊÇ·ñÂú
-            //						if(pUser->IsItemFull(CItem::GetWeight(pNpc->GetInt(NPCDATA_ITEMTYPE)), ID_NONE, ITEMPOSITION_BACKPACK))
-            //						{
-            //							pUser->SendSysMsg(STR_YOUR_BAG_FULL);
-            //							return ;
-            //						}
+//            //				if(pNpc->IsDelEnable() && pNpc->IsOwnerOf(pUser))		// °ïÅÉÖù×Ó²»ÄÜÉ¾³ý
+//            //				{
+//            //					if(pNpc->IsRecycleEnable())
+//            //					{
+//            //						// Ö»¼ì²éÆÕÍ¨±³°üÊÇ·ñÂú
+//            //						if(pUser->IsItemFull(CItem::GetWeight(pNpc->GetInt(NPCDATA_ITEMTYPE)), ID_NONE, ITEMPOSITION_BACKPACK))
+//            //						{
+//            //							pUser->SendSysMsg(STR_YOUR_BAG_FULL);
+//            //							return ;
+//            //						}
 
-            //						CItem* pItem = pNpc->Recycle(pUser->GetID());
-            //						if(pItem)
-            //						{
-            //							pUser->AddItem(pItem, SYNCHRO_TRUE);
-            //							pUser->SendSysMsg(STR_GOT_ITEM, pItem->GetStr(ITEMDATA_NAME));
-            //						}
-            //						else
-            //							pUser->SendSysMsg(STR_ITEM_DAMAGED);
-            //					}
-            //					if(!pNpc->DelNpc())
-            //						pUser->SendSysMsg(STR_DELETE_FAILED);
-            //				}
-            //			}
-            break;
-        }
-    case EVENT_CHANGEPOS:
+//            //						CItem* pItem = pNpc->Recycle(pUser->GetID());
+//            //						if(pItem)
+//            //						{
+//            //							pUser->AddItem(pItem, SYNCHRO_TRUE);
+//            //							pUser->SendSysMsg(STR_GOT_ITEM, pItem->GetStr(ITEMDATA_NAME));
+//            //						}
+//            //						else
+//            //							pUser->SendSysMsg(STR_ITEM_DAMAGED);
+//            //					}
+//            //					if(!pNpc->DelNpc())
+//            //						pUser->SendSysMsg(STR_DELETE_FAILED);
+//            //				}
+//            //			}
+//            break;
+//        }
+//    case EVENT_CHANGEPOS:
+//        {
+//            //			CNpc* pNpc;
+//            //			IRole* pRole = RoleManager()->QuerySet()->GetObj(m_pInfo->id);
+//            //			if (pRole && pRole->QueryObj(OBJ_NPC, IPP_OF(pNpc)) && pUser->GetMapID() == pNpc->GetMapID())
+//            //			{
+//            //				int	nLook = ::MaskLook(m_pInfo->usType);
+//            //				if(::MaskLook(pNpc->GetLookFace()) == nLook)
+//            //					pNpc->ChangeDir(nLook);
+//            //				pNpc->TransPos(m_pInfo->usPosX, m_pInfo->usPosY);		// synchro true
+//            //			}
+//            break;
+//        }
+    default:
         {
-            //			CNpc* pNpc;
-            //			IRole* pRole = RoleManager()->QuerySet()->GetObj(m_pInfo->id);
-            //			if (pRole && pRole->QueryObj(OBJ_NPC, IPP_OF(pNpc)) && pUser->GetMapID() == pNpc->GetMapID())
-            //			{
-            //				int	nLook = ::MaskLook(m_pInfo->usType);
-            //				if(::MaskLook(pNpc->GetLookFace()) == nLook)
-            //					pNpc->ChangeDir(nLook);
-            //				pNpc->TransPos(m_pInfo->usPosX, m_pInfo->usPosY);		// synchro true
-            //			}
+            fprintf(stdout, "Unknown event[%04u], data=[%d]\n",
+                    mInfo->Event, mInfo->Data);
             break;
         }
     }

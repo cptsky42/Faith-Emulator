@@ -53,3 +53,23 @@ World :: ~World()
     }
     mAllTasks.clear();
 }
+
+bool
+World :: queryNpc(Npc** aOutNpc, int32_t aUID)
+{
+    ASSERT_ERR(aOutNpc != nullptr && *aOutNpc == nullptr, false);
+    ASSERT_ERR(Entity::isNpc(aUID), false);
+
+    // TODO: Thread-safe ?
+
+    bool found = false;
+    map<int32_t, Npc*>::const_iterator it;
+
+    if ((it = mAllNPCs.find(aUID)) != mAllNPCs.end())
+    {
+        *aOutNpc = it->second;
+        found = true;
+    }
+
+    return found;
+}

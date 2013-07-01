@@ -14,13 +14,64 @@
 #include <string>
 
 class NpcTask;
+class Client;
 
 class Npc : public Entity
 {
     PROHIBIT_COPY(Npc); // constant UID, should be unique...
 
 public:
-    // type: 6, 9, 21, 22, 23, 24
+    // type: 2, 6, 9, 21, 22, 23, 24
+    enum Type
+    {
+        TYPE_NONE = 0,
+        TYPE_SHOPKEEPER = 1,
+        TYPE_TASK = 2,
+        TYPE_STORAGE = 3,
+        TYPE_TRUNCK = 4,
+        TYPE_FACE = 5,
+        TYPE_FROGE = 6, // only used by the client
+        TYPE_EMBED = 7,
+
+        _STATUARY_NPC			= 9,			// µñÏñNPC
+        _SYNFLAG_NPC			= 10,			// °ïÅÉ±ê¼ÇNPC
+        _ROLE_PLAYER			= 11,			// ÆäËûÍæ¼Ò		(only use for client)
+        _ROLE_HERO				= 12,			// ×Ô¼º			(only use for client)
+        _ROLE_MONSTER			= 13,			// ¹ÖÎï			(only use for client)
+        _BOOTH_NPC				= 14,			// °ÚÌ¯NPC		(CBooth class)
+        _SYNTRANS_NPC			= 15,			// °ïÅÉ´«ËÍNPC, ¹Ì¶¨ÄÇ¸ö²»ÒªÓÃ´ËÀàÐÍ! (ÓÃÓÚ00:00ÊÕ·Ñ)(LINKIDÎª¹Ì¶¨NPCµÄID£¬ÓëÆäËüÊ¹ÓÃLINKIDµÄ»¥³â)
+        _ROLE_BOOTH_FLAG_NPC	= 16,			// Ì¯Î»±êÖ¾NPC	(only use for client)
+        _ROLE_MOUSE_NPC			= 17,			// Êó±êÉÏµÄNPC	(only use for client)
+        _ROLE_MAGICITEM			= 18,			// ÏÝÚå»ðÇ½		(only use for client)
+        _ROLE_DICE_NPC			= 19,			// ÷»×ÓNPC
+        _ROLE_SHELF_NPC			= 20,			// ÎïÆ·¼Ü
+        _WEAPONGOAL_NPC			= 21,			// ÎäÆ÷°Ð×ÓNPC
+        _MAGICGOAL_NPC			= 22,			// Ä§·¨°Ð×ÓNPC
+        _BOWGOAL_NPC			= 23,			// ¹­¼ý°Ð×ÓNPC
+        _ROLE_TARGET_NPC		= 24,			// °¤´ò£¬²»´¥·¢ÈÎÎñ	(only use for client)
+        _ROLE_FURNITURE_NPC		= 25,			// ¼Ò¾ßNPC	(only use for client)
+        _ROLE_CITY_GATE_NPC		= 26,			// ³ÇÃÅNPC	(only use for client)
+        _ROLE_NEIGHBOR_DOOR		= 27,			// ÁÚ¾ÓµÄÃÅ
+        _ROLE_CALL_PET			= 28,			// ÕÙ»½ÊÞ	(only use for client)
+        _EUDEMON_TRAINPLACE_NPC	= 29,			// »ÃÊÞÑ±ÑøËù
+         _AUCTION_NPC			= 30,			// ÅÄÂòNPC	ÎïÆ·ÁìÈ¡NPC  LW
+         _ROLE_MINE_NPC			= 31,			// ¿óÊ¯NPC
+    };
+
+    enum Sort
+    {
+        SORT_NONE = 0,
+        SORT_TASK = 1,
+        SORT_RECYCLE = 2,
+        SORT_SCENE = 4,
+        SORT_LINKMAP = 8,
+        SORT_DIEACTION = 16,
+        SORT_DELENABLE = 32,
+        SORT_EVENT = 64,
+        SORT_TABLE = 128,
+
+        SORT_USELINKID = SORT_LINKMAP | SORT_DIEACTION | SORT_EVENT
+    };
 
 public:
     /* constructor */
@@ -33,11 +84,23 @@ public:
     virtual ~Npc();
 
 public:
+    void linkTask(NpcTask* aTask) { ASSERT(aTask != nullptr); mTask = aTask; }
+    bool activateNpc(Client& aClient, int32_t aAction);
+
+public:
     uint8_t getType() { return mType; }
     uint8_t getBase() { return mBase; }
     uint8_t getSort() { return mSort; }
 
-    void linkTask(NpcTask* aTask) { mTask = aTask; }
+public:
+    bool isShopNpc() { return mType == TYPE_SHOPKEEPER; }
+    // NpcShop* queryShop();
+
+    bool isTaskNpc() { return mType == TYPE_TASK || (mSort & SORT_TASK) != 0; }
+    const NpcTask& queryTask() { ASSERT(mTask != nullptr); return *mTask; }
+
+    bool isStorageNpc() { return mType == TYPE_STORAGE; }
+    // NpcStorage? queryStorage
 
 private:
     uint8_t mType;

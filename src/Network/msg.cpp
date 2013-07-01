@@ -91,6 +91,12 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
     case MSG_ITEMINFO:
         msg = new MsgItemInfo(aBuf, aLen);
         break;
+    case MSG_DIALOG:
+        msg = new MsgDialog(aBuf, aLen);
+        break;
+    case MSG_NPC:
+        msg = new MsgNpc(aBuf, aLen);
+        break;
     default:
         msg = new Msg(aBuf, aLen);
         break;

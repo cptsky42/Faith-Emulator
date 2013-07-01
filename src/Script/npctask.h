@@ -25,7 +25,7 @@ public:
     NpcTask(int32_t aUID, const char* aPath);
     virtual ~NpcTask();
 
-    virtual err_t execute(Client& aClient, int32_t aParam);
+    virtual err_t execute(Client& aClient, int32_t aParam) const;
 
 private:
     // MsgDialog Lua methods

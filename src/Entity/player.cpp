@@ -8,12 +8,14 @@
 
 #include "player.h"
 #include "world.h"
-#include "npc.h"
 #include "msgtalk.h"
 #include "msgaction.h"
 #include "msgnpcinfo.h"
 #include <stdarg.h>
 #include <map>
+
+#include "npc.h"
+#include "npctask.h"
 
 using namespace std;
 
@@ -67,6 +69,7 @@ Player :: enterMap()
 
     // TODO: HACK!
     World& world = World::getInstance();
+    NpcTask* task = new NpcTask(21, "/Users/jpboivin/Development/Faith Emulator/data/NPCs/21.lua");
     for (map<int32_t, Npc*>::iterator
             it = world.AllNPCs.begin(), end = world.AllNPCs.end();
          it != end; ++it)
@@ -75,6 +78,8 @@ Player :: enterMap()
 
         if (npc->getMapId() == mMapId)
         {
+            npc->linkTask(task);
+
             MsgNpcInfo info(*npc);
             send(&info);
         }

@@ -28,6 +28,7 @@ Script::State :: State()
 {
     mState = luaL_newstate();
     ASSERT(mState != nullptr);
+    luaL_openlibs(mState);
 }
 
 Script::State :: ~State()
@@ -45,7 +46,11 @@ Script :: Script(int32_t aUID, const char* aPath)
     ASSERT(aPath != nullptr && aPath[0] != '\0');
 
     lua_State* state = Script::getState();
-    luaL_loadfile(state, aPath);
+    if (luaL_dofile(state, aPath) != 0)
+    {
+        LOG("Failed to parse Lua script `%s`:\n%s",
+            aPath, lua_tostring(state, -1));
+    }
 }
 
 Script :: ~Script()

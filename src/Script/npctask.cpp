@@ -47,16 +47,27 @@ NpcTask :: ~NpcTask()
 }
 
 err_t
-NpcTask :: execute(Client& aClient, int32_t aParam)
+NpcTask :: execute(Client& aClient, int32_t aParam) const
 {
     err_t err = ERROR_SUCCESS;
 
     lua_State* state = Script::getState();
 
+    LOG("Executing npc task %d with client=%p, param=%d.",
+        mUID, &aClient, aParam);
+
     lua_getglobal(state, mFct.c_str());
     lua_pushinteger(state, (ptrdiff_t)&aClient);
     lua_pushinteger(state, aParam);
-    lua_call(state, 2, 0);  /* call Lua function */
+    LOG("Calling function %s", mFct.c_str());
+
+    int luaerr = lua_pcall(state, 2, 0, 0); // state, nargs, nret, err_fct
+    if (LUA_OK != luaerr)
+    {
+        LOG("Lua error %d calling %s:\n %s",
+              luaerr, mFct.c_str(), lua_tostring(state, -1));
+        err = ERROR_EXEC_FAILED;
+    }
 
     return err;
 }

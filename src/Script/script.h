@@ -39,7 +39,10 @@ public:
      *
      * @return
      */
-    virtual err_t execute(Client& aClient, int32_t aParam) = 0;
+    virtual err_t execute(Client& aClient, int32_t aParam) const = 0;
+
+public:
+    int32_t getUID() const { return mUID; }
 
 protected:
     /* constructor */

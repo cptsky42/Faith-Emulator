@@ -146,8 +146,14 @@ MsgDialog :: process(Client* aClient)
             break;
         }
     default:
-        ASSERT(false);
-        break;
+        {
+            fprintf(stdout, "Unknown event[%04u], data=[%d]\n",
+                    mInfo->Action, mInfo->IdxTask);
+            break;
+        }
+//    default:
+//        ASSERT(false);
+//        break;
     }
 }
 

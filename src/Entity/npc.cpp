@@ -8,6 +8,7 @@
 
 #include "npc.h"
 #include "npctask.h"
+#include "client.h"
 
 Npc :: Npc(int32_t aUID, const char* aName,
            uint8_t aType, int16_t aLook,
@@ -37,4 +38,24 @@ Npc :: Npc(int32_t aUID, const char* aName,
 Npc :: ~Npc()
 {
 
+}
+
+bool
+Npc :: activateNpc(Client& aClient, int32_t aAction)
+{
+    ASSERT_ERR(&aClient != nullptr, false);
+
+    bool result = false;
+
+    // TODO: isAlive()
+    if (isTaskNpc() && /* isAlive() && */ mTask != nullptr)
+    {
+        const NpcTask& task = queryTask();
+
+        LOG("Npc %d is a task npc and the task %d will be executed...",
+            mUID, task.getUID());
+        result = (task.execute(aClient, 0) == ERROR_SUCCESS);
+    }
+
+    return result;
 }
