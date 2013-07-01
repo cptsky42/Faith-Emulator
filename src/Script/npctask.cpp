@@ -27,7 +27,23 @@ NpcTask :: registerFunctions()
     lua_register(state, "create", NpcTask::create);
 
     // Getters / Setters Lua methods
+    lua_register(state, "getName", NpcTask::getName);
+    lua_register(state, "getLook", NpcTask::getLook);
+    lua_register(state, "getHair", NpcTask::getHair);
     lua_register(state, "getMoney", NpcTask::getMoney);
+    lua_register(state, "getExp", NpcTask::getExp);
+    lua_register(state, "getStrength", NpcTask::getStrength);
+    lua_register(state, "getVitality", NpcTask::getVitality);
+    lua_register(state, "getAgility", NpcTask::getAgility);
+    lua_register(state, "getSpirit", NpcTask::getSpirit);
+    lua_register(state, "getAddPoints", NpcTask::getAddPoints);
+    lua_register(state, "getCurHP", NpcTask::getCurHP);
+    lua_register(state, "getMaxHP", NpcTask::getMaxHP);
+    lua_register(state, "getCurMP", NpcTask::getCurMP);
+    lua_register(state, "getMaxMP", NpcTask::getMaxMP);
+    lua_register(state, "getPkPoints", NpcTask::getPkPoints);
+    lua_register(state, "getLevel", NpcTask::getLevel);
+    lua_register(state, "getProfession", NpcTask::getProfession);
 
     return err;
 }
@@ -134,6 +150,51 @@ NpcTask :: create(lua_State* aState)
     return 0;
 }
 
+
+
+
+/* static */
+int
+NpcTask :: getName(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushstring(aState, player.getName());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getLook(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getLook());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getHair(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getHair());
+    return 1;
+}
+
 /* static */
 int
 NpcTask :: getMoney(lua_State* aState)
@@ -145,5 +206,187 @@ NpcTask :: getMoney(lua_State* aState)
     ASSERT(&player != nullptr);
 
     lua_pushinteger(aState, player.getMoney());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getExp(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getExp());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getStrength(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getStrength());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getVitality(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getVitality());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getAgility(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getAgility());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getSpirit(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getSpirit());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getAddPoints(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getAddPoints());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getCurHP(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getCurHP());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getMaxHP(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getMaxHP());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getCurMP(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getCurMP());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getMaxMP(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getMaxMP());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getPkPoints(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getPkPoints());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getLevel(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getLevel());
+    return 1;
+}
+
+/* static */
+int
+NpcTask :: getProfession(lua_State* aState)
+{
+    Client& client = *((Client*)lua_tointeger(aState, 1));
+    ASSERT(&client != nullptr);
+
+    Player& player = *client.getPlayer();
+    ASSERT(&player != nullptr);
+
+    lua_pushinteger(aState, player.getProfession());
     return 1;
 }

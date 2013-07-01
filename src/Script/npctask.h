@@ -35,7 +35,23 @@ private:
     static int create(lua_State* aState);
 
     // Getters / Setters Lua methods
+    static int getName(lua_State* aState);
+    static int getLook(lua_State* aState);
+    static int getHair(lua_State* aState);
     static int getMoney(lua_State* aState);
+    static int getExp(lua_State* aState);
+    static int getStrength(lua_State* aState);
+    static int getVitality(lua_State* aState);
+    static int getAgility(lua_State* aState);
+    static int getSpirit(lua_State* aState);
+    static int getAddPoints(lua_State* aState);
+    static int getCurHP(lua_State* aState);
+    static int getMaxHP(lua_State* aState);
+    static int getCurMP(lua_State* aState);
+    static int getMaxMP(lua_State* aState);
+    static int getPkPoints(lua_State* aState);
+    static int getLevel(lua_State* aState);
+    static int getProfession(lua_State* aState);
 
 private:
     std::string mFct;
