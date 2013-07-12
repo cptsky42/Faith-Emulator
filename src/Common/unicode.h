@@ -43,15 +43,16 @@ inline err_t wcToUtf8(char* aOutStr, size_t& aLen, const wchar_t* aStr)
 {
     ASSERT(aOutStr != nullptr);
     ASSERT(aStr != nullptr);
+    ASSERT(aLen <= INT_MAX);
 
     err_t err = ERROR_SUCCESS;
 
-    int len = WideCharToMultiByte(CP_UTF8, 0, aStr, -1, aOutStr, aLen, NULL, NULL);
+    int len = WideCharToMultiByte(CP_UTF8, 0, aStr, -1, aOutStr, (int)aLen, NULL, NULL);
     if (len == 0)
     {
         // failed to convert the string, will return the required length
         aLen = WideCharToMultiByte(CP_UTF8, 0, aStr, -1, NULL, 0, NULL, NULL);
-        err = BL_ERROR_BUFFER_OVERFLOW;
+        err = ERROR_BUFFER_OVERFLOW;
     }
     else
     {
@@ -80,10 +81,11 @@ inline err_t utf8ToWc(wchar_t* aOutStr, size_t& aLen, const char* aStr)
 {
     ASSERT(aOutStr != nullptr);
     ASSERT(aStr != nullptr);
+    ASSERT(aLen <= INT_MAX);
 
-    err_t err = BL_ERROR_SUCCESS;
+    err_t err = ERROR_SUCCESS;
 
-    int len = MultiByteToWideChar(CP_UTF8, 0, aStr, -1, aOutStr, aLen);
+    int len = MultiByteToWideChar(CP_UTF8, 0, aStr, -1, aOutStr, (int)aLen);
     if (len == 0)
     {
         // failed to convert the string, will return the required length

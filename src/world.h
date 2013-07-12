@@ -13,6 +13,10 @@
 #include "env.h"
 #include <map>
 
+class Entity;
+class AdvancedEntity;
+class Player;
+class Monster;
 class Npc;
 class NpcTask;
 
@@ -22,6 +26,10 @@ class NpcTask;
  */
 class World : public Environment::Global
 {
+    friend class Database; // loading entities, etc...
+
+    PROHIBIT_COPY(World); // one world per server...
+
 public:
     /**
      * Get the World singleton. If the object does not exist yet,
@@ -36,13 +44,8 @@ public:
     virtual ~World();
 
 public:
+    bool queryEntity(Entity** aOutEntity, int32_t aUID);
     bool queryNpc(Npc** aOutNpc, int32_t aUID);
-
-    // TODO: remove them for thread-safe methods
-    /** All NPCs in the world. */
-    std::map<int32_t, Npc*>& AllNPCs;
-    /** All tasks in the world. */
-    std::map<int32_t, NpcTask*>& AllTasks;
 
 private:
     /* constructor */
@@ -50,6 +53,10 @@ private:
 
 private:
     static World* sInstance; //!< static instance of the singleton
+
+private: // aliases
+    std::map<int32_t, Npc*>& AllNPCs;
+    std::map<int32_t, NpcTask*>& AllTasks;
 
 private:
     std::map<int32_t, Npc*> mAllNPCs; //!< internal map

@@ -19,6 +19,9 @@
  */
 class StringPacker
 {
+    // !!! class has pointer data members !!!
+    PROHIBIT_COPY(StringPacker);
+
 public:
     /**
      * Create a new packer around the specified buffer.

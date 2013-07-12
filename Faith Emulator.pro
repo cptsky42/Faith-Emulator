@@ -3,12 +3,23 @@ QT += network sql
 QT -= gui
 
 TARGET = "Faith Emulator"
-CONFIG   += console
-CONFIG   -= app_bundle
-
-#CONFIG += x86 x86_64
-
 TEMPLATE = app
+CONFIG   += console
+
+# Check Qt version
+QT_VERSION = $$[QT_VERSION]
+QT_VERSION = $$split(QT_VERSION, ".")
+QT_VER_MAJ = $$member(QT_VERSION, 0)
+QT_VER_MIN = $$member(QT_VERSION, 1)
+
+lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 7) {
+   error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
+}
+
+macx {
+CONFIG -= app_bundle
+#CONFIG += ppc ppc64 x86 x86_64
+}
 
 SOURCES += \
     src/server.cpp \
@@ -167,4 +178,32 @@ INCLUDEPATH += \
     src/Network/Sockets \
     src/Script \
     src/Security/Cryptography \
-    src/third_party/lua-5.2.2/src \
+    src/third_party/lua-5.2.2/src
+
+# WIN32 stuff
+win32 {
+#OTHER_FILES += \
+#    res/win32.rc
+
+#RC_FILE += \
+#    res/win32.rc
+
+QMAKE_CFLAGS += -D_CRT_SECURE_NO_WARNINGS
+QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
+}
+
+# Mac OS X stuff
+macx {
+
+}
+
+# UNIX stuff...
+unix:!macx {
+
+}
+
+# UNIX-like stuff...
+unix {
+QMAKE_CFLAGS += -Wextra
+QMAKE_CXXFLAGS += -Wextra
+}

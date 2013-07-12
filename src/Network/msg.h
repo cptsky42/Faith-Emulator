@@ -19,6 +19,9 @@ class Client;
  */
 class Msg
 {
+    // !!! class has pointer data members !!!
+    PROHIBIT_COPY(Msg);
+
 public:
     /**
      * The general header prefixing all messages.

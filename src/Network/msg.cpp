@@ -142,6 +142,8 @@ Msg :: ~Msg()
 void
 Msg :: process(Client* aClient)
 {
+    ASSERT(aClient != nullptr);
+
     Msg::Header* header = (Msg::Header*)mBuf;
     fprintf(stdout, "Unknown msg[%04d], len=[%03d]\n",
             header->Type, header->Length);

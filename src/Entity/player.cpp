@@ -68,22 +68,22 @@ Player :: enterMap()
     send(&msg);
 
     // TODO: HACK!
-    World& world = World::getInstance();
-    NpcTask* task = new NpcTask(21, "/Users/jpboivin/Development/Faith Emulator/data/NPCs/21.lua");
-    for (map<int32_t, Npc*>::iterator
-            it = world.AllNPCs.begin(), end = world.AllNPCs.end();
-         it != end; ++it)
-    {
-        Npc* npc = it->second;
+//    World& world = World::getInstance();
+//    NpcTask* task = new NpcTask(21, "/Users/jpboivin/Development/Faith Emulator/data/NPCs/21.lua");
+//    for (map<int32_t, Npc*>::iterator
+//            it = world.AllNPCs.begin(), end = world.AllNPCs.end();
+//         it != end; ++it)
+//    {
+//        Npc* npc = it->second;
 
-        if (npc->getMapId() == mMapId)
-        {
-            npc->linkTask(task);
+//        if (npc->getMapId() == mMapId)
+//        {
+//            npc->linkTask(task);
 
-            MsgNpcInfo info(*npc);
-            send(&info);
-        }
-    }
+//            MsgNpcInfo info(*npc);
+//            send(&info);
+//        }
+//    }
 
 //	CMapPtr pMap = GetMap();
 //	if(pMap)
