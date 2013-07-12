@@ -27,7 +27,7 @@ public:
     static const int32_t MASK_RANK_SHIFT = INT32_C(24);
 
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */

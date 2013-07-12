@@ -22,9 +22,6 @@ class Player;
  */
 class Database : public Environment::Global
 {
-    // the database can manipulate the Player data...
-    friend class Player;
-
 public:
     /**
      * Get the Database singleton. If the object does not exist yet,

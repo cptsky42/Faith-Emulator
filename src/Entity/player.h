@@ -16,6 +16,8 @@
 
 class Player : public AdvancedEntity
 {
+    friend class Database; // the database can manipulate the Player data...
+
     PROHIBIT_COPY(Player); // constant UID, should be unique...
 
 public:

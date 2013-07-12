@@ -168,7 +168,7 @@ public:
     };
 
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */
