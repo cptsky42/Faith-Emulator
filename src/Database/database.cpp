@@ -48,7 +48,7 @@ Database :: connect(const char* aHost, const char* aDbName,
     ASSERT(aHost != nullptr && aHost[0] != '\0');
     ASSERT(aDbName != nullptr && aDbName[0] != '\0');
     ASSERT(aUserName != nullptr && aUserName[0] != '\0');
-    ASSERT(aPassword != nullptr && aPassword[0] != '\0');
+    ASSERT(aPassword != nullptr);
 
     if (mConnection.isOpen())
     {

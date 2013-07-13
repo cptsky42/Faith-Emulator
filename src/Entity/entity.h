@@ -115,7 +115,7 @@ public:
     int32_t getLook() { return mLook; }
 
     /** Get the entity's map UID. */
-    int16_t getMapId() { return mMapId; }
+    int32_t getMapId() { return mMapId; }
     /** Get the entity's X coord. */
     uint16_t getPosX() { return mPosX; }
     /** Get the entity's Y coord. */
@@ -124,7 +124,7 @@ public:
     uint8_t getDirection() { return mDirection; }
 
     /** Set the map UID of the entity. */
-    void setMapId(int16_t aMapId) { mMapId = aMapId; }
+    void setMapId(int32_t aMapId) { mMapId = aMapId; }
     /** Set the position on the map of the entity. */
     void setPosition(uint16_t aPosX, uint16_t aPosY) { mPosX = aPosX; mPosY = aPosY; }
     /** Set the cardinal direction of the entity. */
@@ -140,7 +140,7 @@ protected:
     std::string mName; //!< Entity name
     int32_t mLook; //!< Entity look/face
 
-    int16_t mMapId; //!< Entity map UID
+    int32_t mMapId; //!< Entity map UID
     uint16_t mPosX; //!< Entity X coord.
     uint16_t mPosY; //!< Entity Y coord.
     uint8_t mDirection; //!< Entity cardinal direction

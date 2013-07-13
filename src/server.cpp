@@ -10,16 +10,19 @@
 #include "client.h"
 #include "networkclient.h"
 #include "msg.h"
+#include "mapmanager.h"
 #include "database.h"
 #include "npctask.h"
-#include <string>
+#include <QSettings>
+#include <QString>
+
+#include "mapdata.h"
 
 using namespace std;
 
 /* static */
 const uint16_t Server::ACCSERVER_PORT = 9958;
 const uint16_t Server::MSGSERVER_PORT = 5816;
-const char* Server::SERVER_IP = "70.80.200.10"; //172.16.104.1";
 
 /* static */
 Server* Server::sInstance = nullptr;
@@ -38,8 +41,23 @@ Server :: getInstance()
 
 Server :: Server()
 {
+    err_t err = ERROR_SUCCESS;
+
+    QSettings settings("./settings.cfg", QSettings::IniFormat);
+    QString name = settings.value("FAITH_EMULATOR/NAME", "Faith").toString(); // TODO
+    mServerIP = settings.value("FAITH_EMULATOR/SERVER_IP", "127.0.0.1").toString().toStdString();
+
+    QString sql_host = settings.value("FAITH_EMULATOR/SQL_HOST", "localhost").toString();
+    QString sql_db = settings.value("FAITH_EMULATOR/SQL_DB", "xyserver").toString();
+    QString sql_user = settings.value("FAITH_EMULATOR/SQL_USER", "root").toString();
+    QString sql_pwd = settings.value("FAITH_EMULATOR/SQL_PWD", "").toString();
+
+    MapManager& mgr = MapManager::getInstance();
+    DOIF(err, mgr.loadData());
+
     Database& db = Database::getInstance();
-    if (!db.connect("localhost", "xyserver", "root", "s0cac3r3b0rn"))
+    if (!db.connect(qPrintable(sql_host), qPrintable(sql_db),
+                    qPrintable(sql_user), qPrintable(sql_pwd)))
     {
         LOG("Failed to connect to the database...");
         // failed to connect
@@ -49,7 +67,7 @@ Server :: Server()
     NpcTask::registerFunctions(); // TODO: Only one call for all ?
 
     // load database
-    db.loadAllNPCs();
+    DOIF(err, db.loadAllNPCs());
 
     mAccServer.listen(ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;
@@ -66,6 +84,8 @@ Server :: Server()
     fprintf(stdout, "MsgServer listening on port %u...\n", MSGSERVER_PORT);
 
     fprintf(stdout, "Waiting for connections...\n");
+
+    ASSERT(err == ERROR_SUCCESS);
 }
 
 Server :: ~Server()
@@ -77,7 +97,7 @@ Server :: ~Server()
 void
 Server :: connectionHandler(NetworkClient* aClient)
 {
-    fprintf(stdout, "Incoming connection... %p\n", aClient);
+    LOG("Incoming connection... %p\n", aClient);
     if (aClient != nullptr)
     {
         uint16_t port = ((TcpServer*)aClient->getServer())->getPort();
@@ -156,7 +176,7 @@ Server :: receiveHandler(NetworkClient* aClient, uint8_t* aBuf, size_t aLen)
 void
 Server :: disconnectionHandler(NetworkClient* aClient)
 {
-    fprintf(stdout, "Incoming disconnection... %p\n", aClient);
+    LOG("Incoming disconnection... %p\n", aClient);
     if (aClient != nullptr)
     {
         // TODO? clean this line and add some checks

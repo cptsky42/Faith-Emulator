@@ -12,6 +12,7 @@
 #include "common.h"
 #include "env.h"
 #include "tcpserver.h"
+#include <string>
 
 class NetworkClient;
 
@@ -26,8 +27,6 @@ public:
     static const uint16_t ACCSERVER_PORT;
     /** The game server port. */
     static const uint16_t MSGSERVER_PORT;
-    /** The game server IP. */
-    static const char* SERVER_IP;
 
 public:
     /**
@@ -37,6 +36,13 @@ public:
      * @returns A reference to the singleton
      */
     static Server& getInstance();
+
+    /**
+     * Get the IPv4 address of the MsgServer.
+     *
+     * @returns The IPv4 address of the MsgServer.
+     */
+    static const char* getServerIP() { return getInstance().mServerIP.c_str(); }
 
 public:
     /* destructor */
@@ -76,6 +82,7 @@ private:
 private:
     TcpServer mAccServer; //!< TCP/IP server for the AccServer
     TcpServer mMsgServer; //!< TCP/IP server for the MsgServer
+    std::string mServerIP; //!< IPv4 address for the MsgServer
 };
 
 #endif // _FAITH_EMULATOR_SERVER_H

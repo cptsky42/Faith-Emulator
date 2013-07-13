@@ -63,7 +63,7 @@ MsgAccount :: process(Client* aClient)
         int32_t accUID = 1;
         int32_t token = 1;
 
-        MsgConnect msg(accUID, token, Server::SERVER_IP);
+        MsgConnect msg(accUID, token, Server::getServerIP());
         client.send(&msg);
     }
     else

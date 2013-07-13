@@ -6,6 +6,11 @@ TARGET = "Faith Emulator"
 TEMPLATE = app
 CONFIG   += console
 
+macx {
+CONFIG -= app_bundle
+#CONFIG += ppc ppc64 x86 x86_64
+}
+
 # Check Qt version
 QT_VERSION = $$[QT_VERSION]
 QT_VERSION = $$split(QT_VERSION, ".")
@@ -16,10 +21,10 @@ lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 7) {
    error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
 }
 
-macx {
-CONFIG -= app_bundle
-#CONFIG += ppc ppc64 x86 x86_64
-}
+OBJECTS_DIR = tmp
+MOC_DIR = tmp
+RCC_DIR = tmp
+UI_DIR = tmp
 
 SOURCES += \
     src/server.cpp \
@@ -90,7 +95,8 @@ SOURCES += \
     src/Script/script.cpp \
     src/Script/npctask.cpp \
     src/Network/msgnpc.cpp \
-    src/Network/msgdialog.cpp
+    src/Network/msgdialog.cpp \
+    src/Map/mapdata.cpp
 
 HEADERS += \
     src/server.h \
@@ -165,7 +171,9 @@ HEADERS += \
     src/third_party/lua-5.2.2/src/lctype.h \
     src/third_party/lua-5.2.2/src/lcode.h \
     src/third_party/lua-5.2.2/src/lauxlib.h \
-    src/third_party/lua-5.2.2/src/lapi.h
+    src/third_party/lua-5.2.2/src/lapi.h \
+    src/Map/mapdata.h \
+    src/Map/mapbase.h
 
 INCLUDEPATH += \
     src \
@@ -207,3 +215,16 @@ unix {
 QMAKE_CFLAGS += -Wextra
 QMAKE_CXXFLAGS += -Wextra
 }
+
+
+# copying data to build directory...
+win32 {
+    copyfiles.commands = "@call copy -r \"$${PWD}/data/*\" \"$${OUT_PWD}/\""
+}
+
+unix {
+    copyfiles.commands = "cp -r \"$${PWD}/data/\" \"$${OUT_PWD}/\""
+}
+
+QMAKE_EXTRA_TARGETS += copyfiles
+POST_TARGETDEPS += copyfiles
