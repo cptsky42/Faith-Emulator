@@ -11,7 +11,7 @@
  Target Server Version : 50170
  File Encoding         : utf-8
 
- Date: 07/01/2013 16:00:19 PM
+ Date: 07/14/2013 10:49:07 AM
 */
 
 SET NAMES utf8;
@@ -67,16 +67,16 @@ CREATE TABLE `map` (
   `id` int(4) unsigned NOT NULL DEFAULT '0',
   `name` char(15) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT 'Î´ÃüÃû',
   `describe_text` char(127) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
-  `mapdoc` int(4) unsigned NOT NULL DEFAULT '0',
+  `doc_id` smallint(4) unsigned NOT NULL DEFAULT '0',
   `type` int(4) unsigned zerofill DEFAULT '0000',
   `weather` int(4) unsigned zerofill DEFAULT '0000',
   `bgmusic` int(4) unsigned zerofill DEFAULT '0000',
   `bgmusic_show` int(4) unsigned zerofill DEFAULT '0000',
-  `portal0_x` int(4) unsigned zerofill DEFAULT '0000',
-  `portal0_y` int(4) unsigned zerofill DEFAULT '0000',
+  `portal_x` int(4) unsigned zerofill DEFAULT '0000',
+  `portal_y` int(4) unsigned zerofill DEFAULT '0000',
   `reborn_map` int(4) unsigned zerofill DEFAULT '0000',
   `reborn_portal` int(4) unsigned zerofill DEFAULT '0000',
-  `color` int(4) unsigned zerofill DEFAULT '4294967295',
+  `light` int(4) unsigned zerofill DEFAULT '4294967295',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -149,50 +149,46 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
-  `mate` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'ÎÞ',
-  `lookface` int(4) unsigned NOT NULL DEFAULT '0',
-  `hair` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `money` int(4) unsigned NOT NULL DEFAULT '0',
-  `money_saved` int(4) unsigned NOT NULL DEFAULT '0',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `exp` bigint(4) NOT NULL DEFAULT '0',
-  `strength` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `old_prof` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `Speed` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `health` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `soul` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `additional_point` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `auto_allot` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `life` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `mana` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `account_id` int(4) unsigned DEFAULT '0',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL DEFAULT 'Unknown',
+  `mate` varchar(15) CHARACTER SET latin1 COLLATE latin1_general_cs DEFAULT 'None',
+  `lookface` int(7) unsigned NOT NULL,
+  `hair` smallint(3) unsigned NOT NULL,
+  `money` int(4) unsigned DEFAULT '1000',
+  `money_saved` int(4) unsigned DEFAULT '0',
+  `level` tinyint(3) unsigned DEFAULT '1',
+  `exp` int(10) unsigned DEFAULT '0',
+  `strength` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `speed` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `health` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `soul` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `add_points` smallint(3) unsigned DEFAULT '0',
+  `auto_allot` tinyint(1) unsigned DEFAULT '1',
+  `life` smallint(5) unsigned NOT NULL DEFAULT '1',
+  `mana` smallint(5) unsigned NOT NULL DEFAULT '0',
   `profession` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `pk` smallint(2) NOT NULL DEFAULT '0',
-  `metempsychosis` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `syndicate_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `recordmap_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `recordx` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `recordy` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `account_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
-  `last_login` int(8) unsigned NOT NULL DEFAULT '0',
-  `virtue` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `home_id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `pk` smallint(5) DEFAULT '0',
+  `virtue` int(4) unsigned DEFAULT '0',
+  `nobility` tinyint(1) unsigned DEFAULT '0',
+  `medal` int(4) unsigned DEFAULT '0',
+  `medal_select` int(4) unsigned DEFAULT '0',
+  `metempsychosis` tinyint(1) unsigned DEFAULT '0',
+  `syndicate_id` smallint(4) unsigned DEFAULT '0',
+  `record_map` smallint(4) unsigned DEFAULT '1000',
+  `record_x` smallint(4) unsigned DEFAULT '400',
+  `record_y` smallint(4) unsigned DEFAULT '400',
+  `last_login` bigint(8) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_name` (`name`),
-  KEY `index_account` (`account_id`),
-  KEY `index_money` (`money_saved`),
-  KEY `index_pk` (`pk`),
-  KEY `index_level` (`level`,`profession`),
-  KEY `tim` (`last_login`),
-  KEY `index_profession` (`profession`)
-) ENGINE=MyISAM AUTO_INCREMENT=4983955 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `index_name` (`name`) USING BTREE,
+  KEY `index_account` (`account_id`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=1000002 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- ----------------------------
 --  Records of `user`
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES ('CptSky[PM]', 'None', '1010005', '101', '20000', '0', '120', '0', '15', '0', '12', '13', '5', '3', '0', '100', '80', '10', '0', '0', '0', '200', '465', '50', '1', '1000000', '20081026', '0', '0');
+INSERT INTO `user` VALUES ('1', '1000001', 'CptSky[PM]', 'None', '1010005', '101', '1000', '0', '1', '0', '5', '7', '9', '11', '3', '1', '150', '100', '10', '30', '0', '0', '0', '0', '0', '0', '1000', '400', '400', '0');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
