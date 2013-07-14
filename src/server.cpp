@@ -67,6 +67,7 @@ Server :: Server()
     NpcTask::registerFunctions(); // TODO: Only one call for all ?
 
     // load database
+    DOIF(err, db.loadAllMaps());
     DOIF(err, db.loadAllNPCs());
 
     mAccServer.listen(ACCSERVER_PORT);

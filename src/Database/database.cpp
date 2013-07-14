@@ -8,6 +8,7 @@
 
 #include "database.h"
 #include "world.h"
+#include "mapmanager.h"
 #include "npc.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlResult>
@@ -118,7 +119,7 @@ Database :: loadAllNPCs()
     if (query.exec())
     {
         World& world = World::getInstance();
-        while (query.next())
+        while (ERROR_SUCCESS == err && query.next())
         {
             Npc* npc = new Npc(
                            (int32_t)query.value(0).toInt(),
@@ -145,6 +146,50 @@ Database :: loadAllNPCs()
 
     return err;
 }
+
+err_t
+Database :: loadAllMaps()
+{
+    const char* cmd = "SELECT id, doc_id, type, weather, portal_x, portal_y, reborn_map, reborn_portal, light FROM map";
+
+    err_t err = ERROR_SUCCESS;
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+
+    if (query.exec())
+    {
+        MapManager& mgr = MapManager::getInstance();
+        while (ERROR_SUCCESS == err && query.next())
+        {
+            GameMap::Info* info = new GameMap::Info();
+            int32_t uid = query.value(0).toInt();
+
+            info->OwnerUID = 0;
+            info->DocID = (uint16_t)query.value(1).toInt();
+            info->Type = (uint32_t)query.value(2).toInt();
+            // TODO: weather
+            info->PortalX = (uint16_t)query.value(4).toInt();
+            info->PortalY = (uint16_t)query.value(5).toInt();
+            info->RebornMap = (int32_t)query.value(6).toInt();
+            info->RebornPortal = (int32_t)query.value(7).toInt();
+            info->Light = (uint32_t)query.value(8).toInt();
+
+            ASSERT(info != nullptr);
+            DOIF(err, mgr.createMap(uid, &info));
+
+            SAFE_DELETE(info);
+        }
+    }
+    else
+    {
+        LOG("Failed to execute the following cmd : %s", cmd);
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
 
 //QSqlQuery query(db);
 //success = query.exec("SELECT name, salary FROM employee WHERE salary > 50000");

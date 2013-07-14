@@ -86,7 +86,7 @@ MapManager :: loadData()
                     string dataPath = gamemap.value(group + "/File", "N/A").toString().toStdString();
                     if (dataPath != "N/A")
                     {
-                        map<string, MapData*>::iterator data_it;
+                        map<string, MapData*>::const_iterator data_it;
                         if ((data_it = mData.find(dataPath)) == mData.end())
                         {
                             MapData* data = nullptr;
@@ -141,6 +141,42 @@ MapManager :: loadData()
     {
         LOG("Could not find the '%s' file for loading maps.", path);
         err = ERROR_FILE_NOT_FOUND;
+    }
+
+    return err;
+}
+
+err_t
+MapManager :: createMap(int32_t aUID, GameMap::Info** aInfo)
+{
+    ASSERT_ERR(aInfo != nullptr && *aInfo != nullptr, ERROR_INVALID_POINTER);
+
+    err_t err = ERROR_SUCCESS;
+
+    if (mGameMaps.find(aUID) == mGameMaps.end())
+    {
+        map<uint16_t, MapData*>::const_iterator it;
+        if ((it = mMaps.find((*aInfo)->DocID)) != mMaps.end())
+        {
+            GameMap* gameMap = new GameMap(aUID, aInfo, *it->second);
+            ASSERT(gameMap != nullptr);
+
+            mGameMaps[aUID] = gameMap;
+
+            LOG("Created game map %d with data of %u.",
+                gameMap->getUID(), gameMap->getDocID());
+        }
+        else
+        {
+            LOG("Missing map data for doc ID %u. The map %d won't be created.",
+                (*aInfo)->DocID, aUID);
+            err = ERROR_NOT_FOUND;
+        }
+    }
+    else
+    {
+        LOG("Duplicated map %d.", aUID);
+        err = ERROR_CANNOT_CREATE;
     }
 
     return err;

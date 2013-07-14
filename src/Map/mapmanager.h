@@ -11,10 +11,10 @@
 
 #include "common.h"
 #include "env.h"
+#include "gamemap.h"
 #include <map>
 
 class MapData;
-class GameMap;
 
 class MapManager : public Environment::Global
 {
@@ -33,7 +33,7 @@ public:
 
     err_t loadData();
 
-    err_t createMap(int32_t aUID /* data */, uint16_t aDocID);
+    err_t createMap(int32_t aUID, GameMap::Info** aInfo);
     err_t linkMap(int32_t aUID, int32_t aRefUID);
 
 private:

@@ -36,14 +36,6 @@ public:
 private:
     static const int32_t MAX_PATH = 260;
 
-    static const int32_t LAYER_NONE = 0;
-    static const int32_t LAYER_TERRAIN = 1;
-    static const int32_t LAYER_FLOOR = 2;
-    static const int32_t LAYER_INTERACTIVE = 3;
-    static const int32_t LAYER_SCENE = 4;
-    static const int32_t LAYER_SKY = 5;
-    static const int32_t LAYER_SURFACE = 6;
-
     static const int32_t MAP_NONE = 0;
     static const int32_t MAP_TERRAIN = 1;
     static const int32_t MAP_TERRAIN_PART = 2;

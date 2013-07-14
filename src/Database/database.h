@@ -71,6 +71,15 @@ public:
      */
     err_t loadAllNPCs();
 
+    /**
+     * Load all maps in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllMaps();
+
 private:
     /* constructor */
     Database();

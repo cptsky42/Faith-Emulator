@@ -14,6 +14,7 @@
 #include "mapdata.h"
 
 class Client;
+class Entity;
 
 class GameMap
 {
@@ -49,7 +50,7 @@ public:
         uint16_t PortalY;
         int32_t RebornMap;
         int32_t RebornPortal;
-        uint32_t Color;
+        uint32_t Light;
     };
 
 public:
@@ -63,15 +64,19 @@ public:
 public:
     int32_t getUID() const { return mUID; }
     int32_t getOwnerUID() const { return mInfo->OwnerUID; }
+
     uint16_t getWidth() const { ASSERT(&mData != nullptr); return mData.getWidth(); }
     uint16_t getHeight() const { ASSERT(&mData != nullptr); return mData.getHeight(); }
 
     bool getFloorAccess(uint16_t aPosX, uint16_t aPosY) const;
     bool getFloorAlt(uint16_t aPosX, uint16_t aPosY) const;
+
+    uint16_t getDocID() { return mInfo->DocID; }
+    uint32_t getLight() { return mInfo->Light; }
+
     //	int		GetWidthOfBlock()				{ return (m_pMapData->GetMapWidth()-1) / CELLS_PER_BLOCK + 1; }
     //	int		GetHeightOfBlock()				{ return (m_pMapData->GetMapHeight()-1) / CELLS_PER_BLOCK + 1; }
 
-    //	int		GetResLev()						{ return m_pData->GetInt(GAMEMAPDATA_RESOURCE_LEV); }
     //	OBJID	GetSynID()						{ if(GetOwnerType() == OWNER_SYN) return GetOwnerID(); return ID_NONE; }
     //	DWORD	GetStatus()						{ return m_nStatus; }
     //	DWORD	GetType()						{ return m_pData->GetInt(GAMEMAPDATA_TYPE); }
@@ -83,28 +88,29 @@ public:
     bool isValidPoint(uint16_t aPosX, uint16_t aPosY) const { return (aPosX < getWidth() && aPosY < getHeight()); }
     bool isNewbieMap() const { return NEWBIE_MAP_UID == mUID; }
     bool isDynaMap() const { return mUID >= DYNAMIC_MAP_UID; }
+    bool isTrainMap() const { return 1039 == mUID; }
     bool isPkField() const { return (mInfo->Type & TYPE_PK_FIELD) != 0; }
     bool isChgMapDisabled() const { return (mInfo->Type & TYPE_CHGMAP_DISABLE) != 0; }
     bool isRecordDisabled() const { return (mInfo->Type & TYPE_RECORD_DISABLE) != 0; }
-    //	bool	IsPkDisable(void)				{ return ((m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_PK_DISABLE) != 0); }
-    //	bool	IsWarTime()						{ return (GetStatus() & STATUS_WAR) != 0; }
-    //	bool	IsTeamDisable()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_TEAM_DISABLE) != 0; }
-    //	bool	IsTeleportDisable()				{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_TELEPORT_DISABLE) != 0; }
-    //	bool	IsSynMap()						{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_SYN_MAP) != 0; }
-    //	bool	IsPrisonMap()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_PRISON_MAP) != 0; }
-    //	bool	IsTrainMap()					{ return GetID() == 1039; }
-    //	bool	IsWingEnable()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_WING_DISABLE) == 0; }
-    //	bool	IsMineField()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_MINEFIELD) != 0; }
-    //	bool	IsPkGameMap()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_PKGAME) != 0; }
-    //	bool	IsFamilyMap()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_FAMILY) != 0; }
-    //	bool	IsNeverWoundMap()				{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_NEVERWOUND) != 0;}
-    //	bool	IsDeadIsland()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_DEADISLAND) != 0;}
-    //	bool	IsBoothEnable()					{ return (m_pData->GetInt(GAMEMAPDATA_TYPE)&MAPTYPE_BOOTH_ENABLE) != 0;}
+    bool isPkDisabled() const { return (mInfo->Type & TYPE_PK_DISABLE) != 0; }
+    bool isTeamDisabled() const { return (mInfo->Type & TYPE_TEAM_DISABLE) != 0; }
+    bool isTeleportDisabled() const { return (mInfo->Type & TYPE_TELEPORT_DISABLE) != 0; }
+    bool isSynMap() const { return (mInfo->Type & TYPE_SYN_MAP) != 0; }
+    bool isPrisonMap() const { return (mInfo->Type & TYPE_PRISON_MAP) != 0; }
+    bool isWingDisabled() const { return (mInfo->Type & TYPE_WING_DISABLE) != 0; }
+    bool isMineField() const { return (mInfo->Type & TYPE_MINE_FIELD) != 0; }
+    bool isPkGameMap() const { return (mInfo->Type & TYPE_PK_GAME) != 0; }
+    bool isFamilyMap() const { return (mInfo->Type & TYPE_FAMILY) != 0; }
+    bool isBoothEnabled() const { return (mInfo->Type & TYPE_BOOTH_ENABLE) != 0; }
+    bool isWarTime() const { return false; /* (getStatus() & STATUS_WAR) != 0 */ } // TODO
 
 
 public:
 //	int		Distance(int x1, int y1, int x2, int y2)	{ return __max(abs(x1-x2), abs(y1-y2)); }
     void sendMapInfo(Client* aClient) const;
+
+    void enterRoom(Entity* aEntity) const;
+    void leaveRoom(Entity* aEntity) const;
 
 private:
     GameMap(int32_t aUID, Info** aInfo, MapData& aData);
@@ -119,9 +125,6 @@ private:
 
 //class CGameMap : public CGameObj
 //{
-//	bool	Create(PROCESS_ID idProcess, IRecordset* pRes);
-//	OBJID	CreateDynaMap(PROCESS_ID idProcess, const NewMapInfo* pInfo);
-//	void	OnTimer(DWORD tCurr);
 //	bool	QueryObjInPos(int nPosX, int nPosY, OBJID idObjType, void** ppObj);
 //	bool	QueryObj(int nCenterX, int nCenterY, OBJID idObjType, OBJID idObj, void** ppObj);
 //	IRole*	QueryRole(int nCenterX, int nCenterY, OBJID idObj);
@@ -142,8 +145,6 @@ private:
 //	virtual void	BroadcastBlockMsg(int nPosX, int nPosY, CNetMsg* pMsg);
 
 //public: // role
-//	void	EnterRoom(IMapThing* pThing, BOOL bWithBlock=false);
-//	void	LeaveRoom(IMapThing* pThing, BOOL bWithBlock=false);
 //	void	MoveTo(IRole* pRole, int nNewPosX, int nNewPosY, BOOL bLeaveBlock=false, BOOL bEnterBlock=false);		// ÓÐ¿ÉÄÜÒÆ¶¯µ½ÏàÁÚµÄBLOCK
 //	void	IncRole(int x, int y)		{ m_pMapData->IncRole(x, y); }
 //	void	DecRole(int x, int y)		{ m_pMapData->DecRole(x, y); }		// normal use LeaveRoom or MoveTo but dead
@@ -159,20 +160,6 @@ private:
 //	static bool	IsInRegion(CRegionData* pData, OBJID idMap, int x, int y);
 //	bool	BroadcastDance(CUser* pUser, OBJID idEmotion);
 
-//public: // light ------------------
-//	DWORD	GetLight()						{ return m_dwLightRGB; }
-//	void	SetLight(DWORD dwRGB)			{ m_dwLightRGB = dwRGB; }
-//protected:
-//	DWORD	m_dwLightRGB;
-
-
-//public: // const
-//	bool	IsStandEnable(int nPosX, int nPosY);
-//	bool	IsMoveEnable(int x, int y);
-//	bool	IsMoveEnable(int xSour, int ySour, int x, int y, int nClimbCap);
-//	bool	IsAltEnable(const POINT& posSour, const POINT& pos, int nAltDiff);
-//	bool	IsAltOver(const POINT& pos, int nAlt);
-
 //public: // application
 //	void	CollectMapThing(MAPTHING_SET& psetMapThing, const POINT pos, int nRange, OBJID idObjTypeUnion);	// idObjTypeUnion Ö§³Ö¶àÀàÐÍ¶ÔÏó
 //	bool	FindDropItemCell(int nRange, POINT* pos);			// pos: in/out
@@ -181,7 +168,6 @@ private:
 //	bool	SetStatus(int nStatus, bool flag);				// return false: no change
 //	void	SetSynID(OBJID idSyn, bool bWithAllNpc);				// true: set all syna npc syn id, yet.
 //	void	SetUserID(OBJID idUser, bool bWithAllNpc);				// true: set all syna npc syn id, yet.
-//	bool	ChangeMapDoc(OBJID idDoc);						// false: user in map, can't change
 //	bool	EraseMap();
 //	void	SetResLev(int nData, bool bUpdate)			{ m_pData->SetInt(GAMEMAPDATA_RESOURCE_LEV, nData); if(bUpdate) m_pData->Update(); }
 //	void	SetPortal0X(int nData, bool bUpdate)		{ m_pData->SetInt(GAMEMAPDATA_PORTAL0_X, nData); if(bUpdate) m_pData->Update(); }
