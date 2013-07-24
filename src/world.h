@@ -9,8 +9,8 @@
 #ifndef _FAITH_EMULATOR_WORLD_H_
 #define _FAITH_EMULATOR_WORLD_H_
 
-#include "common.h"
-#include "env.h"
+#include "fscommon.h"
+#include "fsenv.h"
 #include <map>
 
 class Entity;

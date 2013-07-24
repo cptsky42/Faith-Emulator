@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_MONSTER_H
 #define _FAITH_EMULATOR_MONSTER_H
 
-#include "common.h"
+#include "fscommon.h"
 #include "advancedentity.h"
 #include <string>
 

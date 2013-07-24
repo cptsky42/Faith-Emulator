@@ -14,7 +14,7 @@
 #ifndef _FAITH_EMULATOR_ERROR_H_
 #define _FAITH_EMULATOR_ERROR_H_
 
-#include "types.h"
+#include "fstypes.h"
 #include <errno.h>
 
 /*

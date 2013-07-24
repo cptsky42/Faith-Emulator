@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_NPC_H
 #define _FAITH_EMULATOR_NPC_H
 
-#include "common.h"
+#include "fscommon.h"
 #include "entity.h"
 #include <string>
 

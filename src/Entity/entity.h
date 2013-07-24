@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_ENTITY_H
 #define _FAITH_EMULATOR_ENTITY_H
 
-#include "common.h"
+#include "fscommon.h"
 
 /**
  * Base class of all entity on a map.

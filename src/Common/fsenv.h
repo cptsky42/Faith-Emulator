@@ -14,7 +14,7 @@
 #ifndef _FAITH_EMULATOR_ENVIRONMENT_H_
 #define _FAITH_EMULATOR_ENVIRONMENT_H_
 
-#include "common.h"
+#include "fscommon.h"
 #include <vector>
 
 /**

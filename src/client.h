@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_CLIENT_H
 #define _FAITH_EMULATOR_CLIENT_H
 
-#include "common.h"
+#include "fscommon.h"
 #include "tqcipher.h"
 #include <string>
 

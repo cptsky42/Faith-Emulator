@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_NPC_TASK_H_
 #define _FAITH_EMULATOR_NPC_TASK_H_
 
-#include "common.h"
+#include "fscommon.h"
 #include "script.h"
 #include <string>
 

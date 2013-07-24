@@ -11,8 +11,8 @@
  * sections in the LICENSE file.
  */
 
-#include "env.h"
-#include "common.h"
+#include "fsenv.h"
+#include "fscommon.h"
 #include <stdlib.h>
 #include <algorithm>
 

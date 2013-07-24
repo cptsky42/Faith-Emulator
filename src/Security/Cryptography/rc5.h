@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_RC5_H
 #define _FAITH_EMULATOR_RC5_H
 
-#include "common.h"
+#include "fscommon.h"
 
 /**
  * Rivest Cipher 5 (RC5) implementation for Era of Faith. The game uses the

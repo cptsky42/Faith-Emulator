@@ -14,9 +14,9 @@
 #ifndef _FAITH_EMULATOR_UNICODE_H_
 #define _FAITH_EMULATOR_UNICODE_H_
 
-#include "types.h"
-#include "err.h"
-#include "myassert.h"
+#include "fstypes.h"
+#include "fserr.h"
+#include "fsassert.h"
 
 #ifdef _WIN32
 #include <windows.h>

@@ -88,8 +88,11 @@ BinaryWriter :: seek(int64_t aOffset, int aWhence)
 void
 BinaryWriter :: close()
 {
-    fclose(mStream);
-    mStream = nullptr;
+    if (mStream != nullptr)
+    {
+        fclose(mStream);
+        mStream = nullptr;
+    }
 }
 
 err_t

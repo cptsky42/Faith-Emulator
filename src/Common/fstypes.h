@@ -14,7 +14,7 @@
 #ifndef _FAITH_EMULATOR_TYPES_H_
 #define _FAITH_EMULATOR_TYPES_H_
 
-#include "def.h"
+#include "fsdef.h"
 #include <stddef.h> // Define NULL, size_t
 #include <limits.h> // Define UCHAR_MAX, etc
 

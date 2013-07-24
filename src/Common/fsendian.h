@@ -14,8 +14,8 @@
 #ifndef _FAITH_EMULATOR_ENDIAN_H_
 #define _FAITH_EMULATOR_ENDIAN_H_
 
-#include "types.h"
-#include "def.h"
+#include "fstypes.h"
+#include "fsdef.h"
 
 #ifdef HAVE_ENDIAN_H
 #include <endian.h>
@@ -27,31 +27,49 @@
  ****************************************************
  */
 
-// LITTLE_ENDIAN is defined with some header/compiler
-#ifndef LITTLE_ENDIAN
-#define LITTLE_ENDIAN 1
-#endif
-
-// BIG_ENDIAN is defined with some header/compiler
-#ifndef BIG_ENDIAN
-#define BIG_ENDIAN 2
-#endif
-
 // If BYTE_ORDER is defined, it should be equal to LITTLE_ENDIAN or BIG_ENDIAN.
 // Else, it's an unsupported endianness.
 // The value of LITTLE_ENDIAN and BIG_ENDIAN may be different to the one defined in this header.
-#if defined(BYTE_ORDER) && (BYTE_ORDER != LITTLE_ENDIAN && BYTE_ORDER != BIG_ENDIAN)
+#if defined(BYTE_ORDER) && LITTLE_ENDIAN != BIG_ENDIAN
+
+#if (BYTE_ORDER != LITTLE_ENDIAN && BYTE_ORDER != BIG_ENDIAN)
 #error Unsupported endianness!
-#elif !defined(BYTE_ORDER)
+#endif
+
+#elif defined(__BYTE_ORDER) && __LITTLE_ENDIAN != __BIG_ENDIAN
+
+// already defined with some header/compiler
+#define LITTLE_ENDIAN __LITTLE_ENDIAN
+#define BIG_ENDIAN __BIG_ENDIAN
 
 // If __BYTE_ORDER__ is defined, it is possible to use it to define BYTE_ORDER with our custom values.
-#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#if __BYTE_ORDER == __LITTLE_ENDIAN
 #define BYTE_ORDER LITTLE_ENDIAN
-#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#elif  __BYTE_ORDER == __BIG_ENDIAN
 #define BYTE_ORDER BIG_ENDIAN
-#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__ // Middle-Endian BADC
-#error Unsupported endianness!
 #else
+#error Unsupported endianness!
+#endif
+
+#elif defined(__BYTE_ORDER__) && __ORDER__LITTLE_ENDIAN__ != __ORDER__BIG_ENDIAN__
+
+// already defined with some header/compiler
+#define LITTLE_ENDIAN __ORDER__LITTLE_ENDIAN__
+#define BIG_ENDIAN __ORDER__BIG_ENDIAN__
+
+// If __BYTE_ORDER__ is defined, it is possible to use it to define BYTE_ORDER with our custom values.
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define BYTE_ORDER LITTLE_ENDIAN
+#elif  __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define BYTE_ORDER BIG_ENDIAN
+#else
+#error Unsupported endianness!
+#endif
+
+#else
+
+#define LITTLE_ENDIAN 1234
+#define BIG_ENDIAN 4321
 
 // If no byte order is defined, it is possible to use the target architecture macro to define
 // BYTE_ORDER with our custom values.
@@ -75,8 +93,6 @@
 #else
 #error Unknow endianness!
 #endif // Architecture
-
-#endif // __BYTE_ORDER__
 
 #endif // BYTE_ORDER
 

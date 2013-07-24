@@ -6,7 +6,7 @@
  * sections in the LICENSE file.
  */
 
-#include "MsgItemInfo.h"
+#include "msgiteminfo.h"
 
 MsgItemInfo :: MsgItemInfo(void* aItem, Action aAction)
     : Msg(sizeof(MsgInfo))

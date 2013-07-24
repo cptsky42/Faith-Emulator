@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_GAMEMAP_H_
 #define _FAITH_EMULATOR_GAMEMAP_H_
 
-#include "common.h"
+#include "fscommon.h"
 #include "mapbase.h"
 #include "mapdata.h"
 

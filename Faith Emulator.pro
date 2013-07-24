@@ -104,16 +104,7 @@ HEADERS += \
     src/world.h \
     src/item.h \
     src/strres.h \
-    src/Common/common.h \
-    src/Common/arch.h \
-    src/Common/def.h \
-    src/Common/err.h \
-    src/Common/types.h \
-    src/Common/log.h \
-    src/Common/myassert.h \
-    src/Common/endian.h \
-    src/Common/env.h \
-    src/Common/unicode.h \
+    src/Common/fsendian.h \
     src/Database/database.h \
     src/Entity/entity.h \
     src/Entity/player.h \
@@ -173,7 +164,16 @@ HEADERS += \
     src/third_party/lua-5.2.2/src/lauxlib.h \
     src/third_party/lua-5.2.2/src/lapi.h \
     src/Map/mapdata.h \
-    src/Map/mapbase.h
+    src/Map/mapbase.h \
+    src/Common/fsarch.h \
+    src/Common/fslog.h \
+    src/Common/fsassert.h \
+    src/Common/fstypes.h \
+    src/Common/fsunicode.h \
+    src/Common/fserr.h \
+    src/Common/fsenv.h \
+    src/Common/fsdef.h \
+    src/Common/fscommon.h
 
 INCLUDEPATH += \
     src \
@@ -222,8 +222,12 @@ win32 {
     copyfiles.commands = "@call copy -r \"$${PWD}/data/*\" \"$${OUT_PWD}/\""
 }
 
-unix {
+macx {
     copyfiles.commands = "cp -r \"$${PWD}/data/\" \"$${OUT_PWD}/\""
+}
+
+unix:!macx {
+    copyfiles.commands = "cp -r \"$${PWD}/data/.\" \"$${OUT_PWD}\""
 }
 
 QMAKE_EXTRA_TARGETS += copyfiles

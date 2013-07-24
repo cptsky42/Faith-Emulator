@@ -8,7 +8,7 @@
 
 #include <QtCore/QCoreApplication>
 
-#include "common.h"
+#include "fscommon.h"
 #include "server.h"
 
 #ifdef _WIN32

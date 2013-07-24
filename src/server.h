@@ -9,8 +9,8 @@
 #ifndef _FAITH_EMULATOR_SERVER_H
 #define _FAITH_EMULATOR_SERVER_H
 
-#include "common.h"
-#include "env.h"
+#include "fscommon.h"
+#include "fsenv.h"
 #include "tcpserver.h"
 #include <string>
 

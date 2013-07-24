@@ -14,14 +14,14 @@
 #ifndef _FAITH_EMULATOR_COMMON_H_
 #define _FAITH_EMULATOR_COMMON_H_
 
-#include "def.h" // all defines by CMake
-#include "arch.h"
-#include "types.h"
-#include "endian.h"
-#include "err.h"
-#include "myassert.h"
-#include "unicode.h"
-#include "log.h"
+#include "fsdef.h" // all defines by CMake
+#include "fsarch.h"
+#include "fstypes.h"
+#include "fsendian.h"
+#include "fserr.h"
+#include "fsassert.h"
+#include "fsunicode.h"
+#include "fslog.h"
 #include "strres.h"
 
 #ifdef _WIN32
