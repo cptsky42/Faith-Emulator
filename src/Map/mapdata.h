@@ -61,14 +61,21 @@ private:
     MapData();
 
 private:
+    /** Load the map data */
     err_t loadMapData(BinaryReader& aReader);
+    /** Load all passages data */
     err_t loadPassageData(BinaryReader& aReader);
+    /** Load all regions data */
     err_t loadRegionData(BinaryReader& aReader);
+    /** Load all layers data */
     err_t loadLayerData(BinaryReader& aReader);
 
 private:
+    /** Convert a position to an index. */
     inline size_t pos2idx(uint16_t aPosX, uint16_t aPosY) { return (aPosX + aPosY * mWidth); }
+    /** Convert an index to a x-coord. */
     inline size_t idx2x(size_t aIdx) { return (aIdx % mHeight); }
+    /** Convert a position to a y-coord. */
     inline size_t idx2y(size_t aIdx) { return (aIdx / mHeight); }
 
 private:
