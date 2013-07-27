@@ -49,11 +49,8 @@ public:
         uint8_t Magic3;
         uint16_t MagicAtk;
         uint16_t MagicDef;
-        uint16_t Range;
+        uint16_t AtkRange;
         uint16_t AtkSpeed;
-        uint8_t FrayMode;
-        uint8_t RepairMode;
-        uint8_t TypeMask;
     };
 
 public:

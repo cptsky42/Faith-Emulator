@@ -6,8 +6,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_STRRES_H
-#define _FAITH_EMULATOR_STRRES_H
+#ifndef _FAITH_EMULATOR_STRRES_H_
+#define _FAITH_EMULATOR_STRRES_H_
 
 #include "fscommon.h"
 #include <QtCore/QCoreApplication>
@@ -515,4 +515,4 @@
 #define	STR_NO_MANA_BROADCAST       "¸óÏÂµÄÄÚÁ¦²»×ã£¬²»ÄÜÇ§Àï´«Òô!"
 //---------------------------------------------------------------------------
 
-#endif // _FAITH_EMULATOR_STRRES_H
+#endif // _FAITH_EMULATOR_STRRES_H_
