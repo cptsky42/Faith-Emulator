@@ -11,6 +11,7 @@
 #include "world.h"
 #include "mapmanager.h"
 #include "npc.h"
+#include "item.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlResult>
 #include <QVariant>
@@ -138,6 +139,12 @@ Database :: loadAllNPCs()
 
             world.AllNPCs[npc->getUID()] = npc;
         }
+
+        if (IS_SUCCESS(err))
+        {
+            fprintf(stdout, "Loaded all NPCs.\n");
+            LOG(INFO, "Loaded all NPCs.");
+        }
     }
     else
     {
@@ -180,6 +187,82 @@ Database :: loadAllMaps()
             DOIF(err, mgr.createMap(uid, &info));
 
             SAFE_DELETE(info);
+        }
+
+        if (IS_SUCCESS(err))
+        {
+            fprintf(stdout, "Loaded all maps.\n");
+            LOG(INFO, "Loaded all maps.");
+        }
+    }
+    else
+    {
+        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
+err_t
+Database :: loadAllItems()
+{
+    const char* cmd = "SELECT * FROM itemtype";
+
+    err_t err = ERROR_SUCCESS;
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+
+    if (query.exec())
+    {
+        World& world = World::getInstance();
+        while (ERROR_SUCCESS == err && query.next())
+        {
+            Item::Info* item = new Item::Info();
+            ASSERT(item != nullptr);
+
+            item->Id = (int32_t)query.value(0).toInt();
+            item->Name = query.value(1).toString().toStdString();
+            item->ReqForce = (uint8_t)query.value(2).toInt();
+            item->ReqWeaponSkill = (uint8_t)query.value(3).toInt();
+            item->ReqLevel = (uint8_t)query.value(4).toInt();
+            item->ReqSex = (uint8_t)query.value(5).toInt();
+            item->ReqForce = (uint16_t)query.value(6).toInt();
+            item->ReqSpeed = (uint16_t)query.value(7).toInt();
+            item->ReqHealth = (uint16_t)query.value(8).toInt();
+            item->ReqSoul = (uint16_t)query.value(9).toInt();
+            item->Monopoly = (uint8_t)query.value(10).toInt();
+            item->Weight = (uint16_t)query.value(11).toInt();
+            item->Price = (uint32_t)query.value(12).toInt();
+            item->Task = (int32_t)query.value(13).toInt();
+            item->MaxAtk = (uint16_t)query.value(14).toInt();
+            item->MinAtk = (uint16_t)query.value(15).toInt();
+            item->Defense = (int16_t)query.value(16).toInt();
+            item->Dexterity = (int16_t)query.value(17).toInt();
+            item->Dodge = (int16_t)query.value(18).toInt();
+            item->Life = (int16_t)query.value(19).toInt();
+            item->Mana = (int16_t)query.value(20).toInt();
+            item->Amount = (uint16_t)query.value(21).toInt();
+            item->AmountLimit = (uint16_t)query.value(22).toInt();
+            item->Status = (uint8_t)query.value(23).toInt();
+            item->Gem1 = (uint8_t)query.value(24).toInt();
+            item->Gem2 = (uint8_t)query.value(25).toInt();
+            item->Magic1 = (uint8_t)query.value(26).toInt();
+            item->Magic2 = (uint8_t)query.value(27).toInt();
+            item->Magic3 = (uint8_t)query.value(28).toInt();
+            item->MagicAtk = (uint16_t)query.value(29).toInt();
+            item->MagicDef = (uint16_t)query.value(30).toInt();
+            item->AtkRange = (uint16_t)query.value(31).toInt();
+            item->AtkSpeed = (uint16_t)query.value(32).toInt();
+
+            // TODO: add somewhere...
+        }
+
+        if (IS_SUCCESS(err))
+        {
+            fprintf(stdout, "Loaded all items.\n");
+            LOG(INFO, "Loaded all items.");
         }
     }
     else

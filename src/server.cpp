@@ -71,7 +71,10 @@ Server :: Server()
 
     // load database
     DOIF(err, db.loadAllMaps());
+    DOIF(err, db.loadAllItems());
     DOIF(err, db.loadAllNPCs());
+
+    fprintf(stdout, "\n");
 
     mAccServer.listen(ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;

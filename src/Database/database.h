@@ -80,6 +80,15 @@ public:
      */
     err_t loadAllMaps();
 
+    /**
+     * Load all items in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllItems();
+
 private:
     /* constructor */
     Database();
