@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_TCP_SERVER_H
 #define _FAITH_EMULATOR_TCP_SERVER_H
 
-#include "fscommon.h"
+#include "common.h"
 #include <QtNetwork>
 #include <QTcpServer>
 #include <vector>

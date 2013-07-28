@@ -48,7 +48,7 @@ Script :: Script(int32_t aUID, const char* aPath)
     lua_State* state = Script::getState();
     if (luaL_dofile(state, aPath) != 0)
     {
-        LOG("Failed to parse Lua script `%s`:\n%s",
+        LOG(ERROR, "Failed to parse Lua script `%s`:\n%s",
             aPath, lua_tostring(state, -1));
     }
 }

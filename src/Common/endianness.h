@@ -14,8 +14,8 @@
 #ifndef _FAITH_EMULATOR_ENDIAN_H_
 #define _FAITH_EMULATOR_ENDIAN_H_
 
-#include "fstypes.h"
-#include "fsdef.h"
+#include "types.h"
+#include "def.h"
 
 #ifdef HAVE_ENDIAN_H
 #include <endian.h>

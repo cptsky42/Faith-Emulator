@@ -61,7 +61,7 @@ MsgNpcInfo :: create(Npc& aNpc)
         }
         else
         {
-            LOG("Invalid length: name=%zu",
+            LOG(ERROR, "Invalid length: name=%zu",
                 strlen(aNpc.getName()));
         }
     }

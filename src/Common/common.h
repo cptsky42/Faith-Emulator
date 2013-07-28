@@ -14,14 +14,12 @@
 #ifndef _FAITH_EMULATOR_COMMON_H_
 #define _FAITH_EMULATOR_COMMON_H_
 
-#include "fsdef.h" // all defines by CMake
-#include "fsarch.h"
-#include "fstypes.h"
-#include "fsendian.h"
-#include "fserr.h"
-#include "fsassert.h"
-#include "fsunicode.h"
-#include "fslog.h"
+#include "def.h" // all defines by CMake
+#include "arch.h"
+#include "types.h"
+#include "endianness.h"
+#include "err.h"
+#include "unicode.h"
 #include "strres.h"
 
 #ifdef _WIN32
@@ -62,9 +60,24 @@
 
 /*
  *****************************************************
+ * Common macros
+ ****************************************************
+ */
+
+// Quote strings in macro */
+#define STRINGIFY_(str) #str
+#define STRINGIFY(str) STRINGIFY_(str)
+
+/*
+ *****************************************************
  * Cross-compiling definitions
  ****************************************************
  */
+
+// If using Visual Studio, __FUNCTION__ is not defined, but __func__ is
+#ifndef _MSC_VER
+#define __FUNCTION__ __func__
+#endif // _MSC_VER
 
 // If using Visual Studio, and C++11 is not implemented
 // POSIX-compliant platforms define those functions, so C++11 is not required

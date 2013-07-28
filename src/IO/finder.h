@@ -15,7 +15,7 @@
 #ifndef _FAITH_EMULATOR_FINDER_H_
 #define _FAITH_EMULATOR_FINDER_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include <stdio.h>
 
 /**

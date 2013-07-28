@@ -9,7 +9,8 @@
 #ifndef _FAITH_EMULATOR_MSG_H_
 #define _FAITH_EMULATOR_MSG_H_
 
-#include "fscommon.h"
+#include "log.h"
+#include "common.h"
 #include "networkdef.h"
 
 class Client;

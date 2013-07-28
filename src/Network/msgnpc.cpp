@@ -75,7 +75,7 @@ MsgNpc :: process(Client* aClient)
             if (world.queryNpc(&npc, mInfo->Id) &&
                 player.getMapId() == npc->getMapId())
             {
-                LOG("Activating npc %d for client %p...",
+                LOG(DBG, "Activating npc %d for client %p...",
                     npc->getUID(), &client);
 
                 npc->activateNpc(client, 0);

@@ -14,7 +14,7 @@
 #ifndef _FAITH_EMULATOR_BINARY_WRITER_H_
 #define _FAITH_EMULATOR_BINARY_WRITER_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include <string>
 
 /**

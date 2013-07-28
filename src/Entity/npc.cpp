@@ -6,6 +6,7 @@
  * sections in the LICENSE file.
  */
 
+#include "log.h"
 #include "npc.h"
 #include "npctask.h"
 #include "client.h"
@@ -52,7 +53,7 @@ Npc :: activateNpc(Client& aClient, int32_t aAction)
     {
         const NpcTask& task = queryTask();
 
-        LOG("Npc %d is a task npc and the task %d will be executed...",
+        LOG(DBG, "Npc %d is a task npc and the task %d will be executed...",
             mUID, task.getUID());
         result = (task.execute(aClient, 0) == ERROR_SUCCESS);
     }

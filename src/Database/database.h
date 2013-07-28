@@ -9,8 +9,8 @@
 #ifndef _FAITH_EMULATOR_DATABASE_H_
 #define _FAITH_EMULATOR_DATABASE_H_
 
-#include "fscommon.h"
-#include "fsenv.h"
+#include "common.h"
+#include "env.h"
 #include <QtSql/QSqlDatabase>
 
 class QSqlQuery;

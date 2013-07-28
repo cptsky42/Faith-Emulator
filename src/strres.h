@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_STRRES_H_
 #define _FAITH_EMULATOR_STRRES_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include <QtCore/QCoreApplication>
 
 #define STR_CREATOR_INFO                    "Faith Emulator by CptSky..."

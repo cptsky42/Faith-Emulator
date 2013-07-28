@@ -1,3 +1,12 @@
+/**
+ * ****** Faith Emulator - Closed Source ******
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
+#include "log.h"
 #include "mapdata.h"
 #include "finder.h"
 #include "binaryreader.h"
@@ -29,7 +38,7 @@ MapData :: load(MapData** aOutData, const char* aPath)
     }
     else
     {
-        LOG("Can't load the DMap file at %s as the file doesn't exist.",
+        LOG(ERROR, "Can't load the DMap file at %s as the file doesn't exist.",
             aPath);
         err = ERROR_FILE_NOT_FOUND;
     }
@@ -72,7 +81,7 @@ MapData :: loadMapData(BinaryReader& aReader)
     DOIF(err, aReader.readUInt32(width));
     DOIF(err, aReader.readUInt32(height));
 
-    LOG("TQ Digital DMap : v%u (data=%u) with [%u, %u] cells.",
+    LOG(INFO, "TQ Digital DMap : v%u (data=%u) with [%u, %u] cells.",
         version, data, width, height);
 
     if (IS_SUCCESS(err))
@@ -84,7 +93,7 @@ MapData :: loadMapData(BinaryReader& aReader)
         }
         else
         {
-            LOG("Size overflow for the map.");
+            LOG(ERROR, "Size overflow for the map.");
             err = ERROR_BAD_LENGTH;
         }
     }
@@ -113,7 +122,7 @@ MapData :: loadMapData(BinaryReader& aReader)
 
         if (checksum != tmp)
         {
-            LOG("Invalid checksum for the block of cells for the position y=%u", y);
+            LOG(ERROR, "Invalid checksum for the block of cells for the position y=%u", y);
             err = ERROR_BAD_CHECKSUM;
         }
     }
@@ -140,7 +149,7 @@ MapData :: loadPassageData(BinaryReader& aReader)
     DOIF(err, aReader.readInt32(count));
     mPassages.reserve(count);
 
-    LOG("Found %d passages for the map.", count);
+    LOG(INFO, "Found %d passages for the map.", count);
 
     for (int32_t i = 0; ERROR_SUCCESS == err && i < count; ++i)
     {
@@ -160,14 +169,14 @@ MapData :: loadPassageData(BinaryReader& aReader)
             }
             else
             {
-                LOG("Size overflow for the position of the passage.");
+                LOG(ERROR, "Size overflow for the position of the passage.");
                 err = ERROR_BAD_LENGTH;
             }
         }
 
         if (IS_SUCCESS(err))
         {
-            LOG("Added passage %d at (%u, %u).",
+            LOG(VRB, "Added passage %d at (%u, %u).",
                 passage->Index, passage->PosX, passage->PosY);
 
             mPassages.push_back(passage);
@@ -189,11 +198,11 @@ MapData :: loadRegionData(BinaryReader& aReader)
     int32_t count = 0;
     DOIF(err, aReader.readInt32(count));
 
-    LOG("Found %d regions for the map.", count);
+    LOG(INFO, "Found %d regions for the map.", count);
 
     if (IS_SUCCESS(err))
     {
-        LOG("Regions are not supported yet.");
+        LOG(ERROR, "Regions are not supported yet.");
         err = ERROR_INVALID_FUNCTION;
     }
 
@@ -210,7 +219,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
     int32_t count = 0;
     DOIF(err, aReader.readInt32(count));
 
-    LOG("Found %d layers for the map.", count);
+    LOG(INFO, "Found %d layers for the map.", count);
 
     for (int32_t i = 0; ERROR_SUCCESS == err && i < count; ++i)
     {
@@ -222,7 +231,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
         case MAP_COVER: // 2DMapCoverObj
             {
                 //Do nothing with it...
-                LOG("Found a 2D map cover object layer. Skipping.");
+                LOG(VRB, "Found a 2D map cover object layer. Skipping.");
                 DOIF(err, aReader.seek(416, SEEK_CUR));
                 break;
             }
@@ -238,7 +247,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                 DOIF(err, aReader.readUInt32(startX));
                 DOIF(err, aReader.readUInt32(startY));
 
-                LOG("Found a 2D map terrain object at (%u, %u). Loading scene file '%s'",
+                LOG(VRB, "Found a 2D map terrain object at (%u, %u). Loading scene file '%s'",
                     startX, startY, fileName);
 
                 // TODO: Normalize path to / instead of Windows...
@@ -249,7 +258,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                     DOIF(err, reader.lock());
 
                     DOIF(err, reader.readInt32(count));
-                    LOG("Found %d parts.", count);
+                    LOG(VRB, "Found %d parts.", count);
 
                     // the server only need the new cells info, so it will be merged
                     // and the objects will be deleted...
@@ -291,7 +300,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                                 }
                                 else
                                 {
-                                    LOG("Size overflow for the position of the scene part.");
+                                    LOG(ERROR, "Size overflow for the position of the scene part.");
                                     err = ERROR_BAD_LENGTH;
                                 }
                             }
@@ -303,7 +312,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                 }
                 else
                 {
-                    LOG("Can't load the scene file at '%s'' as the file doesn't exist.",
+                    LOG(ERROR, "Can't load the scene file at '%s'' as the file doesn't exist.",
                         fileName);
                     err = ERROR_FILE_NOT_FOUND;
                 }
@@ -313,27 +322,27 @@ MapData :: loadLayerData(BinaryReader& aReader)
         case MAP_SOUND: // MapSound
             {
                 //Do nothing with it...
-                LOG("Found a map sound layer. Skipping.");
+                LOG(VRB, "Found a map sound layer. Skipping.");
                 DOIF(err, aReader.seek(276, SEEK_CUR));
                 break;
             }
         case MAP_3DEFFECT: // 3DMapEffect
             {
                 //Do nothing with it...
-                LOG("Found a 3D map effect layer. Skipping.");
+                LOG(VRB, "Found a 3D map effect layer. Skipping.");
                 DOIF(err, aReader.seek(72, SEEK_CUR));
                 break;
             }
         case MAP_3DEFFECTNEW: // 3DMapEffectNew
             {
                 //Do nothing with it...
-                LOG("Found a 3D map effect (new) layer. Skipping.");
+                LOG(VRB, "Found a 3D map effect (new) layer. Skipping.");
                 DOIF(err, aReader.seek(96, SEEK_CUR));
                 break;
             }
         default:
             {
-                LOG("Found a layer of type %d at offset %lld, which is unknown.",
+                LOG(VRB, "Found a layer of type %d at offset %lld, which is unknown.",
                     type, aReader.tell());
                 err = ERROR_BAD_FORMAT;
                 break;

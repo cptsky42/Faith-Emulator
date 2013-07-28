@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_MAP_DATA_H_
 #define _FAITH_EMULATOR_MAP_DATA_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include "mapbase.h"
 #include <vector>
 

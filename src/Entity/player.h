@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_PLAYER_H
 #define _FAITH_EMULATOR_PLAYER_H
 
-#include "fscommon.h"
+#include "common.h"
 #include "advancedentity.h"
 #include "client.h"
 #include <string>

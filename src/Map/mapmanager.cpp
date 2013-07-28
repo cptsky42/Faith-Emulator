@@ -6,6 +6,7 @@
  * sections in the LICENSE file.
  */
 
+#include "log.h"
 #include "mapmanager.h"
 #include "gamemap.h"
 #include "mapdata.h"
@@ -96,7 +97,7 @@ MapManager :: loadData()
                             {
                                 ASSERT_ERR(data != nullptr, ERROR_INVALID_POINTER);
 
-                                LOG("Loaded map data at '%s' for id=%u.",
+                                LOG(INFO, "Loaded map data at '%s' for id=%u.",
                                     dataPath.c_str(), mapId);
 
                                 mData[dataPath] = data;
@@ -105,7 +106,7 @@ MapManager :: loadData()
                             }
                             else if (ERROR_FILE_NOT_FOUND == err)
                             {
-                                LOG("Could not find all files for loading the map data file '%s'. Ignoring error.",
+                                LOG(ERROR, "Could not find all files for loading the map data file '%s'. Ignoring error.",
                                     dataPath.c_str());
                                 err = ERROR_SUCCESS;
                             }
@@ -113,33 +114,33 @@ MapManager :: loadData()
                         }
                         else
                         {
-                            LOG("Found already loaded map data for id=%u.",
+                            LOG(INFO, "Found already loaded map data for id=%u.",
                                 mapId);
                             mMaps[(uint16_t)mapId] = data_it->second;
                         }
                     }
                     else
                     {
-                        LOG("Could not find the key 'File' under the group '%s'. Skipping",
+                        LOG(WARN, "Could not find the key 'File' under the group '%s'. Skipping",
                             qPrintable(group));
                     }
                 }
                 else
                 {
-                    LOG("Duplicated entry for map %u.", mapId);
+                    LOG(ERROR, "Duplicated entry for map %u.", mapId);
                     err = ERROR_CANNOT_CREATE;
                 }
             }
             else
             {
-                LOG("Found an invalid group (%s) at root. Skipping.",
+                LOG(WARN, "Found an invalid group (%s) at root. Skipping.",
                     qPrintable(group));
             }
         }
     }
     else
     {
-        LOG("Could not find the '%s' file for loading maps.", path);
+        LOG(ERROR, "Could not find the '%s' file for loading maps.", path);
         err = ERROR_FILE_NOT_FOUND;
     }
 
@@ -163,19 +164,19 @@ MapManager :: createMap(int32_t aUID, GameMap::Info** aInfo)
 
             mGameMaps[aUID] = gameMap;
 
-            LOG("Created game map %d with data of %u.",
+            LOG(INFO, "Created game map %d with data of %u.",
                 gameMap->getUID(), gameMap->getDocID());
         }
         else
         {
-            LOG("Missing map data for doc ID %u. The map %d won't be created.",
+            LOG(ERROR, "Missing map data for doc ID %u. The map %d won't be created.",
                 (*aInfo)->DocID, aUID);
             err = ERROR_NOT_FOUND;
         }
     }
     else
     {
-        LOG("Duplicated map %d.", aUID);
+        LOG(ERROR, "Duplicated map %d.", aUID);
         err = ERROR_CANNOT_CREATE;
     }
 

@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_MSG_TALK_H_
 #define _FAITH_EMULATOR_MSG_TALK_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include "msg.h"
 
 class MsgTalk : public Msg

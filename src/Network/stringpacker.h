@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_STRINGPACKER_H_
 #define _FAITH_EMULATOR_STRINGPACKER_H_
 
-#include "fscommon.h"
+#include "common.h"
 
 /**
  * String packer for an internal buffer. All strings are prefixed with

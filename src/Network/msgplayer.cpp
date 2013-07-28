@@ -81,7 +81,7 @@ MsgPlayer :: create(Player& aPlayer)
     }
     else
     {
-        LOG("Invalid length: name=%zu",
+        LOG(ERROR, "Invalid length: name=%zu",
             strlen(aPlayer.getName()));
     }
 }
@@ -126,7 +126,7 @@ MsgPlayer :: create(Monster& aMonster)
     }
     else
     {
-        LOG("Invalid length: name=%zu",
+        LOG(ERROR, "Invalid length: name=%zu",
             strlen(aMonster.getName()));
     }
 }

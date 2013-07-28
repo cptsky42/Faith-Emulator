@@ -11,7 +11,7 @@
  * sections in the LICENSE file.
  */
 
-
+#include "log.h"
 #include "finder.h"
 
 #include <sys/stat.h>
@@ -65,21 +65,21 @@ Finder :: fileOpen(FILE** aOutFile,
     *aOutFile = _wfopen(path, mode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
     #elif defined(__APPLE__)
     *aOutFile = fopen(aPath, aMode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
     #else
     *aOutFile = fopen64(aPath, aMode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
     #endif

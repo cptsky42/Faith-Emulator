@@ -74,7 +74,7 @@ MsgTalk :: create(const char* aSpeaker, const char* aHearer, const char* aEmotio
     }
     else
     {
-        LOG("Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
+        LOG(ERROR, "Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
             strlen(aHearer), strlen(aSpeaker), strlen(aEmotion), strlen(aWords));
     }
 }

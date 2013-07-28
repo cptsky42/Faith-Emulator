@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_ADVANCED_ENTITY_H
 #define _FAITH_EMULATOR_ADVANCED_ENTITY_H
 
-#include "fscommon.h"
+#include "common.h"
 #include "entity.h"
 
 /**

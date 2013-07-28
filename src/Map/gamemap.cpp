@@ -6,6 +6,7 @@
  * sections in the LICENSE file.
  */
 
+#include "log.h"
 #include "gamemap.h"
 
 GameMap :: GameMap(int32_t aUID, Info** aInfo, MapData& aData)

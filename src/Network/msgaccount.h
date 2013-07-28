@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_MSG_ACCOUNT_H_
 #define _FAITH_EMULATOR_MSG_ACCOUNT_H_
 
-#include "fscommon.h"
+#include "common.h"
 #include "msg.h"
 
 /**

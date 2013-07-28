@@ -74,7 +74,7 @@ MsgDialog :: create(const char* aText, uint16_t aData,
     }
     else
     {
-        LOG("Invalid length: text=%zu",
+        LOG(ERROR, "Invalid length: text=%zu",
             strlen(aText));
     }
 }

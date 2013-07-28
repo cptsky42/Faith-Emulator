@@ -9,8 +9,9 @@
 #ifndef _FAITH_EMULATOR_SCRIPT_H_
 #define _FAITH_EMULATOR_SCRIPT_H_
 
-#include "fscommon.h"
-#include "fsenv.h"
+#include "log.h"
+#include "common.h"
+#include "env.h"
 
 class Client;
 struct lua_State;

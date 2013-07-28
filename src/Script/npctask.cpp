@@ -69,18 +69,18 @@ NpcTask :: execute(Client& aClient, int32_t aParam) const
 
     lua_State* state = Script::getState();
 
-    LOG("Executing npc task %d with client=%p, param=%d.",
+    LOG(INFO, "Executing npc task %d with client=%p, param=%d.",
         mUID, &aClient, aParam);
 
     lua_getglobal(state, mFct.c_str());
     lua_pushinteger(state, (ptrdiff_t)&aClient);
     lua_pushinteger(state, aParam);
-    LOG("Calling function %s", mFct.c_str());
+    LOG(DBG, "Calling function %s", mFct.c_str());
 
     int luaerr = lua_pcall(state, 2, 0, 0); // state, nargs, nret, err_fct
     if (LUA_OK != luaerr)
     {
-        LOG("Lua error %d calling %s:\n %s",
+        LOG(ERROR, "Lua error %d calling %s:\n %s",
               luaerr, mFct.c_str(), lua_tostring(state, -1));
         err = ERROR_EXEC_FAILED;
     }

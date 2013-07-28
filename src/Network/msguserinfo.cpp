@@ -82,7 +82,7 @@ MsgUserInfo :: create(Player& aPlayer)
     }
     else
     {
-        LOG("Invalid length: name=%zu, mate=%zu",
+        LOG(ERROR, "Invalid length: name=%zu, mate=%zu",
             strlen(aPlayer.getName()), strlen(aPlayer.getMate()));
     }
 }

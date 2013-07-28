@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_TQCIPHER_H
 #define _FAITH_EMULATOR_TQCIPHER_H
 
-#include "fscommon.h"
+#include "common.h"
 
 /**
  * TQ Digital's cipher used by the AccServer & the MsgServer of the

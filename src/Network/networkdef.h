@@ -9,7 +9,7 @@
 #ifndef _FAITH_EMULATOR_NETWORK_DEF_H_
 #define _FAITH_EMULATOR_NETWORK_DEF_H_
 
-#include "fscommon.h"
+#include "common.h"
 
 const size_t MAX_NAMESIZE = 16;
 const size_t MAX_WORDSSIZE = 255;

@@ -6,6 +6,7 @@
  * sections in the LICENSE file.
  */
 
+#include "log.h"
 #include "database.h"
 #include "world.h"
 #include "mapmanager.h"
@@ -93,13 +94,13 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
         }
         else
         {
-            LOG("The cmd should return only one result, not %d", query.size());
+            LOG(ERROR, "The cmd should return only one result, not %d", query.size());
             err = ERROR_NOT_FOUND; // suppose the account is not found
         }
     }
     else
     {
-        LOG("Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
         err = ERROR_EXEC_FAILED;
     }
 
@@ -140,7 +141,7 @@ Database :: loadAllNPCs()
     }
     else
     {
-        LOG("Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
         err = ERROR_EXEC_FAILED;
     }
 
@@ -183,7 +184,7 @@ Database :: loadAllMaps()
     }
     else
     {
-        LOG("Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
         err = ERROR_EXEC_FAILED;
     }
 
