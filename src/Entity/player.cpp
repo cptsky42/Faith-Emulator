@@ -19,38 +19,44 @@
 
 using namespace std;
 
-Player :: Player(Client& aClient)
-    : AdvancedEntity(1000000), mClient(aClient)
+Player :: Player(Client& aClient, uint32_t aUID)
+    : AdvancedEntity(aUID), mClient(aClient)
 {
-    mName = "CptSky[PM]";
+    mName = "Unknown";
     mMate = "None";
+    mLook = 0;
+    mHair = 0;
 
-    mLook = 1010005;
-    mHair = 101;
-    mMoney = 20000;
-    mExp = 92134;
-    mMercenaryExp = 10;
-    mMercenaryLevel = 20;
-    mStrength = 5;
-    mVitality = 7;
-    mAgility = 9;
-    mSpirit = 11;
-    mAddPoints = 3;
-    mCurHP = 150;
-    mCurMP = 100;
-    mPkPoints = 120; // ?
-    mLevel = 50;
-    mProfession = 10;
-    mMetempsychosis = 2;
+    mMoney = 0;
 
-    mPosX = 517;
-    mPosY = 832;
-    mMapId = 1000;
+    mProfession = 0;
+    mLevel = 0;
+    mExp = 0;
+    mMetempsychosis = 0;
+
+    mForce = 0;
+    mSpeed = 0;
+    mHealth = 0;
+    mSoul = 0;
+    mAddPoints = 0;
+
+    mCurHP = 0;
+    mCurMP = 0;
+
+    mPkPoints = 0;
+    mVirtue = 0;
+
+    mMapId = 0;
+    mPosX = 0;
+    mPosY = 0;
     mDirection = 1;
 
-    mPrevMap = mMapId;
-    mPrevX = mPosX;
-    mPrevY = mPosY;
+    mPrevMap = 0;
+    mPrevX = 0;
+    mPrevY = 0;
+
+    mMercenaryExp = 0;
+    mMercenaryLevel = 0;
 }
 
 Player :: ~Player()

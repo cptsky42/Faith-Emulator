@@ -8,13 +8,16 @@
 
 #include "log.h"
 #include "database.h"
+#include "client.h"
 #include "world.h"
 #include "mapmanager.h"
+#include "player.h"
 #include "npc.h"
 #include "item.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlResult>
 #include <QVariant>
+#include <QSqlError>
 
 /* static */
 Database* Database::sInstance = nullptr;
@@ -66,13 +69,28 @@ Database :: connect(const char* aHost, const char* aDbName,
     return mConnection.open();
 }
 
+QString
+Database :: getSqlCommand(const QSqlQuery& aQuery)
+{
+    QString cmd = aQuery.lastQuery();
+    QMapIterator<QString, QVariant> it(aQuery.boundValues());
+
+    while (it.hasNext())
+    {
+        it.next();
+        cmd.replace(it.key(), it.value().toString());
+    }
+
+    return cmd;
+}
+
 err_t
-Database :: authenticate(const char* aAccount, const char* aPassword)
+Database :: authenticate(Client& aClient, const char* aAccount, const char* aPassword)
 {
     ASSERT_ERR(aAccount != nullptr && aAccount[0] != '\0', ERROR_INVALID_PARAMETER);
     ASSERT_ERR(aPassword != nullptr && aPassword[0] != '\0', ERROR_INVALID_PARAMETER);
 
-    const char* cmd = "SELECT password, id, type FROM account WHERE name = :name";
+    const char* cmd = "SELECT `id`, `password` FROM `account` WHERE `name` = :name";
 
     err_t err = ERROR_SUCCESS;
 
@@ -80,14 +98,22 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
     query.prepare(cmd);
     query.bindValue(":name", aAccount);
 
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
+
     if (query.exec())
     {
         if (query.size() == 1)
         {
             query.next(); // get the first result...
 
-            QString password = query.value(0).toString();
-            if (password.compare(aPassword) != 0)
+            int32_t accountID = (int32_t)query.value(0).toInt();
+            QString password = query.value(1).toString();
+            if (password.compare(aPassword) == 0)
+            {
+                aClient.mAccountID = accountID;
+                LOG(DBG, "Account ID of %s is %d", aAccount, accountID);
+            }
+            else
             {
                 // the Account/Password pair is not found
                 err = ERROR_NOT_FOUND;
@@ -103,7 +129,92 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
     }
     else
     {
-        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
+err_t
+Database :: getPlayerInfo(Client& aClient)
+{
+    ASSERT_ERR(&aClient != nullptr, ERROR_INVALID_REFERENCE);
+
+    const char* cmd = "SELECT `id`, `name`, `mate`, `lookface`, `hair`, `money`, `money_saved`, "
+                      "`level`, `exp`, `force`, `speed`, `health`, `soul`, `add_points`, `life`, "
+                      "`mana`, `profession`, `pk`, `virtue`, `metempsychosis`, `record_map`, "
+                      "`record_x`, `record_y` FROM `user` WHERE `account_id` = :account_id";
+
+    err_t err = ERROR_SUCCESS;
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+    query.bindValue(":account_id", aClient.getAccountID());
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
+
+    if (query.exec())
+    {
+        if (query.size() == 1)
+        {
+            query.next(); // get the first result...
+
+            uint32_t uid = (uint32_t)query.value(0).toInt();
+            Player* player = new Player(aClient, uid);
+
+            player->mName = query.value(1).toString().toStdString();
+            player->mMate = query.value(2).toString().toStdString();
+            player->mLook = (uint32_t)query.value(3).toInt();
+            player->mHair = (uint16_t)query.value(4).toInt();
+
+            player->mMoney = (uint32_t)query.value(5).toInt();
+            // money_saved
+
+            player->mProfession = (uint8_t)query.value(16).toInt();
+            player->mLevel = (uint8_t)query.value(7).toInt();
+            player->mExp = (uint32_t)query.value(8).toInt();
+            player->mMetempsychosis = (uint8_t)query.value(19).toInt();
+
+            player->mForce = (uint16_t)query.value(9).toInt();
+            player->mSpeed = (uint16_t)query.value(10).toInt();
+            player->mHealth = (uint16_t)query.value(11).toInt();
+            player->mSoul = (uint16_t)query.value(12).toInt();
+            player->mAddPoints = (uint16_t)query.value(13).toInt();
+
+            player->mCurHP = (uint16_t)query.value(14).toInt();
+            player->mCurMP = (uint16_t)query.value(15).toInt();
+
+            player->mPkPoints = (int16_t)query.value(17).toInt();
+            player->mVirtue = (int32_t)query.value(18).toInt();
+
+            player->mMapId = (uint16_t)query.value(20).toInt();
+            player->mPosX = (uint16_t)query.value(21).toInt();
+            player->mPosY = (uint16_t)query.value(22).toInt();
+
+            player->mPrevMap = player->mMapId;
+            player->mPosX = player->mPosX;
+            player->mPosY = player->mPosY;
+
+            aClient.mCharacter = player->getName();
+            aClient.mPlayer = player;
+            player = nullptr;
+        }
+        else if (query.size() == 0)
+        {
+            // not found, ignore... will create a new player
+        }
+        else
+        {
+            LOG(ERROR, "The cmd should return only one result, not %d", query.size());
+            err = ERROR_BAD_LENGTH;
+        }
+    }
+    else
+    {
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
         err = ERROR_EXEC_FAILED;
     }
 
@@ -113,12 +224,14 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
 err_t
 Database :: loadAllNPCs()
 {
-    const char* cmd = "SELECT * FROM npc";
+    const char* cmd = "SELECT * FROM `npc`";
 
     err_t err = ERROR_SUCCESS;
 
     QSqlQuery query(mConnection);
     query.prepare(cmd);
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
 
     if (query.exec())
     {
@@ -150,7 +263,8 @@ Database :: loadAllNPCs()
     }
     else
     {
-        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
         err = ERROR_EXEC_FAILED;
     }
 
@@ -160,12 +274,14 @@ Database :: loadAllNPCs()
 err_t
 Database :: loadAllMaps()
 {
-    const char* cmd = "SELECT id, doc_id, type, weather, portal_x, portal_y, reborn_map, reborn_portal, light FROM map";
+    const char* cmd = "SELECT `id`, `doc_id`, `type`, `weather`, `portal_x`, `portal_y`, `reborn_map`, `reborn_portal`, `light` FROM `map`";
 
     err_t err = ERROR_SUCCESS;
 
     QSqlQuery query(mConnection);
     query.prepare(cmd);
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
 
     if (query.exec())
     {
@@ -199,7 +315,8 @@ Database :: loadAllMaps()
     }
     else
     {
-        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
         err = ERROR_EXEC_FAILED;
     }
 
@@ -209,12 +326,14 @@ Database :: loadAllMaps()
 err_t
 Database :: loadAllItems()
 {
-    const char* cmd = "SELECT * FROM itemtype";
+    const char* cmd = "SELECT * FROM `itemtype`";
 
     err_t err = ERROR_SUCCESS;
 
     QSqlQuery query(mConnection);
     query.prepare(cmd);
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
 
     if (query.exec())
     {
@@ -269,7 +388,8 @@ Database :: loadAllItems()
     }
     else
     {
-        LOG(ERROR, "Failed to execute the following cmd : %s", cmd);
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
         err = ERROR_EXEC_FAILED;
     }
 

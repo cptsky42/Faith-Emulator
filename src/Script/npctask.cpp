@@ -32,10 +32,10 @@ NpcTask :: registerFunctions()
     lua_register(state, "getHair", NpcTask::getHair);
     lua_register(state, "getMoney", NpcTask::getMoney);
     lua_register(state, "getExp", NpcTask::getExp);
-    lua_register(state, "getStrength", NpcTask::getStrength);
-    lua_register(state, "getVitality", NpcTask::getVitality);
-    lua_register(state, "getAgility", NpcTask::getAgility);
-    lua_register(state, "getSpirit", NpcTask::getSpirit);
+    lua_register(state, "getForce", NpcTask::getForce);
+    lua_register(state, "getHealth", NpcTask::getHealth);
+    lua_register(state, "getSpeed", NpcTask::getSpeed);
+    lua_register(state, "getSoul", NpcTask::getSoul);
     lua_register(state, "getAddPoints", NpcTask::getAddPoints);
     lua_register(state, "getCurHP", NpcTask::getCurHP);
     lua_register(state, "getMaxHP", NpcTask::getMaxHP);
@@ -225,7 +225,7 @@ NpcTask :: getExp(lua_State* aState)
 
 /* static */
 int
-NpcTask :: getStrength(lua_State* aState)
+NpcTask :: getForce(lua_State* aState)
 {
     Client& client = *((Client*)lua_tointeger(aState, 1));
     ASSERT(&client != nullptr);
@@ -233,13 +233,13 @@ NpcTask :: getStrength(lua_State* aState)
     Player& player = *client.getPlayer();
     ASSERT(&player != nullptr);
 
-    lua_pushinteger(aState, player.getStrength());
+    lua_pushinteger(aState, player.getForce());
     return 1;
 }
 
 /* static */
 int
-NpcTask :: getVitality(lua_State* aState)
+NpcTask :: getHealth(lua_State* aState)
 {
     Client& client = *((Client*)lua_tointeger(aState, 1));
     ASSERT(&client != nullptr);
@@ -247,13 +247,13 @@ NpcTask :: getVitality(lua_State* aState)
     Player& player = *client.getPlayer();
     ASSERT(&player != nullptr);
 
-    lua_pushinteger(aState, player.getVitality());
+    lua_pushinteger(aState, player.getHealth());
     return 1;
 }
 
 /* static */
 int
-NpcTask :: getAgility(lua_State* aState)
+NpcTask :: getSpeed(lua_State* aState)
 {
     Client& client = *((Client*)lua_tointeger(aState, 1));
     ASSERT(&client != nullptr);
@@ -261,13 +261,13 @@ NpcTask :: getAgility(lua_State* aState)
     Player& player = *client.getPlayer();
     ASSERT(&player != nullptr);
 
-    lua_pushinteger(aState, player.getAgility());
+    lua_pushinteger(aState, player.getSpeed());
     return 1;
 }
 
 /* static */
 int
-NpcTask :: getSpirit(lua_State* aState)
+NpcTask :: getSoul(lua_State* aState)
 {
     Client& client = *((Client*)lua_tointeger(aState, 1));
     ASSERT(&client != nullptr);
@@ -275,7 +275,7 @@ NpcTask :: getSpirit(lua_State* aState)
     Player& player = *client.getPlayer();
     ASSERT(&player != nullptr);
 
-    lua_pushinteger(aState, player.getSpirit());
+    lua_pushinteger(aState, player.getSoul());
     return 1;
 }
 

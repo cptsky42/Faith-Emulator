@@ -107,12 +107,12 @@ public:
 
 public:
     /** Get the entity's UID. */
-    int32_t getUID() { return mUID; }
+    uint32_t getUID() { return mUID; }
 
     /** Get the entity's name. */
     const char* getName() { return (mName.empty() ? nullptr : mName.c_str());  }
     /** Get the entity's look/face. */
-    int32_t getLook() { return mLook; }
+    uint32_t getLook() { return mLook; }
 
     /** Get the entity's map UID. */
     int32_t getMapId() { return mMapId; }
@@ -135,10 +135,10 @@ protected:
     Entity(int32_t aUID);
 
 protected:
-    const int32_t mUID; //!< Entity UID
+    const uint32_t mUID; //!< Entity UID
 
     std::string mName; //!< Entity name
-    int32_t mLook; //!< Entity look/face
+    uint32_t mLook; //!< Entity look/face
 
     int32_t mMapId; //!< Entity map UID
     uint16_t mPosX; //!< Entity X coord.

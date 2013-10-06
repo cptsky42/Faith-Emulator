@@ -21,7 +21,7 @@ class Player : public AdvancedEntity
     PROHIBIT_COPY(Player); // constant UID, should be unique...
 
 public:
-    Player(Client& aClient);
+    Player(Client& aClient, uint32_t aUID);
     virtual ~Player();
 
     void enterMap();
@@ -35,16 +35,16 @@ public:
 public:
     const char* getMate() { return mMate.c_str(); }
 
-    int16_t getHair() { return mHair; }
+    uint16_t getHair() { return mHair; }
 
     uint8_t getProfession() { return mProfession; }
     uint8_t getMetempsychosis() { return mMetempsychosis; }
     int32_t getExp() { return mExp; }
 
-    uint16_t getStrength() { return mStrength; }
-    uint16_t getAgility() { return mAgility; }
-    uint16_t getVitality() { return mVitality; }
-    uint16_t getSpirit() { return mSpirit; }
+    uint16_t getForce() { return mForce; }
+    uint16_t getSpeed() { return mSpeed; }
+    uint16_t getHealth() { return mHealth; }
+    uint16_t getSoul() { return mSoul; }
     uint16_t getAddPoints() { return mAddPoints; }
 
     uint16_t getCurMP() { return mCurMP; }
@@ -65,16 +65,16 @@ private:
 
     std::string mMate;
 
-    int16_t mHair;
+    uint16_t mHair;
 
     uint8_t mProfession;
     uint8_t mMetempsychosis;
-    int32_t mExp;
+    uint32_t mExp;
 
-    uint16_t mStrength;
-    uint16_t mAgility;
-    uint16_t mVitality;
-    uint16_t mSpirit;
+    uint16_t mForce;
+    uint16_t mSpeed;
+    uint16_t mHealth;
+    uint16_t mSoul;
     uint16_t mAddPoints;
 
     uint16_t mCurMP;

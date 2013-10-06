@@ -33,9 +33,9 @@ public:
         /** Generic header of all msgs */
         Msg::Header Header;
         /** The unique Id of the entity */
-        int32_t UniqId;
+        uint32_t UniqId;
         /** The look of the entity */
-        int32_t Look;
+        uint32_t Look;
 
         union
         {

@@ -56,7 +56,7 @@ Server :: Server()
     QString sql_pwd = settings.value("FAITH_EMULATOR/SQL_PWD", "").toString();
 
     MapManager& mgr = MapManager::getInstance();
-    DOIF(err, mgr.loadData());
+    //DOIF(err, mgr.loadData());
 
     Database& db = Database::getInstance();
     if (!db.connect(qPrintable(sql_host), qPrintable(sql_db),
@@ -70,9 +70,9 @@ Server :: Server()
     NpcTask::registerFunctions(); // TODO: Only one call for all ?
 
     // load database
-    DOIF(err, db.loadAllMaps());
-    DOIF(err, db.loadAllItems());
-    DOIF(err, db.loadAllNPCs());
+    //DOIF(err, db.loadAllMaps());
+    //DOIF(err, db.loadAllItems());
+    //DOIF(err, db.loadAllNPCs());
 
     fprintf(stdout, "\n");
 

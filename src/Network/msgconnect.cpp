@@ -9,6 +9,7 @@
 #include "msgconnect.h"
 #include "client.h"
 #include "player.h"
+#include "database.h"
 #include "msgtalk.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
@@ -65,59 +66,72 @@ MsgConnect :: process(Client* aClient)
 
     Client& client = *aClient;
     Client::Status status = client.getStatus();
+    Database& db = Database::getInstance();
+
+    // set the account UID
+    client.setAccountID(mInfo->AccountUID);
+
     switch (status)
     {
-    case Client::NOT_AUTHENTICATED: // Sent to the AccServer
-    {
-        // TODO ?
-        break;
-    }
-    case Client::NORMAL: // Sent to the MsgServer
-    {
-        // TODO: load character from DB()
-        // TODO: if online, disconnect
-
-        TqCipher& cipher = client.getCipher();
-        cipher.generateKey(mInfo->Data, mInfo->AccountUID);
-
-        Msg* msg= nullptr;
-        if (false) // TODO: Check
+        case Client::NOT_AUTHENTICATED: // Sent to the AccServer
         {
-            msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_NEW_ROLE, MsgTalk::CHANNEL_ENTRANCE);
-            client.send(msg);
-            SAFE_DELETE(msg);
+            fprintf(stderr, "MsgConnect::process() [AccServer]");
+            SAFE_DELETE(aClient);
+            // TODO ?
+            break;
         }
-        else
+        case Client::NORMAL: // Sent to the MsgServer
         {
-            Player& player = *client.getPlayer();
+            // TODO: load character from DB()
+            // TODO: if online, disconnect
 
-            msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK, MsgTalk::CHANNEL_ENTRANCE);
-            client.send(msg);
-            SAFE_DELETE(msg);
+            TqCipher& cipher = client.getCipher();
+            cipher.generateKey(mInfo->Data, mInfo->AccountUID);
 
-            msg = new MsgUserInfo(player);
-            client.send(msg);
-            SAFE_DELETE(msg);
+            if (!IS_SUCCESS(db.getPlayerInfo(client)))
+            {
+                // TODO client disconnect
+                break;
+            }
 
-            // HACK !
-            msg = new MsgUserAttrib(&player, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
-            client.send(msg);
-            SAFE_DELETE(msg);
+            Msg* msg = nullptr;
+            if (client.getPlayer() == nullptr)
+            {
+                msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_NEW_ROLE, MsgTalk::CHANNEL_ENTRANCE);
+                client.send(msg);
+                SAFE_DELETE(msg);
+            }
+            else
+            {
+                Player& player = *client.getPlayer();
 
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_CREATOR_INFO, MsgTalk::CHANNEL_TALK);
-            client.send(msg);
-            SAFE_DELETE(msg);
+                msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK, MsgTalk::CHANNEL_ENTRANCE);
+                client.send(msg);
+                SAFE_DELETE(msg);
 
-            msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
-            client.send(msg);
-            SAFE_DELETE(msg);
+                msg = new MsgUserInfo(player);
+                client.send(msg);
+                SAFE_DELETE(msg);
+
+                // HACK !
+                msg = new MsgUserAttrib(&player, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
+                client.send(msg);
+                SAFE_DELETE(msg);
+
+                msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_CREATOR_INFO, MsgTalk::CHANNEL_TALK);
+                client.send(msg);
+                SAFE_DELETE(msg);
+
+                msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
+                client.send(msg);
+                SAFE_DELETE(msg);
+            }
+
+            break;
         }
-
-        break;
-    }
-    default:
-        ASSERT(false);
-        break;
+        default: // FIXME !
+            ASSERT(false);
+            break;
     }
 }
 

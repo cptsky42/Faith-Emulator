@@ -20,6 +20,7 @@
 #include "endianness.h"
 #include "err.h"
 #include "unicode.h"
+#include "basefunc.h"
 #include "strres.h"
 
 #ifdef _WIN32

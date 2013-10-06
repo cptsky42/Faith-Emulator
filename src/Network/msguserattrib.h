@@ -57,7 +57,7 @@ public:
     {
         /** Generic header of all msgs */
         Msg::Header Header;
-        int32_t UniqId;
+        uint32_t UniqId;
         int32_t Amount;
         UserAttrib Attrib[1];
     }MsgInfo;

@@ -51,19 +51,26 @@ MsgAccount :: process(Client* aClient)
     cipher.generateKey(seed);
     cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
 
-    if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
+    if (isValidString(mInfo->Account) && isValidString(mInfo->Password))
     {
-        fprintf(stdout, "Connection of %s on %s...\n",
-                mInfo->Account, mInfo->Server);
+        if (IS_SUCCESS(db.authenticate(client, mInfo->Account, mInfo->Password)))
+        {
+            fprintf(stdout, "Connection of %s on %s...\n",
+                    mInfo->Account, mInfo->Server);
 
-        int32_t token = timeGetTime();
+            int32_t token = random(INT32_MAX);
 
-        MsgConnect msg(client.getAccUID(), token, Server::getServerIP());
-        client.send(&msg);
+            MsgConnect msg(client.getAccountID(), token, Server::getServerIP());
+            client.send(&msg);
+        }
+        else
+        {
+            // TODO: Bruteforce protection
+            // TODO: send bad password packet
+        }
     }
     else
     {
-        // TODO: Bruteforce protection
-        // TODO: send bad password packet
+        // TODO disconnect
     }
 }

@@ -21,14 +21,16 @@ Client :: Client(NetworkClient* aSocket)
 
     mStatus = Client::NOT_AUTHENTICATED;
 
+    mAccountID = -1;
     mAccLvl = 0;
     mFlags = 0;
 
-    mPlayer = new Player(*this);
+    mPlayer = nullptr;
 }
 
 Client :: ~Client()
 {
+    mSocket = nullptr; // Qt handle the memory
     SAFE_DELETE(mPlayer);
 }
 

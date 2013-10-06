@@ -65,7 +65,7 @@ Logger :: willLog(LogLevel aLevel)
     if (sInstance != nullptr)
     {
         #ifdef DEBUG
-        return true;
+        return aLevel >= LOG_LEVEL_DBG;
         #else
         return aLevel > LOG_LEVEL_DBG;
         #endif

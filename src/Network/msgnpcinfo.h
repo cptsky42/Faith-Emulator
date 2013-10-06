@@ -26,13 +26,13 @@ public:
         /** Generic header of all msgs */
         Msg::Header Header;
         /** The unique Id of the NPC */
-        int32_t UniqId;
+        uint32_t UniqId;
         /** The X coord of the NPC */
         uint16_t PosX;
         /** The Y coord of the NPC */
         uint16_t PosY;
         /** The look of the NPC or the direction for a statuary */
-        int16_t Look;
+        uint16_t Look;
         /** The type of the NPC, or the frame for a statuary */
         int16_t Type;
         /** The sort of the NPC, or the pose for a statuary */

@@ -176,7 +176,7 @@ public:
         /** The timestamp of the creation of the packet */
         int32_t Timestamp;
         /** The unique Id of the entity */
-        int32_t UniqId;
+        uint32_t UniqId;
         /** The X coord of the entity */
         uint16_t PosX;
         /** The Y coord of the entity */

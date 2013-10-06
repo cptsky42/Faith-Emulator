@@ -40,10 +40,10 @@ private:
     static int getHair(lua_State* aState);
     static int getMoney(lua_State* aState);
     static int getExp(lua_State* aState);
-    static int getStrength(lua_State* aState);
-    static int getVitality(lua_State* aState);
-    static int getAgility(lua_State* aState);
-    static int getSpirit(lua_State* aState);
+    static int getForce(lua_State* aState);
+    static int getHealth(lua_State* aState);
+    static int getSpeed(lua_State* aState);
+    static int getSoul(lua_State* aState);
     static int getAddPoints(lua_State* aState);
     static int getCurHP(lua_State* aState);
     static int getMaxHP(lua_State* aState);

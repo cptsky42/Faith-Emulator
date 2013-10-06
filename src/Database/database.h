@@ -14,6 +14,7 @@
 #include <QtSql/QSqlDatabase>
 
 class QSqlQuery;
+class Client;
 class Player;
 
 /**
@@ -52,6 +53,7 @@ public:
     /**
      * Authenticate the account/password pair sent by a client.
      *
+     * @param[in]   aClient     the client
      * @param[in]   aAccount    the account name
      * @param[in]   aPassword   the password of the account
      *
@@ -60,7 +62,9 @@ public:
      * @retval ERROR_NOT_FOUND if the account/password pair was not found
      * @returns Error code otherwise
      */
-    err_t authenticate(const char* aAccount, const char* aPassword);
+    err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword);
+
+    err_t getPlayerInfo(Client& aClient);
 
     /**
      * Load all NPCs in memory from the database.
@@ -92,6 +96,8 @@ public:
 private:
     /* constructor */
     Database();
+
+    QString getSqlCommand(const QSqlQuery& aQuery);
 
 private:
     static Database* sInstance; //!< static instance of the singleton

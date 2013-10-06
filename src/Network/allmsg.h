@@ -11,6 +11,7 @@
 
 #include "msgaccount.h"
 #include "msgconnect.h"
+#include "msgregister.h"
 #include "msgtalk.h"
 #include "msgaction.h"
 #include "msgplayer.h"

@@ -31,7 +31,7 @@ public:
     {
         /** Generic header of all msgs */
         Msg::Header Header;
-        int32_t UniqId;
+        uint32_t UniqId;
         int32_t Type;
         uint16_t Amount;
         uint16_t AmountLimit;
