@@ -194,6 +194,9 @@ INCLUDEPATH += \
     src/Security/Cryptography \
     src/third_party/lua-5.2.2/src
 
+OTHER_FILES += \
+    data/settings.cfg
+
 # WIN32 stuff
 win32 {
 #OTHER_FILES += \

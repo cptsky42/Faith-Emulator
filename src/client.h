@@ -52,6 +52,8 @@ public:
     void send(Msg* aMsg);
     void send(uint8_t* aBuf, size_t aLen);
 
+    void disconnect() {  /* TODO... */ }
+
 public:
     /** Get a reference to the client cipher */
     TqCipher& getCipher() { return mCipher; }

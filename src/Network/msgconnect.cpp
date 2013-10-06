@@ -75,9 +75,8 @@ MsgConnect :: process(Client* aClient)
     {
         case Client::NOT_AUTHENTICATED: // Sent to the AccServer
         {
-            fprintf(stderr, "MsgConnect::process() [AccServer]");
-            SAFE_DELETE(aClient);
-            // TODO ?
+            fprintf(stderr, "MsgConnect::process() [AccServer]\n");
+            client.disconnect();
             break;
         }
         case Client::NORMAL: // Sent to the MsgServer
@@ -90,7 +89,7 @@ MsgConnect :: process(Client* aClient)
 
             if (!IS_SUCCESS(db.getPlayerInfo(client)))
             {
-                // TODO client disconnect
+                client.disconnect();
                 break;
             }
 

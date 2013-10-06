@@ -14,8 +14,7 @@
 #ifndef _FAITH_EMULATOR_ERROR_H_
 #define _FAITH_EMULATOR_ERROR_H_
 
-#define DEBUG // TODO HACK!
-
+#include "def.h"
 #include "types.h"
 #include <assert.h>
 #include <errno.h>

@@ -71,6 +71,6 @@ MsgAccount :: process(Client* aClient)
     }
     else
     {
-        // TODO disconnect
+        client.disconnect();
     }
 }

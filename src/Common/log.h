@@ -9,6 +9,7 @@
 #ifndef _FAITH_EMULATOR_LOG_H_
 #define _FAITH_EMULATOR_LOG_H_
 
+#include "def.h"
 #include "env.h"
 #include <stdio.h>
 #include <time.h>

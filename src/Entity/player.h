@@ -21,6 +21,25 @@ class Player : public AdvancedEntity
     PROHIBIT_COPY(Player); // constant UID, should be unique...
 
 public:
+    static const uint16_t LOOK_HUMAN_MALE       = 1;
+    static const uint16_t LOOK_HUMAN_FEMALE     = 2;
+    static const uint16_t LOOK_ELF_MALE         = 3;
+    static const uint16_t LOOK_ELF_FEMALE       = 4;
+    static const uint16_t LOOK_DARKELF_MALE     = 5;
+    static const uint16_t LOOK_DARKELF_FEMALE   = 6;
+
+    static const uint16_t FACE_INTERN   = 1;
+    static const uint16_t FACE_NORMAL   = 101;
+    static const uint16_t FACE_VETERAN  = 201;
+
+    static const uint16_t HAIR_FIRST     = 101;
+    static const uint16_t HAIR_LAST      = 101; // 107 (XY)
+
+    static const uint8_t PROFESSION_MAGE    = 10;
+    static const uint8_t PROFESSION_WARRIOR = 20;
+    static const uint8_t PROFESSION_ARCHER  = 30;
+
+public:
     Player(Client& aClient, uint32_t aUID);
     virtual ~Player();
 

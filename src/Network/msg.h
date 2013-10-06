@@ -50,9 +50,8 @@ public:
 
     /**
      * Print the msg in the standard output stream.
-     *
-     * @param[in]     aMsg        a pointer to the msg to print
      */
+    static void dump(const uint8_t* aBuf, size_t aLen);
     static void dump(Msg* aMsg);
 
 public:

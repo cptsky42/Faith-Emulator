@@ -40,14 +40,16 @@ MsgRegister :: process(Client* aClient)
     {
         if (isValidString(mInfo->Password))
         {
-            if (db.authenticate(client, mInfo->Account, mInfo->Password))
+            if (IS_SUCCESS(db.authenticate(client, mInfo->Account, mInfo->Password)) &&
+                client.getAccountID() == mInfo->AccountUID)
             {
                 if (isValidNameString(mInfo->Name))
                 {
-                    if (true) // TODO
-                    //if (db.create(mInfo->Account,
-                                  //mInfo->Name, mInfo->Look, mInfo->Profession))
+                    if (IS_SUCCESS(db.createPlayer(client, mInfo->Name, mInfo->Look, mInfo->Profession)))
                     {
+                        LOG(INFO, "Created the character %s for the account %s.",
+                            mInfo->Name, mInfo->Account);
+
                         MsgTalk msg(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK,
                                     MsgTalk::CHANNEL_REGISTER);
                         client.send(&msg);
@@ -68,8 +70,7 @@ MsgRegister :: process(Client* aClient)
             }
             else
             {
-                // TODO
-                //client.disconnect();
+                client.disconnect();
             }
         }
         else

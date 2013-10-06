@@ -64,6 +64,19 @@ public:
      */
     err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword);
 
+    err_t createPlayer(Client& aClient, const char* aName,
+                      uint16_t aLook, uint16_t aProfession);
+
+    /**
+     * Try to retreive the player information for the specified client.
+     * The player will be null if none exist.
+     *
+     * @param[in]   aClient     the client
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
     err_t getPlayerInfo(Client& aClient);
 
     /**
@@ -97,6 +110,7 @@ private:
     /* constructor */
     Database();
 
+    /** Get the SQL command from the SQL query. */
     QString getSqlCommand(const QSqlQuery& aQuery);
 
 private:

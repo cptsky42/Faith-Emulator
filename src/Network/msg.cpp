@@ -160,10 +160,19 @@ Msg :: dump(Msg* aMsg)
 {
     ASSERT(aMsg != nullptr);
 
-    const size_t AMOUNT_PER_LINE = 16;
-    uint8_t* buf = (uint8_t*)aMsg->getBuffer();
+    dump(aMsg->getBuffer(), aMsg->getLength());
+}
 
-    for (size_t i = 0, len = aMsg->getLength(); i < len; i+=AMOUNT_PER_LINE)
+/* static */
+void
+Msg :: dump(const uint8_t* aBuf, size_t aLen)
+{
+    ASSERT(aBuf != nullptr);
+
+    const size_t AMOUNT_PER_LINE = 16;
+    const uint8_t* buf = aBuf;
+
+    for (size_t i = 0, len = aLen; i < len; i += AMOUNT_PER_LINE)
     {
         for (size_t j = 0; j < AMOUNT_PER_LINE; ++j)
         {

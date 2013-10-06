@@ -138,6 +138,72 @@ Database :: authenticate(Client& aClient, const char* aAccount, const char* aPas
 }
 
 err_t
+Database :: createPlayer(Client& aClient, const char* aName,
+                         uint16_t aLook, uint16_t aProfession)
+{
+    ASSERT_ERR(&aClient != nullptr, ERROR_INVALID_REFERENCE);
+    ASSERT_ERR(aName != nullptr && aName[0] != '\0', ERROR_INVALID_PARAMETER);
+
+    const char* cmd = "INSERT INTO `user` (`account_id`, `name`, `lookface`, `profession`, "
+                      "`force`, `speed`, `health`, `soul`, `life`, `mana`) VALUES "
+                      "(:account_id, :name, :lookface, :profession, :force, :speed, "
+                      ":health, :soul, :life, :mana)";
+
+    err_t err = ERROR_SUCCESS;
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+    query.bindValue(":account_id", aClient.getAccountID());
+    query.bindValue(":name", aName);
+    query.bindValue(":lookface", (Player::FACE_INTERN * 10000) + aLook);
+
+    uint16_t force = 0, speed = 0, health = 0, soul = 0;
+    switch (aLook) // skip profession, useless...
+    {
+    case Player::LOOK_HUMAN_MALE:
+    case Player::LOOK_HUMAN_FEMALE:
+        {
+            query.bindValue(":profession", Player::PROFESSION_WARRIOR);
+            break;
+        }
+    case Player::LOOK_ELF_MALE:
+    case Player::LOOK_ELF_FEMALE:
+        {
+            query.bindValue(":profession", Player::PROFESSION_ARCHER);
+            break;
+        }
+    case Player::LOOK_DARKELF_MALE:
+    case Player::LOOK_DARKELF_FEMALE:
+        {
+            query.bindValue(":profession", Player::PROFESSION_MAGE);
+            break;
+        }
+    default:
+        ASSERT(false);
+        break;
+    }
+
+    query.bindValue(":force", force);
+    query.bindValue(":speed", speed);
+    query.bindValue(":health", health);
+    query.bindValue(":soul", soul);
+
+    query.bindValue(":life", 0);
+    query.bindValue(":mana", 0);
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
+
+    if (!query.exec())
+    {
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
+err_t
 Database :: getPlayerInfo(Client& aClient)
 {
     ASSERT_ERR(&aClient != nullptr, ERROR_INVALID_REFERENCE);

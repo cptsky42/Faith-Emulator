@@ -144,7 +144,7 @@ Server :: receiveHandler(NetworkClient* aClient, uint8_t* aBuf, size_t aLen)
             if (size < aLen)
             {
                 uint8_t* packet = new uint8_t[size];
-                memcpy(packet, received, size);
+                memcpy(packet, received + i, size);
 
                 #if BYTE_ORDER == BIG_ENDIAN
                 Msg::Header* header = (Msg::Header*)packet;

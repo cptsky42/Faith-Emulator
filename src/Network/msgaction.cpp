@@ -77,7 +77,7 @@ MsgAction :: process(Client* aClient)
         {
             if (player.getUID() != mInfo->UniqId)
             {
-                // TODO disconnect
+                client.disconnect();
                 return;
             }
 
@@ -94,6 +94,34 @@ MsgAction :: process(Client* aClient)
             client.send(this);
 
             player.enterMap();
+            break;
+        }
+    case ACTION_GET_ITEM_SET:
+        {
+            // TODO: send item set
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_GOOD_FRIEND:
+        {
+            // TODO send friends / enemies
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_WEAPON_SKILL_SET:
+        {
+            // TODO send weapon skills
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_MAGIC_SET:
+        {
+            // TODO send skills
+
+            client.send(this);
             break;
         }
     case ACTION_SET_PKMODE:
@@ -130,6 +158,13 @@ MsgAction :: process(Client* aClient)
 
             client.send(this);
             player.sendSysMsg(msg);
+            break;
+        }
+    case ACTION_GET_SYN_ATTR:
+        {
+            // TODO send syn attributes
+
+            client.send(this);
             break;
         }
     case ACTION_DESTROY_BOOTH:
