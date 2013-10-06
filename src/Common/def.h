@@ -14,7 +14,6 @@
 #ifndef _FAITH_EMULATOR_DEF_H_
 #define _FAITH_EMULATOR_DEF_H_
 
-// TODO Create a def.h.in file...
 #define HAVE_STDINT_H
 #define HAVE_UNISTD_H
 //#define HAVE_ENDIAN_H

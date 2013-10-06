@@ -44,7 +44,28 @@ public:
     virtual ~World();
 
 public:
+    /**
+     * Search an entity based on its UID. If the entity is not found,
+     * the output entity will be null.
+     *
+     * @param[in,out]   aOutEntity   a pointer to the object receiving the entity
+     * @param[in]       aUID         the UID of the entity
+     *
+     * @retval TRUE if the entity is found
+     * @returns FALSE otherwise
+     */
     bool queryEntity(Entity** aOutEntity, int32_t aUID);
+
+    /**
+     * Search a NPC based on its UID. If the NPC is not found,
+     * the output NPC will be null.
+     *
+     * @param[in,out]   aOutNpc      a pointer to the object receiving the NPC
+     * @param[in]       aUID         the UID of the NPC
+     *
+     * @retval TRUE if the NPC is found
+     * @returns FALSE otherwise
+     */
     bool queryNpc(Npc** aOutNpc, int32_t aUID);
 
 private:

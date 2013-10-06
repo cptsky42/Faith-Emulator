@@ -224,9 +224,6 @@ private:
     template<class T>
     err_t read(T& aOutVal);
 
-    template<class T>
-    err_t readPckInt(T& aOutVal);
-
 private:
     FILE* mStream; //!< the base stream of the reader
 };

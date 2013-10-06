@@ -238,9 +238,6 @@ private:
     template<class T>
     err_t write(T aValue);
 
-    template<class T>
-    err_t writePckInt(T aValue);
-
 private:
     FILE* mStream; //!< the base stream of the reader
 };

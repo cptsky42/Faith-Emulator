@@ -72,7 +72,7 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
     ASSERT_ERR(aAccount != nullptr && aAccount[0] != '\0', ERROR_INVALID_PARAMETER);
     ASSERT_ERR(aPassword != nullptr && aPassword[0] != '\0', ERROR_INVALID_PARAMETER);
 
-    const char* cmd = "SELECT password FROM account WHERE name = :name";
+    const char* cmd = "SELECT password, id, type FROM account WHERE name = :name";
 
     err_t err = ERROR_SUCCESS;
 
@@ -92,6 +92,8 @@ Database :: authenticate(const char* aAccount, const char* aPassword)
                 // the Account/Password pair is not found
                 err = ERROR_NOT_FOUND;
             }
+
+
         }
         else
         {

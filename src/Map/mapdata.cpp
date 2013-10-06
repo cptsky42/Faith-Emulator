@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Cell;
+struct Cell;
 
 /* static */
 err_t
@@ -54,13 +54,22 @@ MapData :: load(MapData** aOutData, const char* aPath)
 }
 
 MapData :: MapData()
+    : mWidth(0), mHeight(0), mCells(nullptr)
 {
-    // TODO
+
 }
 
 MapData :: ~MapData()
 {
-    // TODO
+    SAFE_DELETE_ARRAY(mCells);
+
+    for (vector<Passage*>::iterator
+            it = mPassages.begin(), end = mPassages.end();
+         it != end; ++it)
+    {
+        Passage* passage = *it;
+        SAFE_DELETE(passage);
+    }
 }
 
 

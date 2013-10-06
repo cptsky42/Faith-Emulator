@@ -97,7 +97,8 @@ SOURCES += \
     src/Network/msgnpc.cpp \
     src/Network/msgdialog.cpp \
     src/Map/mapdata.cpp \
-    src/Common/log.cpp
+    src/Common/log.cpp \
+    src/inifile.cpp
 
 HEADERS += \
     src/server.h \
@@ -173,7 +174,8 @@ HEADERS += \
     src/Common/def.h \
     src/Common/arch.h \
     src/Common/common.h \
-    src/Common/endianness.h
+    src/Common/endianness.h \
+    src/inifile.h
 
 INCLUDEPATH += \
     src \

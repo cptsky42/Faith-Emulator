@@ -26,16 +26,26 @@ class Logger;
 
 #define LOG(LEVEL, ...) LOG_(LOG_LEVEL_ ## LEVEL, __VA_ARGS__)
 
+/** Level of logging. */
 enum LogLevel
 {
+    /** Verbose */
     LOG_LEVEL_VRB = 0,
+    /** Debug */
     LOG_LEVEL_DBG = 1,
+    /** Information */
     LOG_LEVEL_INFO = 2,
+    /** Warning */
     LOG_LEVEL_WARN = 3,
+    /** Error */
     LOG_LEVEL_ERROR = 4,
+    /** Critical error */
     LOG_LEVEL_CRIT = 5
 };
 
+/**
+ * Optimized logger.
+ */
 class Logger : public Environment::Global, private QThread
 {
 public:
@@ -50,9 +60,11 @@ public:
                     const char* aFormat, ...);
 
 public:
+    /* destructor */
     ~Logger();
 
 private:
+    /* time / string */
     typedef std::pair<tm, char*> LogData;
 
 private:
@@ -64,6 +76,7 @@ private:
 
     virtual void run();
 
+    /* constructor */
     Logger();
 
 private:

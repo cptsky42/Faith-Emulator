@@ -182,3 +182,17 @@ MapManager :: createMap(int32_t aUID, GameMap::Info** aInfo)
 
     return err;
 }
+
+GameMap*
+MapManager :: getMap(int32_t aUID)
+{
+    GameMap* gameMap = nullptr;
+
+    map<int32_t, GameMap*>::iterator it;
+    if ((it = mGameMaps.find(aUID)) == mGameMaps.end())
+    {
+        gameMap = it->second;
+    }
+
+    return gameMap;
+}

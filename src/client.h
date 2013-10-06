@@ -52,10 +52,13 @@ public:
 public:
     /** Get a reference to the client cipher */
     TqCipher& getCipher() { return mCipher; }
+
+    /** Get the account UID. */
+    int32_t getAccUID() const { return mAccUID; }
     /** Get the status of the account */
-    Status getStatus() { return mStatus; }
+    Status getStatus() const { return mStatus; }
     /** Get the player object linked to this client */
-    Player* getPlayer() { return mPlayer; }
+    Player* getPlayer() const { return mPlayer; }
 
     void setAccount(const std::string& aAccount) { mAccount = aAccount; }
     void setStatus(Status aStatus) { mStatus = aStatus; }
@@ -69,6 +72,7 @@ private:
     Status mStatus; //!< the status of the account
 
     std::string mAccount; //!< the account name
+    int32_t mAccUID; //!< the account UID
     int8_t mAccLvl; //!< the account permissions level
     int32_t mFlags; //!< the account flags
     std::string mCharacter; //!< the character name

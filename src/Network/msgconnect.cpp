@@ -115,7 +115,7 @@ MsgConnect :: process(Client* aClient)
 
         break;
     }
-    default: // FIXME !
+    default:
         ASSERT(false);
         break;
     }

@@ -91,7 +91,7 @@ public:
         int16_t Channel;
         int16_t Style;
         int32_t Timestamp;
-        uint8_t Buf[1];
+        uint8_t Buf[1]; // Speaker, Hearer, Emotion, Words
     }MsgInfo;
     #pragma pack(pop)
 

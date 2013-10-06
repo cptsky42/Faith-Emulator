@@ -28,8 +28,6 @@
 #include <sys/time.h> // for timeGetTime()
 #endif
 
-
-
 /*
  *****************************************************
  * Safe delete macros

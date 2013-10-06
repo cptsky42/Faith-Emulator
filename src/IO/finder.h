@@ -24,22 +24,6 @@
 class Finder
 {
 public:
-    struct FileInfo
-    {
-        // TODO: Use std::string for safe memory !
-    public:
-        char* Name;
-        int64_t Size;
-        int64_t CreationTime;
-        int64_t LastAccessTime;
-        int64_t LastWriteTime;
-
-    public:
-        FileInfo();
-        ~FileInfo();
-    };
-
-public:
     /**
       * Open the file pointed by the path with the "C" mode. The file
       * descriptor is returned.
@@ -119,16 +103,12 @@ public:
      */
     static bool fileExists(const char* aPath);
 
-    static FileInfo fileStat(const char* aPath);
-
     /**
      * Create a temp file that will be deleted on close.
      *
      * @returns A pointer to a FILE object that identifies the stream.
      */
     static FILE* getTempFile();
-
-    static const char* getFileName(const char* aPath);
 };
 
 #endif /* _FAITH_EMULATOR_FINDER_H_ */

@@ -29,18 +29,6 @@
 
 using namespace std;
 
-Finder::FileInfo :: FileInfo()
-    : Name(nullptr), Size(0),
-      CreationTime(0), LastAccessTime(0), LastWriteTime(0)
-{
-
-}
-
-Finder::FileInfo :: ~FileInfo()
-{
-    SAFE_DELETE_ARRAY(Name);
-}
-
 /* static */
 err_t
 Finder :: fileOpen(FILE** aOutFile,
@@ -209,58 +197,6 @@ Finder :: fileExists(const char* aPath)
 }
 
 /* static */
-Finder::FileInfo
-Finder :: fileStat(const char* aPath)
-{
-    ASSERT_ERR(aPath != nullptr && aPath[0] != '\0', ERROR_BAD_PARAMS);
-
-    // TODO: Implement flags, permissions, etc.
-
-    FileInfo file;
-    #if defined(_WIN32)
-    struct _stat64 info;
-    if (_stat64(aPath, &info) == 0)
-    {
-        SAFE_DELETE_ARRAY(file.Name);
-
-        const char* name = getFileName(aPath);
-        file.Name = new char[strlen(name) + 1];
-        strncpy(file.Name, name, strlen(name) + 1);
-
-        file.Size = info.st_size;
-
-        file.CreationTime = info.st_ctime;
-        file.LastAccessTime = info.st_atime;
-        file.LastWriteTime = info.st_mtime;
-    }
-    #else
-    struct stat info;
-    if (stat(aPath, &info) == 0)
-    {
-        SAFE_DELETE_ARRAY(file.Name);
-
-        const char* name = getFileName(aPath);
-        file.Name = new char[strlen(name) + 1];
-        strncpy(file.Name, name, strlen(name) + 1);
-
-        file.Size = info.st_size;
-
-        #ifdef __APPLE__
-        file.CreationTime = info.st_ctimespec.tv_sec;
-        file.LastAccessTime = info.st_atimespec.tv_sec;
-        file.LastWriteTime = info.st_mtimespec.tv_sec;
-        #else
-        file.CreationTime = info.st_ctime;
-        file.LastAccessTime = info.st_atime;
-        file.LastWriteTime = info.st_mtime;
-        #endif
-    }
-    #endif
-
-    return file;
-}
-
-/* static */
 FILE*
 Finder :: getTempFile()
 {
@@ -297,24 +233,4 @@ Finder :: getTempFile()
     #endif
 
     return file;
-}
-
-/* static */
-const char*
-Finder :: getFileName(const char* aPath)
-{
-    const char* pos = aPath;
-
-    const char* i1 = strrchr(aPath, '\\');
-    const char* i2 = strrchr(aPath, '/');
-
-    pos = max(pos, max(i1, i2));
-
-    if (pos[0] == '\\' || pos[0] == '/')
-    {
-        // a file name doesn't start with a separator...
-        ++pos;
-    }
-
-    return pos;
 }

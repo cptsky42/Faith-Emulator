@@ -15,23 +15,33 @@
 
 class BinaryReader;
 
+/**
+ * Map data (DMap)
+ */
 class MapData
 {
 public:
+    /**
+     * Load a DMap as a MapData object containing cells and passages.
+     *
+     * @param[in,out]   aOutData     a reference to the outputed MapData
+     * @param[in]       aPath        the path of the DMap file
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns an error code otherwise
+     */
     static err_t load(MapData** aOutData, const char* aPath);
 
 public:
+    /* destructor */
     ~MapData();
 
 public:
     uint16_t getWidth() const { return mWidth; }
     uint16_t getHeight() const { return mHeight; }
 
-    Cell getCell(uint16_t aPosX, uint16_t aPosY);
-    int getPassage(uint16_t aPosX, uint16_t aPosY);
-
-    //bool FindPath(PASSPATH0* pPathBuf, int nBufSize, POINT posSource, POINT posTarget, IRoleAttr* pAttr, int nEscapeSteps = 0);
-    // nEscapeSteps == 0 : Move Forward
+    const Cell& getCell(uint16_t aPosX, uint16_t aPosY) const;
+    int getPassage(uint16_t aPosX, uint16_t aPosY) const;
 
 private:
     static const int32_t MAX_PATH = 260;
@@ -58,6 +68,7 @@ private:
     static const int32_t MAP_3DEFFECTNEW = 19;
 
 private:
+    /* constructor */
     MapData();
 
 private:
@@ -79,11 +90,11 @@ private:
     inline size_t idx2y(size_t aIdx) { return (aIdx / mHeight); }
 
 private:
-    uint16_t mWidth;
-    uint16_t mHeight;
+    uint16_t mWidth;  //!< the width (number of cell) of the map
+    uint16_t mHeight; //!< the height (number of cell) of the map
 
-    Cell* mCells;
-    std::vector<Passage*> mPassages;
+    Cell* mCells; //!< all the cells of the map
+    std::vector<Passage*> mPassages; //!< all the passages of the map
 };
 
 #endif // _FAITH_EMULATOR_MAP_DATA_H_

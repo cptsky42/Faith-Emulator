@@ -51,19 +51,14 @@ MsgAccount :: process(Client* aClient)
     cipher.generateKey(seed);
     cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
 
-    fprintf(stderr, "Password = %s\n", mInfo->Password);
-
-    // TODO: Uncomment me !
-    if (true)//if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
+    if (IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
     {
         fprintf(stdout, "Connection of %s on %s...\n",
                 mInfo->Account, mInfo->Server);
 
-        // FIXME !
-        int32_t accUID = 1;
-        int32_t token = 1;
+        int32_t token = timeGetTime();
 
-        MsgConnect msg(accUID, token, Server::getServerIP());
+        MsgConnect msg(client.getAccUID(), token, Server::getServerIP());
         client.send(&msg);
     }
     else
