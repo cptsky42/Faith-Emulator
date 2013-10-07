@@ -53,8 +53,11 @@ BinaryReader :: seek(int64_t aOffset, int aWhence)
 void
 BinaryReader :: close()
 {
-    fclose(mStream);
-    mStream = nullptr;
+    if (mStream != nullptr)
+    {
+        fclose(mStream);
+        mStream = nullptr;
+    }
 }
 
 err_t
@@ -119,35 +122,6 @@ template err_t BinaryReader :: read<int8_t>(int8_t& aOutVal);
 template err_t BinaryReader :: read<int16_t>(int16_t& aOutVal);
 template err_t BinaryReader :: read<int32_t>(int32_t& aOutVal);
 template err_t BinaryReader :: read<int64_t>(int64_t& aOutVal);
-
-template<class T>
-err_t
-BinaryReader :: readPckInt(T& aOutVal)
-{
-    err_t err = ERROR_SUCCESS;
-    aOutVal = 0;
-
-    int bitIndex = 0;
-    while (ERROR_SUCCESS == err &&
-           bitIndex != 35)
-    {
-        uint8_t byte = 0;
-        DOIF(err, readUInt8(byte));
-
-        aOutVal |= ((T)byte & (T)127) << bitIndex;
-        bitIndex += 7;
-
-        if (((T)byte & 128) == 0)
-            break;
-    }
-
-    return err;
-}
-
-template err_t BinaryReader :: readPckInt<uint8_t>(uint8_t& aOutVal);
-template err_t BinaryReader :: readPckInt<uint16_t>(uint16_t& aOutVal);
-template err_t BinaryReader :: readPckInt<uint32_t>(uint32_t& aOutVal);
-template err_t BinaryReader :: readPckInt<uint64_t>(uint64_t& aOutVal);
 
 err_t
 BinaryReader :: read(void* aBuf, size_t aLen)

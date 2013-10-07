@@ -10,20 +10,19 @@
 #include "client.h"
 #include "entity.h"
 #include "player.h"
+#include "msgplayer.h"
 
 MsgAction :: MsgAction(Entity* aEntity, int32_t aData, Action aAction)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aEntity, aData, aAction);
 }
 
 MsgAction :: MsgAction(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -44,7 +43,7 @@ MsgAction :: create(Entity* aEntity, int32_t aData, Action aAction)
     mInfo->Timestamp = timeGetTime();
     if (aEntity != nullptr)
     {
-        mInfo->UniqId = aEntity->getUniqId();
+        mInfo->UniqId = aEntity->getUID();
         mInfo->PosX = aEntity->getPosX();
         mInfo->PosY = aEntity->getPosY();
         mInfo->Direction = aEntity->getDirection();
@@ -74,9 +73,9 @@ MsgAction :: process(Client* aClient)
     {
     case ACTION_CHG_DIR:
         {
-            if (player.getUniqId() != mInfo->UniqId)
+            if (player.getUID() != mInfo->UniqId)
             {
-                // TODO disconnect
+                client.disconnect();
                 return;
             }
 
@@ -93,6 +92,34 @@ MsgAction :: process(Client* aClient)
             client.send(this);
 
             player.enterMap();
+            break;
+        }
+    case ACTION_GET_ITEM_SET:
+        {
+            // TODO: send item set
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_GOOD_FRIEND:
+        {
+            // TODO send friends / enemies
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_WEAPON_SKILL_SET:
+        {
+            // TODO send weapon skills
+
+            client.send(this);
+            break;
+        }
+    case ACTION_GET_MAGIC_SET:
+        {
+            // TODO send skills
+
+            client.send(this);
             break;
         }
     case ACTION_SET_PKMODE:
@@ -129,6 +156,18 @@ MsgAction :: process(Client* aClient)
 
             client.send(this);
             player.sendSysMsg(msg);
+            break;
+        }
+    case ACTION_GET_SYN_ATTR:
+        {
+            // TODO send syn attributes
+
+            client.send(this);
+            break;
+        }
+    case ACTION_DESTROY_BOOTH:
+        {
+            // TODO: Implement booths
             break;
         }
     default:

@@ -19,18 +19,16 @@ using namespace std;
 
 MsgLoginAccountEx :: MsgLoginAccountEx(const char* aAccount, const char* aPassword,
                                        const char* aServer, const char* aInfo)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aAccount, aPassword, aServer, aInfo);
 }
 
 MsgLoginAccountEx :: MsgLoginAccountEx(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -69,8 +67,8 @@ MsgLoginAccountEx :: create(const char* aAccount, const char* aPassword,
     }
     else
     {
-        LOG("Invalid length: account=%zu, password=%zu, server=%zu, info=%zu",
-               strlen(aAccount), strlen(aPassword), strlen(aServer), strlen(aInfo));
+        LOG(ERROR, "Invalid length: account=%zu, password=%zu, server=%zu, info=%zu",
+            strlen(aAccount), strlen(aPassword), strlen(aServer), strlen(aInfo));
     }
 }
 
@@ -91,24 +89,27 @@ MsgLoginAccountEx :: process(Client* aClient)
     cipher.generateKey(seed);
     cipher.decrypt((uint8_t*)mInfo->Password, sizeof(mInfo->Password));
 
-    fprintf(stderr, "Password = %s\n", mInfo->Password);
-
-    if (true)//(IS_SUCCESS(db.authenticate(mInfo->Account, mInfo->Password)))
+    if (isValidString(mInfo->Account) && isValidString(mInfo->Password))
     {
-        fprintf(stdout, "Connection of %s on %s...\n",
-                mInfo->Account, mInfo->Server);
+        if (IS_SUCCESS(db.authenticate(client, mInfo->Account, mInfo->Password)))
+        {
+            fprintf(stdout, "Connection of %s on %s...\n",
+                    mInfo->Account, mInfo->Server);
 
-        // FIXME !
-        int32_t accUID = 1;
-        int32_t token = 1;
+            int32_t token = random(INT32_MAX);
 
-        MsgLoginReplyEx msg(accUID, token, Server::SERVER_IP);
-        client.send(&msg);
+            MsgLoginReplyEx msg(client.getAccountID(), token, Server::getServerIP());
+            client.send(&msg);
+        }
+        else
+        {
+            // TODO: send bad password packet
+            // TODO: Bruteforce protection
+        }
     }
     else
     {
-        // TODO: Bruteforce protection
-        // TODO: send bad password packet
+        client.disconnect();
     }
 }
 

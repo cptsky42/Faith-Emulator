@@ -14,7 +14,9 @@
 #ifndef _FAITH_EMULATOR_ERROR_H_
 #define _FAITH_EMULATOR_ERROR_H_
 
+#include "def.h"
 #include "types.h"
+#include <assert.h>
 #include <errno.h>
 
 /*
@@ -128,5 +130,35 @@ const err_t ERROR_UNKNOWN = 0x7FFFFFFF;
 #define DOIF(err, fn) \
     if (IS_SUCCESS(err)) \
     err = fn
+
+/*
+ *****************************************************
+ * Assertion macros
+ *****************************************************
+ */
+
+#ifdef DEBUG
+
+// Assert an expression and might abort
+#define ASSERT(exp)                          \
+    assert(exp)
+
+// Assert an expression and might abort
+#define ASSERT_ERR(exp, err)                 \
+    assert(exp)
+
+#else
+
+// Assert an expression and return if false
+#define ASSERT(exp)                          \
+    if (!(exp))                              \
+    return
+
+// Assert an expression and return the error if false
+#define ASSERT_ERR(exp, err)                 \
+    if (!(exp))                              \
+    return err
+
+#endif // DEBUG
 
 #endif // _FAITH_EMULATOR_ERROR_H_

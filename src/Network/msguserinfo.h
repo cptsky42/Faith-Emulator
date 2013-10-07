@@ -20,17 +20,17 @@ class Player;
 class MsgUserInfo : public Msg
 {
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */
         Msg::Header Header;
         /** The unique Id of the player */
-        int32_t UniqId;
+        uint32_t UniqId;
         /** The look of the player */
-        int32_t Look;
+        uint32_t Look;
         /** The hair of the player */
-        int16_t Hair;
+        uint16_t Hair;
         /** The length of the player (unused) */
         int8_t Length;
         /** The fat of the player (unused) */
@@ -38,7 +38,7 @@ public:
         /** The money of the player */
         int32_t Money;
         /** The experience of the player */
-        int32_t Exp;
+        uint32_t Exp;
         /** Unknown bytes (padding ?) */
         uint8_t Padding1[10];
         /** The mercenary exp of the player */
@@ -47,14 +47,14 @@ public:
         uint16_t MercenaryLevel;
         /** Unknown bytes (padding ?) */
         uint8_t Padding2[14];
-        /** The strength of the player */
-        uint16_t Strength;
-        /** The agility of the player */
-        uint16_t Agility;
-        /** The vitality of the player */
-        uint16_t Vitality;
-        /** The spirit of the player */
-        uint16_t Spirit;
+        /** The Force of the player */
+        uint16_t Force;
+        /** The Speed of the player */
+        uint16_t Speed;
+        /** The Health of the player */
+        uint16_t Health;
+        /** The Soul of the player */
+        uint16_t Soul;
         /** The additional points of the player */
         uint16_t AddPoints;
         /** The hit points of the player */

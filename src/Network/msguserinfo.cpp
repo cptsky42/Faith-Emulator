@@ -13,19 +13,18 @@
 
 MsgUserInfo :: MsgUserInfo(Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
-          strlen(aPlayer.getName())  + 1 +
-          strlen(aPlayer.getMate()) + 1)
+          strlen(aPlayer.getName()) + 1 +
+          strlen(aPlayer.getMate()) + 1),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aPlayer);
 }
 
 MsgUserInfo :: MsgUserInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -50,7 +49,7 @@ MsgUserInfo :: create(Player& aPlayer)
         mInfo->Header.Length = mLen;
         mInfo->Header.Type = MSG_USERINFO;
 
-        mInfo->UniqId = aPlayer.getUniqId();
+        mInfo->UniqId = aPlayer.getUID();
         mInfo->Look = aPlayer.getLook();
         mInfo->Hair = aPlayer.getHair();
         mInfo->Length = 0; // unused by EoF
@@ -59,10 +58,10 @@ MsgUserInfo :: create(Player& aPlayer)
         mInfo->Exp = aPlayer.getExp();
         mInfo->MercenaryExp = aPlayer.getMercenaryExp();
         mInfo->MercenaryLevel = aPlayer.getMercenaryLevel();
-        mInfo->Strength = aPlayer.getStrength();
-        mInfo->Vitality = aPlayer.getVitality();
-        mInfo->Agility = aPlayer.getAgility();
-        mInfo->Spirit = aPlayer.getSpirit();
+        mInfo->Force = aPlayer.getForce();
+        mInfo->Health = aPlayer.getHealth();
+        mInfo->Speed = aPlayer.getSpeed();
+        mInfo->Soul = aPlayer.getSoul();
         mInfo->AddPoints = aPlayer.getAddPoints();
         mInfo->CurHP = aPlayer.getCurHP();
         mInfo->CurMP = aPlayer.getCurMP();
@@ -82,7 +81,7 @@ MsgUserInfo :: create(Player& aPlayer)
     }
     else
     {
-        LOG("Invalid length: name=%zu, mate=%zu",
+        LOG(ERROR, "Invalid length: name=%zu, mate=%zu",
             strlen(aPlayer.getName()), strlen(aPlayer.getMate()));
     }
 }
@@ -101,10 +100,10 @@ MsgUserInfo :: swap(uint8_t* aBuf)
     info->Exp = bswap32(info->Exp);
     info->MercenaryExp = bswap16(info->MercenaryExp);
     info->MercenaryLevel = bswap16(info->MercenaryLevel);
-    info->Strength = bswap16(info->Strength);
-    info->Vitality = bswap16(info->Vitality);
-    info->Agility = bswap16(info->Agility);
-    info->Spirit = bswap16(info->Spirit);
+    info->Force = bswap16(info->Force);
+    info->Health = bswap16(info->Health);
+    info->Speed = bswap16(info->Speed);
+    info->Soul = bswap16(info->Soul);
     info->AddPoints = bswap16(info->AddPoints);
     info->CurHP = bswap16(info->CurHP);
     info->CurMP = bswap16(info->CurMP);

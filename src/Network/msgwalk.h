@@ -19,13 +19,13 @@
 class MsgWalk : public Msg
 {
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */
         Msg::Header Header;
         /** The unique Id of the entity which is walking */
-        int32_t UniqId;
+        uint32_t UniqId;
         /** The direction of the mouvement */
         uint8_t Direction;
         /** The mode of the mouvement (walk/run) */

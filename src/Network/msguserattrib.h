@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         int32_t Type;
@@ -52,11 +52,12 @@ public:
     #pragma pack(pop)
 
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
-        int32_t UniqId;
+        uint32_t UniqId;
         int32_t Amount;
         UserAttrib Attrib[1];
     }MsgInfo;

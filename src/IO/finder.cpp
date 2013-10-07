@@ -11,10 +11,12 @@
  * sections in the LICENSE file.
  */
 
-
+#include "log.h"
 #include "finder.h"
+
 #include <sys/stat.h>
 #include <string.h> // strerror
+#include <algorithm> // max
 
 #ifndef _WIN32
 #include <sys/file.h> // flock BSD4.4
@@ -24,6 +26,8 @@
 #include <Windows.h>
 #include <io.h> // _get_osfhandle
 #endif
+
+using namespace std;
 
 /* static */
 err_t
@@ -37,38 +41,33 @@ Finder :: fileOpen(FILE** aOutFile,
     err_t err = ERROR_SUCCESS;
 
     #if defined(_WIN32)
-    wchar_t* path = nullptr; // TODO: UTF8ToWideChar(pPath);
+    wchar_t path[MAX_PATH];
+    wchar_t mode[MAX_PATH];
+    size_t len = 0;
 
-    //ASCII code points are equal to their UNICODE equivalence.
-    wchar_t* mode = new wchar_t(strlen(aMode) + 1);
-    mode[strlen(aMode)] = '\0';
+    len = sizeof(path);
+    DOIF(err, utf8ToWc(path, len, aPath));
+    len = sizeof(mode);
+    DOIF(err, utf8ToWc(mode, len, aMode));
 
-    for (size_t i = 0, len = strlen(aMode); i < len; ++i)
-    {
-        mode[i] = aMode[i];
-    }
-
-    *aOutFile = fopen(aPath, aMode);//_wfopen(path, mode);
+    *aOutFile = _wfopen(path, mode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
-
-    SAFE_DELETE_ARRAY(path);
-    SAFE_DELETE_ARRAY(mode);
     #elif defined(__APPLE__)
     *aOutFile = fopen(aPath, aMode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
     #else
     *aOutFile = fopen64(aPath, aMode);
     if (*aOutFile == nullptr)
     {
-        LOG("failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
+        LOG(ERROR, "failed to open '%s' in '%s' : %s", aPath, aMode, strerror(errno));
         err = ERROR_OPEN_FAILED;
     }
     #endif
@@ -223,7 +222,11 @@ Finder :: getTempFile()
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
+        #ifdef _MSC_VER
+        file = _fdopen(_open_osfhandle((intptr_t)hFile, 0), "rb+");
+        #else
         file = fdopen(_open_osfhandle((intptr_t)hFile, 0), "rb+");
+        #endif
     }
     #else
     file = tmpfile();

@@ -13,8 +13,8 @@
 using namespace std;
 
 /* static */
-const size_t RC5::RC5_SUB;
-const size_t RC5::RC5_KEY;
+extern const size_t RC5::RC5_SUB;
+extern const size_t RC5::RC5_KEY;
 
 RC5 :: RC5()
 {

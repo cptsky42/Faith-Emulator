@@ -82,15 +82,16 @@ public:
     static const uint32_t COLOR_WHITE = 0x00FFFFFF;
 
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
+        /** Generic header of all msgs */
         Msg::Header Header;
         uint32_t Color; // ARGB code
         int16_t Channel;
         int16_t Style;
         int32_t Timestamp;
-        uint8_t Buf[1];
+        uint8_t Buf[1]; // Speaker, Hearer, Emotion, Words
     }MsgInfo;
     #pragma pack(pop)
 

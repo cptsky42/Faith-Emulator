@@ -28,6 +28,6 @@ int main(int argc, char *argv[])
             TARGET_SYSTEM, TARGET_ARCH, QT_VERSION_STR, __TIMESTAMP__);
     fprintf(stdout, "\n");
 
-    Server server;
+    const Server& server = Server::getInstance();
     return a.exec();
 }

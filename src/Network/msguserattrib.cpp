@@ -11,18 +11,16 @@
 #include "entity.h"
 
 MsgUserAttrib :: MsgUserAttrib(Entity* aEntity, int32_t aData, UserAttrType aType)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aEntity, aData, aType);
 }
 
 MsgUserAttrib :: MsgUserAttrib(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -42,7 +40,7 @@ MsgUserAttrib :: create(Entity* aEntity, int32_t aData, UserAttrType aType)
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_USERATTRIB;
 
-    mInfo->UniqId = aEntity != nullptr ? aEntity->getUniqId() : 0;
+    mInfo->UniqId = aEntity != nullptr ? aEntity->getUID() : 0;
     mInfo->Amount = 1;
 
     mInfo->Attrib[0].Type = (int32_t)aType;

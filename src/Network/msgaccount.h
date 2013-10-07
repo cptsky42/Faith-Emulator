@@ -18,7 +18,7 @@
 class MsgAccount : public Msg
 {
 public:
-    #pragma pack(1)
+    #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */
@@ -33,15 +33,6 @@ public:
     #pragma pack(pop)
 
 public:
-    /**
-     * Create a new MsgAccount packet for the specified account.
-     *
-     * @param[in]   aAccount    the account
-     * @param[in]   aPassword   the password of the account
-     * @param[in]   aServer     the server of the role
-     */
-    MsgAccount(const char* aAccount, const char* aPassword, const char* aServer);
-
     /**
      * Create a message object from the specified buffer.
      * The buffer will be took by the object and the memory
@@ -66,10 +57,6 @@ public:
      *                             has sent the message
      */
     virtual void process(Client* aClient);
-
-private:
-    /* internal filling of the packet */
-    void create(const char* aAccount, const char* aPassword, const char* aServer);
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

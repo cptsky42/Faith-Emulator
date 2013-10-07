@@ -7,42 +7,56 @@
  */
 
 #include "player.h"
+#include "world.h"
 #include "msgtalk.h"
 #include "msgaction.h"
+#include "msgnpcinfo.h"
 #include <stdarg.h>
+#include <map>
 
-Player :: Player(Client& aClient)
-    : Entity(1000000), mClient(aClient)
+#include "npc.h"
+#include "npctask.h"
+
+using namespace std;
+
+Player :: Player(Client& aClient, uint32_t aUID)
+    : AdvancedEntity(aUID), mClient(aClient)
 {
-    mName = "CptSky[PM]";
+    mName = "Unknown";
     mMate = "None";
+    mLook = 0;
+    mHair = 0;
 
-    mLook = 1010005;
-    mHair = 101;
-    mMoney = 20000;
-    mExp = 92134;
-    mMercenaryExp = 10;
-    mMercenaryLevel = 20;
-    mStrength = 5;
-    mVitality = 7;
-    mAgility = 9;
-    mSpirit = 11;
-    mAddPoints = 3;
-    mCurHP = 150;
-    mCurMP = 100;
-    mPkPoints = 120; // ?
-    mLevel = 50;
-    mProfession = 10;
-    mMetempsychosis = 2;
+    mMoney = 0;
 
-    mPosX = 530;
-    mPosY = 860;
-    mMapId = 1000;
+    mProfession = 0;
+    mLevel = 0;
+    mExp = 0;
+    mMetempsychosis = 0;
+
+    mForce = 0;
+    mSpeed = 0;
+    mHealth = 0;
+    mSoul = 0;
+    mAddPoints = 0;
+
+    mCurHP = 0;
+    mCurMP = 0;
+
+    mPkPoints = 0;
+    mVirtue = 0;
+
+    mMapId = 0;
+    mPosX = 0;
+    mPosY = 0;
     mDirection = 1;
 
-    mPrevMap = mMapId;
-    mPrevX = mPosX;
-    mPrevY = mPosY;
+    mPrevMap = 0;
+    mPrevX = 0;
+    mPrevY = 0;
+
+    mMercenaryExp = 0;
+    mMercenaryLevel = 0;
 }
 
 Player :: ~Player()
@@ -58,6 +72,24 @@ Player :: enterMap()
 
     MsgAction msg(this, 0xFFFFFF, MsgAction::ACTION_MAP_ARGB); // TODO : get map color
     send(&msg);
+
+    // TODO: HACK!
+//    World& world = World::getInstance();
+//    NpcTask* task = new NpcTask(21, "/Users/jpboivin/Development/Faith Emulator/data/NPCs/21.lua");
+//    for (map<int32_t, Npc*>::iterator
+//            it = world.AllNPCs.begin(), end = world.AllNPCs.end();
+//         it != end; ++it)
+//    {
+//        Npc* npc = it->second;
+
+//        if (npc->getMapId() == mMapId)
+//        {
+//            npc->linkTask(task);
+
+//            MsgNpcInfo info(*npc);
+//            send(&info);
+//        }
+//    }
 
 //	CMapPtr pMap = GetMap();
 //	if(pMap)
@@ -98,7 +130,7 @@ Player :: sendSysMsg(const char* aFmt, ...)
     char buf[MAX_WORDSSIZE];
     vsprintf(buf, aFmt, args);
 
-    MsgTalk msg(STR_SYSTEM_NAME, getName(), buf, MsgTalk::CHANNEL_SYSTEM, MsgTalk::COLOR_RED);
+    MsgTalk msg(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, buf, MsgTalk::CHANNEL_SYSTEM, MsgTalk::COLOR_RED);
     send(&msg);
 
     va_end(args);

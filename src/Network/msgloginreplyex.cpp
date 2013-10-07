@@ -60,7 +60,7 @@ MsgLoginReplyEx :: create(int32_t aAccUID, int32_t aData,
     }
     else
     {
-        LOG("Invalid length: info=%zu", strlen(aInfo));
+        LOG(ERROR, "Invalid length: info=%zu", strlen(aInfo));
     }
 }
 

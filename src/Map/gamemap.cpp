@@ -6,8 +6,17 @@
  * sections in the LICENSE file.
  */
 
+#include "log.h"
 #include "gamemap.h"
 
-GameMap::GameMap()
+GameMap :: GameMap(int32_t aUID, Info** aInfo, MapData& aData)
+    : mUID(aUID), mInfo(*aInfo), mData(aData)
 {
+    ASSERT(aInfo != nullptr && *aInfo != nullptr);
+    *aInfo = nullptr;
+}
+
+GameMap :: ~GameMap()
+{
+    SAFE_DELETE(mInfo);
 }

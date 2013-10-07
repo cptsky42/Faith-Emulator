@@ -8,8 +8,8 @@
 
 #include "entity.h"
 
-Entity :: Entity(int32_t aUniqId)
-    : mUniqId(aUniqId)
+Entity :: Entity(int32_t aUID)
+    : mUID(aUID)
 {
     mLook = 0;
     mMapId = 0;

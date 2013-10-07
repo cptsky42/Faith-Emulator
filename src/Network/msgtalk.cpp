@@ -10,6 +10,9 @@
 #include "stringpacker.h"
 #include "msgaction.h"
 #include "msguserattrib.h"
+#include "msgiteminfo.h"
+#include "client.h"
+#include "player.h"
 #include <string.h>
 
 MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
@@ -18,18 +21,17 @@ MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords
           (aSpeaker != nullptr ? strlen(aSpeaker) : 0)  + 1 +
           (aHearer != nullptr ? strlen(aHearer) : 0)  + 1 +
           /* (aEmotion != nullptr ? strlen(aEmotion) : 0) */ + 1 +
-          (aWords != nullptr ? strlen(aWords) : 0) + 1)
+          (aWords != nullptr ? strlen(aWords) : 0) + 1),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aSpeaker, aHearer, "", aWords, aChannel, aColor); // HACK !
 }
 
 MsgTalk :: MsgTalk(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -71,7 +73,7 @@ MsgTalk :: create(const char* aSpeaker, const char* aHearer, const char* aEmotio
     }
     else
     {
-        LOG("Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
+        LOG(ERROR, "Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
             strlen(aHearer), strlen(aSpeaker), strlen(aEmotion), strlen(aWords));
     }
 }
@@ -82,6 +84,7 @@ MsgTalk :: process(Client* aClient)
     ASSERT(aClient != nullptr);
 
     Client& client = *aClient;
+    Player& player = *client.getPlayer();
 
     char speaker[MAX_NAMESIZE];
     char hearer[MAX_NAMESIZE];
@@ -95,7 +98,37 @@ MsgTalk :: process(Client* aClient)
     // commands
     if (words[0] == '/')
     {
+        if (true) // TODO: Real substring check
+        {
+            int mapId, x, y;
+            int type;
+            int param;
+            if (sscanf(words, "/mm %d %d %d", &mapId, &x, &y) == 3)
+            {
+                player.setMapId(mapId);
+                player.setPosition(x, y);
 
+                MsgAction msg(&player, player.getMapId(), MsgAction::ACTION_ENTER_MAP);
+                client.send(&msg);
+            }
+            else if (sscanf(words, "/action %d %d", &type, &param))
+            {
+                MsgAction msg(&player, param, (MsgAction::Action)type);
+                client.send(&msg);
+            }
+            else if (sscanf(words, "/item %d %d", &type, &param))
+            {
+                int data[2];
+                data[0] = type;
+                data[1] = param;
+                MsgItemInfo msg(data, MsgItemInfo::ACTION_ADD_ITEM);
+                client.send(&msg);
+            }
+            else
+            {
+                player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");
+            }
+        }
         return;
     }
 

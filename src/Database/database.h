@@ -10,20 +10,19 @@
 #define _FAITH_EMULATOR_DATABASE_H_
 
 #include "common.h"
+#include "env.h"
 #include <QtSql/QSqlDatabase>
 
 class QSqlQuery;
+class Client;
 class Player;
 
 /**
  * The global database class for interation with the SQL-like database.
  * It is a singleton and will be created when getting the instance.
  */
-class Database
+class Database : public Environment::Global
 {
-    // the database can manipulate the Player data...
-    friend class Player;
-
 public:
     /**
      * Get the Database singleton. If the object does not exist yet,
@@ -35,7 +34,7 @@ public:
 
 public:
     /* destructor */
-    ~Database();
+    virtual ~Database();
 
     /**
      * Establish a connection to the host using the specified account.
@@ -54,6 +53,7 @@ public:
     /**
      * Authenticate the account/password pair sent by a client.
      *
+     * @param[in]   aClient     the client
      * @param[in]   aAccount    the account name
      * @param[in]   aPassword   the password of the account
      *
@@ -62,11 +62,56 @@ public:
      * @retval ERROR_NOT_FOUND if the account/password pair was not found
      * @returns Error code otherwise
      */
-    err_t authenticate(const char* aAccount, const char* aPassword);
+    err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword);
+
+    err_t createPlayer(Client& aClient, const char* aName,
+                      uint16_t aLook, uint16_t aProfession);
+
+    /**
+     * Try to retreive the player information for the specified client.
+     * The player will be null if none exist.
+     *
+     * @param[in]   aClient     the client
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t getPlayerInfo(Client& aClient);
+
+    /**
+     * Load all NPCs in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllNPCs();
+
+    /**
+     * Load all maps in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllMaps();
+
+    /**
+     * Load all items in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllItems();
 
 private:
     /* constructor */
     Database();
+
+    /** Get the SQL command from the SQL query. */
+    QString getSqlCommand(const QSqlQuery& aQuery);
 
 private:
     static Database* sInstance; //!< static instance of the singleton

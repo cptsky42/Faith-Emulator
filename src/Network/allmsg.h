@@ -11,13 +11,18 @@
 
 #include "msgaccount.h"
 #include "msgconnect.h"
+#include "msgregister.h"
 #include "msgtalk.h"
 #include "msgaction.h"
+#include "msgplayer.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
 #include "msgwalk.h"
 #include "msgloginaccountex.h"
 #include "msgloginreplyex.h"
+#include "msgnpcinfo.h"
+#include "msgdialog.h"
+#include "msgnpc.h"
 
 #endif // _FAITH_EMULATOR_ALL_MSG_H_

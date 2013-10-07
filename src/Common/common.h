@@ -17,10 +17,10 @@
 #include "def.h" // all defines by CMake
 #include "arch.h"
 #include "types.h"
-#include "endian.h"
+#include "endianness.h"
 #include "err.h"
-#include "myassert.h"
-#include "log.h"
+#include "unicode.h"
+#include "basefunc.h"
 #include "strres.h"
 
 #ifdef _WIN32
@@ -28,8 +28,6 @@
 #else
 #include <sys/time.h> // for timeGetTime()
 #endif
-
-
 
 /*
  *****************************************************
@@ -49,9 +47,36 @@
 
 /*
  *****************************************************
+ * Protection macros
+ ****************************************************
+ */
+
+// Prohibit the copy of the object
+#define PROHIBIT_COPY(__class)                   \
+    private:                                        \
+        __class(const __class&);                    \
+        __class& operator=(const __class&)
+
+/*
+ *****************************************************
+ * Common macros
+ ****************************************************
+ */
+
+// Quote strings in macro */
+#define STRINGIFY_(str) #str
+#define STRINGIFY(str) STRINGIFY_(str)
+
+/*
+ *****************************************************
  * Cross-compiling definitions
  ****************************************************
  */
+
+// If using Visual Studio, __FUNCTION__ is not defined, but __func__ is
+#ifndef _MSC_VER
+#define __FUNCTION__ __func__
+#endif // _MSC_VER
 
 // If using Visual Studio, and C++11 is not implemented
 // POSIX-compliant platforms define those functions, so C++11 is not required

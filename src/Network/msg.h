@@ -9,6 +9,7 @@
 #ifndef _FAITH_EMULATOR_MSG_H_
 #define _FAITH_EMULATOR_MSG_H_
 
+#include "log.h"
 #include "common.h"
 #include "networkdef.h"
 
@@ -19,6 +20,9 @@ class Client;
  */
 class Msg
 {
+    // !!! class has pointer data members !!!
+    PROHIBIT_COPY(Msg);
+
 public:
     /**
      * The general header prefixing all messages.
@@ -46,9 +50,8 @@ public:
 
     /**
      * Print the msg in the standard output stream.
-     *
-     * @param[in]     aMsg        a pointer to the msg to print
      */
+    static void dump(const uint8_t* aBuf, size_t aLen);
     static void dump(Msg* aMsg);
 
 public:

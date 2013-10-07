@@ -88,8 +88,11 @@ BinaryWriter :: seek(int64_t aOffset, int aWhence)
 void
 BinaryWriter :: close()
 {
-    fclose(mStream);
-    mStream = nullptr;
+    if (mStream != nullptr)
+    {
+        fclose(mStream);
+        mStream = nullptr;
+    }
 }
 
 err_t
@@ -156,29 +159,6 @@ template err_t BinaryWriter :: write<int8_t>(int8_t aValue);
 template err_t BinaryWriter :: write<int16_t>(int16_t aValue);
 template err_t BinaryWriter :: write<int32_t>(int32_t aValue);
 template err_t BinaryWriter :: write<int64_t>(int64_t aValue);
-
-template<class T>
-err_t
-BinaryWriter :: writePckInt(T aValue)
-{
-    err_t err = ERROR_SUCCESS;
-
-    while (ERROR_SUCCESS == err &&
-           aValue >= (T)128)
-    {
-        err = writeUInt8((uint8_t)(aValue | (T)128));
-        aValue >>= 7;
-    }
-    DOIF(err, writeUInt8((uint8_t)aValue));
-
-    return err;
-}
-
-template err_t BinaryWriter :: writePckInt<uint8_t>(uint8_t aValue);
-template err_t BinaryWriter :: writePckInt<uint16_t>(uint16_t aValue);
-template err_t BinaryWriter :: writePckInt<uint32_t>(uint32_t aValue);
-template err_t BinaryWriter :: writePckInt<uint64_t>(uint64_t aValue);
-
 
 err_t
 BinaryWriter :: write(void* aBuf, size_t aLen)

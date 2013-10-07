@@ -11,18 +11,16 @@
 #include "player.h"
 
 MsgWalk :: MsgWalk(int32_t aUniqId, uint8_t aDirection, bool aIsRunning)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aUniqId, aDirection, aIsRunning);
 }
 
 MsgWalk :: MsgWalk(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -56,9 +54,9 @@ MsgWalk :: process(Client* aClient)
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
 
-    if (player.getUniqId() != mInfo->UniqId)
+    if (player.getUID() != mInfo->UniqId)
     {
-        // TODO: Disconnect
+        client.disconnect();
         return;
     }
 

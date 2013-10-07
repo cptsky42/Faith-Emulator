@@ -10,15 +10,38 @@
 #define _FAITH_EMULATOR_PLAYER_H
 
 #include "common.h"
-#include "entity.h"
+#include "advancedentity.h"
 #include "client.h"
 #include <string>
 
-class Player : public Entity
+class Player : public AdvancedEntity
 {
+    friend class Database; // the database can manipulate the Player data...
+
+    PROHIBIT_COPY(Player); // constant UID, should be unique...
+
 public:
-    Player(Client& aClient);
-    ~Player();
+    static const uint16_t LOOK_HUMAN_MALE       = 1;
+    static const uint16_t LOOK_HUMAN_FEMALE     = 2;
+    static const uint16_t LOOK_ELF_MALE         = 3;
+    static const uint16_t LOOK_ELF_FEMALE       = 4;
+    static const uint16_t LOOK_DARKELF_MALE     = 5;
+    static const uint16_t LOOK_DARKELF_FEMALE   = 6;
+
+    static const uint16_t FACE_INTERN   = 1;
+    static const uint16_t FACE_NORMAL   = 101;
+    static const uint16_t FACE_VETERAN  = 201;
+
+    static const uint16_t HAIR_FIRST     = 101;
+    static const uint16_t HAIR_LAST      = 101; // 107 (XY)
+
+    static const uint8_t PROFESSION_MAGE    = 10;
+    static const uint8_t PROFESSION_WARRIOR = 20;
+    static const uint8_t PROFESSION_ARCHER  = 30;
+
+public:
+    Player(Client& aClient, uint32_t aUID);
+    virtual ~Player();
 
     void enterMap();
     void move(uint16_t aX, uint16_t aY, uint8_t);
@@ -29,24 +52,20 @@ public:
     inline void send(uint8_t* aBuf, size_t aLen) { mClient.send(aBuf, aLen); }
 
 public:
-    const char* getName() { return mName.c_str(); }
     const char* getMate() { return mMate.c_str(); }
 
-    int16_t getHair() { return mHair; }
+    uint16_t getHair() { return mHair; }
 
-    uint8_t getLevel() { return mLevel; }
     uint8_t getProfession() { return mProfession; }
     uint8_t getMetempsychosis() { return mMetempsychosis; }
     int32_t getExp() { return mExp; }
 
-    uint16_t getStrength() { return mStrength; }
-    uint16_t getAgility() { return mAgility; }
-    uint16_t getVitality() { return mVitality; }
-    uint16_t getSpirit() { return mSpirit; }
+    uint16_t getForce() { return mForce; }
+    uint16_t getSpeed() { return mSpeed; }
+    uint16_t getHealth() { return mHealth; }
+    uint16_t getSoul() { return mSoul; }
     uint16_t getAddPoints() { return mAddPoints; }
 
-    uint16_t getCurHP() { return mCurHP; }
-    uint16_t getMaxHP() { return mMaxHP; }
     uint16_t getCurMP() { return mCurMP; }
     uint16_t getMaxMP() { return mMaxMP; }
 
@@ -63,24 +82,20 @@ public:
 private:
     Client& mClient;
 
-    std::string mName;
     std::string mMate;
 
-    int16_t mHair;
+    uint16_t mHair;
 
-    uint8_t mLevel;
     uint8_t mProfession;
     uint8_t mMetempsychosis;
-    int32_t mExp;
+    uint32_t mExp;
 
-    uint16_t mStrength;
-    uint16_t mAgility;
-    uint16_t mVitality;
-    uint16_t mSpirit;
+    uint16_t mForce;
+    uint16_t mSpeed;
+    uint16_t mHealth;
+    uint16_t mSoul;
     uint16_t mAddPoints;
 
-    uint16_t mCurHP;
-    uint16_t mMaxHP;
     uint16_t mCurMP;
     uint16_t mMaxMP;
 

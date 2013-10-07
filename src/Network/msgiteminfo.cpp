@@ -6,21 +6,19 @@
  * sections in the LICENSE file.
  */
 
-#include "MsgItemInfo.h"
+#include "msgiteminfo.h"
 
 MsgItemInfo :: MsgItemInfo(void* aItem, Action aAction)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aItem, aAction);
 }
 
 MsgItemInfo :: MsgItemInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -41,17 +39,17 @@ MsgItemInfo :: create(void* aItem, Action aAction)
     mInfo->Header.Type = MSG_ITEMINFO;
 
     mInfo->UniqId = 1000000;
-    mInfo->Type = 132000;
-    mInfo->Amount = 10099;
+    mInfo->Type = ((int*)aItem)[0];
+    mInfo->Amount = 1099;
     mInfo->AmountLimit = 10099;
     mInfo->Action = (uint8_t)aAction;
     mInfo->Ident = 0;
-    mInfo->Position = 3;
-    mInfo->Gem1 = 1;
-    mInfo->Gem2 = 1;
-    mInfo->Magic1 = 2;
-    mInfo->Magic2 = 0;
-    mInfo->Magic3 = 9;
+    mInfo->Position = ((int*)aItem)[1];
+    mInfo->Gem1 = 5; // Familiary of the horse
+    mInfo->Gem2 = 10;
+    mInfo->Magic1 = 11;
+    mInfo->Magic2 = 8; // Luck
+    mInfo->Magic3 = 9; // Ph-Def Bonus
 }
 
 void
