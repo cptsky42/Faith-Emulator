@@ -18,6 +18,12 @@
 class MsgConnect : public Msg
 {
 public:
+    static const int32_t INVALID_UID = 0;
+    static const char ERROR_SERVER_DOWN[];
+    static const char ERROR_INVALID_ACC[];
+    static const char ERROR_TRY_LATER[];
+
+public:
     #pragma pack(push, 1)
     typedef struct
     {

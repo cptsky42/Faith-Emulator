@@ -15,33 +15,29 @@
 MsgDialog :: MsgDialog(const char* aText, uint16_t aData,
                        uint8_t aIdxTask, Action aAction)
     : Msg(sizeof(MsgInfo) +
-          strlen(aText) + 1)
+          strlen(aText) + 1), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aText, aData, aIdxTask, aAction);
 }
 
 MsgDialog :: MsgDialog(uint16_t aPosX, uint16_t aPosY, uint16_t aPic,
                        uint8_t aIdxTask, Action aAction)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aPosX, aPosY, aPic, aIdxTask, aAction);
 }
 
 MsgDialog :: MsgDialog(uint8_t aIdxTask, Action aAction)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aIdxTask, aAction);
 }
 
 MsgDialog :: MsgDialog(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif

@@ -12,18 +12,17 @@
 
 MsgNpcInfo :: MsgNpcInfo(Npc& aNpc)
     : Msg(sizeof(MsgInfo) +
-          (aNpc.getName() != nullptr ? strlen(aNpc.getName()) + 1 : 0))
+          (aNpc.getName() != nullptr ? strlen(aNpc.getName()) + 1 : 0)),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aNpc);
 }
 
 MsgNpcInfo :: MsgNpcInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif

@@ -15,19 +15,22 @@
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
 
+/* static */
+const char MsgConnect::ERROR_SERVER_DOWN[] = "\xB7\xFE\xCE\xF1\xC6\xF7\xCE\xB4\xC6\xF4\xB6\xAF";
+const char MsgConnect::ERROR_INVALID_ACC[] = "\xD5\xCA\xBA\xC5\xC3\xFB\xBB\xF2\xBF\xDA\xC1\xEE\xB4\xED";
+const char MsgConnect::ERROR_TRY_LATER[] = "\xC7\xEB\xC9\xD4\xBA\xF3\xD6\xD8\xD0\xC2\xB5\xC7\xC2\xBC";
+
 MsgConnect :: MsgConnect(int32_t aAccUID, int32_t aData, const char* aInfo)
-    : Msg(sizeof(MsgInfo))
+    : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aAccUID, aData, aInfo);
 }
 
 MsgConnect :: MsgConnect(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif

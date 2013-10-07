@@ -21,18 +21,17 @@ MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords
           (aSpeaker != nullptr ? strlen(aSpeaker) : 0)  + 1 +
           (aHearer != nullptr ? strlen(aHearer) : 0)  + 1 +
           /* (aEmotion != nullptr ? strlen(aEmotion) : 0) */ + 1 +
-          (aWords != nullptr ? strlen(aWords) : 0) + 1)
+          (aWords != nullptr ? strlen(aWords) : 0) + 1),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aSpeaker, aHearer, "", aWords, aChannel, aColor); // HACK !
 }
 
 MsgTalk :: MsgTalk(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif

@@ -14,18 +14,17 @@
 MsgUserInfo :: MsgUserInfo(Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
           strlen(aPlayer.getName()) + 1 +
-          strlen(aPlayer.getMate()) + 1)
+          strlen(aPlayer.getMate()) + 1),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aPlayer);
 }
 
 MsgUserInfo :: MsgUserInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif

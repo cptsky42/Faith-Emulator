@@ -18,11 +18,10 @@
 using namespace std;
 
 MsgAccount :: MsgAccount(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
@@ -65,8 +64,10 @@ MsgAccount :: process(Client* aClient)
         }
         else
         {
+            MsgConnect msg(MsgConnect::INVALID_UID, 0, MsgConnect::ERROR_INVALID_ACC);
+            client.send(&msg);
+
             // TODO: Bruteforce protection
-            // TODO: send bad password packet
         }
     }
     else

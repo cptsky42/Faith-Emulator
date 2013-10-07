@@ -22,18 +22,17 @@ MsgPlayer :: MsgPlayer(Player& aPlayer)
 
 MsgPlayer :: MsgPlayer(Monster& aMonster)
     : Msg(sizeof(MsgInfo) +
-          strlen(aMonster.getName()) + 1)
+          strlen(aMonster.getName()) + 1),
+      mInfo((MsgInfo*)mBuf)
 {
-    mInfo = (MsgInfo*)mBuf;
     create(aMonster);
 }
 
 MsgPlayer :: MsgPlayer(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen)
+    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
 {
     ASSERT(aLen >= sizeof(MsgInfo));
 
-    mInfo = (MsgInfo*)mBuf;
     #if BYTE_ORDER == BIG_ENDIAN
     swap(mBuf);
     #endif
