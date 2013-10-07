@@ -46,7 +46,9 @@ public:
     int getPassage(uint16_t aPosX, uint16_t aPosY) const;
 
 private:
+    #ifndef _WIN32
     static const int32_t MAX_PATH = 260;
+    #endif
 
     static const int32_t MAP_NONE = 0;
     static const int32_t MAP_TERRAIN = 1;

@@ -228,7 +228,10 @@ QMAKE_CXXFLAGS += -Wextra
 
 # copying data to build directory...
 win32 {
-    copyfiles.commands = "@call copy -r \"$${PWD}/data/*\" \"$${OUT_PWD}/\""
+    WIN_PWD = $${replace(PWD, /, \\)}
+    WIN_OUT_PWD = $${replace(OUT_PWD, /, \\)}
+
+    copyfiles.commands = "xcopy /e /y \"$${WIN_PWD}\\data\" \"$${WIN_OUT_PWD}\\\""
 }
 
 macx {

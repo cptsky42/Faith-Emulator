@@ -12,9 +12,10 @@
 
 using namespace std;
 
-/* static */
+#ifndef _MSC_VER // Visual Studio won't throw an error...
 extern const size_t RC5::RC5_SUB;
 extern const size_t RC5::RC5_KEY;
+#endif
 
 RC5 :: RC5()
 {
