@@ -20,3 +20,17 @@ GameMap :: ~GameMap()
 {
     SAFE_DELETE(mInfo);
 }
+
+bool
+GameMap :: getFloorAccess(uint16_t aPosX, uint16_t aPosY) const
+{
+    const Cell& cell = mData.getCell(aPosX, aPosY);
+    return cell.Accessible;
+}
+
+int16_t
+GameMap :: getFloorAlt(uint16_t aPosX, uint16_t aPosY) const
+{
+    const Cell& cell = mData.getCell(aPosX, aPosY);
+    return cell.Altitude;
+}

@@ -9,6 +9,7 @@
 #include "msgwalk.h"
 #include "client.h"
 #include "player.h"
+#include "mapmanager.h"
 
 MsgWalk :: MsgWalk(int32_t aUniqId, uint8_t aDirection, bool aIsRunning)
     : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
@@ -83,16 +84,17 @@ MsgWalk :: process(Client* aClient)
     //    return;
     //}
 
-    // TODO: Add DMap support
-//    if (World.AllMaps.TryGetValue(Player.Map, out Map))
-//       {
-//           if (!Map.IsValidPoint(NewX, NewY))
-//           {
-//               Player.SendSysMsg(Client.GetStr("STR_INVALID_COORDINATE"));
-//               Player.KickBack();
-//               return;
-//           }
-//       }
+    MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(player.getMapId());
+    if (map != nullptr)
+    {
+        if (map->getFloorAccess(player.getPosX(), player.getPosY()))
+        {
+            player.sendSysMsg(STR_INVALID_COORDINATE);
+            //player.kickBack(); // TODO
+            return;
+        }
+    }
 
     player.move(newX, newY, dir);
 
