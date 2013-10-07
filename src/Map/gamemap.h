@@ -114,7 +114,7 @@ public:
     /** Determine whether or not the cell is accessible. */
     bool getFloorAccess(uint16_t aPosX, uint16_t aPosY) const;
     /** Determine whether or nor the cell altitude is accessible. */
-    bool getFloorAlt(uint16_t aPosX, uint16_t aPosY) const;
+    int16_t getFloorAlt(uint16_t aPosX, uint16_t aPosY) const;
 
     /** Get the map's document ID which corresponds to the UID of the MapData. */
     uint16_t getDocID() { return mInfo->DocID; }

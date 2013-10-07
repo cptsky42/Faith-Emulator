@@ -40,11 +40,15 @@ public:
     uint16_t getWidth() const { return mWidth; }
     uint16_t getHeight() const { return mHeight; }
 
-    const Cell& getCell(uint16_t aPosX, uint16_t aPosY) const;
+    const Cell& getCell(uint16_t aPosX, uint16_t aPosY) const
+    { return mCells[pos2idx(aPosX, aPosY)]; }
+
     int getPassage(uint16_t aPosX, uint16_t aPosY) const;
 
 private:
+    #ifndef _WIN32
     static const int32_t MAX_PATH = 260;
+    #endif
 
     static const int32_t MAP_NONE = 0;
     static const int32_t MAP_TERRAIN = 1;
@@ -83,11 +87,11 @@ private:
 
 private:
     /** Convert a position to an index. */
-    inline size_t pos2idx(uint16_t aPosX, uint16_t aPosY) { return (aPosX + aPosY * mWidth); }
+    inline size_t pos2idx(uint16_t aPosX, uint16_t aPosY) const { return (aPosX + aPosY * mWidth); }
     /** Convert an index to a x-coord. */
-    inline size_t idx2x(size_t aIdx) { return (aIdx % mHeight); }
+    inline size_t idx2x(size_t aIdx) const { return (aIdx % mHeight); }
     /** Convert a position to a y-coord. */
-    inline size_t idx2y(size_t aIdx) { return (aIdx / mHeight); }
+    inline size_t idx2y(size_t aIdx) const { return (aIdx / mHeight); }
 
 private:
     uint16_t mWidth;  //!< the width (number of cell) of the map

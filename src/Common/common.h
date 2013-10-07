@@ -25,6 +25,11 @@
 
 #ifdef _WIN32
 #include <windows.h>
+
+#ifdef _MSC_VER // Visual Studio will complain for linking...
+#pragma comment(lib, "WinMM") // for timeGetTime()
+#endif
+
 #else
 #include <sys/time.h> // for timeGetTime()
 #endif
