@@ -64,8 +64,20 @@ public:
      */
     err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword);
 
+    /**
+     * Create a new player with the specified name and profession.
+     *
+     * @param[in]   aClient        the client
+     * @param[in]   aName          the player name
+     * @param[in]   aLook          the player look
+     * @param[in]   aProfession    the player profession
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
     err_t createPlayer(Client& aClient, const char* aName,
-                      uint16_t aLook, uint16_t aProfession);
+                       uint16_t aLook, uint16_t aProfession);
 
     /**
      * Try to retreive the player information for the specified client.

@@ -49,7 +49,6 @@ SOURCES += \
     src/Network/msgwalk.cpp \
     src/Map/mapmanager.cpp \
     src/Map/gamemap.cpp \
-    src/IO/binarywriter.cpp \
     src/IO/binaryreader.cpp \
     src/IO/finder.cpp \
     src/Network/msgplayer.cpp \
@@ -100,7 +99,8 @@ SOURCES += \
     src/Common/log.cpp \
     src/inifile.cpp \
     src/Network/msgregister.cpp \
-    src/basefunc.cpp
+    src/basefunc.cpp \
+    src/Script/itemtask.cpp
 
 HEADERS += \
     src/server.h \
@@ -114,7 +114,6 @@ HEADERS += \
     src/Entity/npc.h \
     src/Entity/advancedentity.h \
     src/Entity/monster.h \
-    src/IO/binarywriter.h \
     src/IO/binaryreader.h \
     src/IO/finder.h \
     src/Map/mapmanager.h \
@@ -179,7 +178,8 @@ HEADERS += \
     src/Common/endianness.h \
     src/inifile.h \
     src/Network/msgregister.h \
-    src/basefunc.h
+    src/basefunc.h \
+    src/Script/itemtask.h
 
 INCLUDEPATH += \
     src \

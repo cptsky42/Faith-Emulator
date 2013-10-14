@@ -16,6 +16,9 @@
 class Client;
 struct lua_State;
 
+/**
+ * A Lua script.
+ */
 class Script
 {
 public:
@@ -28,22 +31,53 @@ public:
     static lua_State* getState() { return &State::getState(); }
 
 public:
+    /**
+     * Register the shared functions of the scripts.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns Error code otherwise
+     */
+    static err_t registerFunctions();
+
+public:
     /* destructor */
     virtual ~Script();
 
     /**
-     * Execute the function of the script for the specified client
-     * and parameter.
+     * Execute the script for the specified client and parameter.
      *
-     * @param aClient[in]   the client
-     * @param aParam[in]    the param
+     * @param[in]  aClient   the caller
+     * @param[in]  aParam    the parameter
      *
-     * @return
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the Lua script failed
+     * @returns Error code otherwise
      */
     virtual err_t execute(Client& aClient, int32_t aParam) const = 0;
 
 public:
+    /** Get the unique ID of the script. */
     int32_t getUID() const { return mUID; }
+
+protected:
+    // Getters / Setters Lua methods
+    static int getName(lua_State* aState);
+    static int getLook(lua_State* aState);
+    static int getHair(lua_State* aState);
+    static int getMoney(lua_State* aState);
+    static int getExp(lua_State* aState);
+    static int getForce(lua_State* aState);
+    static int getHealth(lua_State* aState);
+    static int getSpeed(lua_State* aState);
+    static int getSoul(lua_State* aState);
+    static int getAddPoints(lua_State* aState);
+    static int getCurHP(lua_State* aState);
+    static int getMaxHP(lua_State* aState);
+    static int getCurMP(lua_State* aState);
+    static int getMaxMP(lua_State* aState);
+    static int getPkPoints(lua_State* aState);
+    static int getLevel(lua_State* aState);
+    static int getProfession(lua_State* aState);
 
 protected:
     /* constructor */
@@ -51,6 +85,8 @@ protected:
 
 protected:
     const int32_t mUID; //!< The unique ID of the script owner.
+
+
 
 private:
     /**

@@ -6,8 +6,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_NPC_TASK_H_
-#define _FAITH_EMULATOR_NPC_TASK_H_
+#ifndef _FAITH_EMULATOR_ITEM_TASK_H_
+#define _FAITH_EMULATOR_ITEM_TASK_H_
 
 #include "common.h"
 #include "script.h"
@@ -17,14 +17,14 @@ class Client;
 struct lua_State;
 
 /**
- * Process a Lua script and execute the processTask when executed.
- * It is used by NPC's tasks.
+ * Process a Lua script and execute the processAction when executed.
+ * It is used by item's actions.
  */
-class NpcTask : public Script
+class ItemTask : public Script
 {
 public:
     /**
-     * Register the specific functions of the NPC's tasks.
+     * Register the specific functions of the item's actions.
      *
      * @retval ERROR_SUCCESS on success
      * @returns Error code otherwise
@@ -33,15 +33,15 @@ public:
 
 public:
     /**
-     * Create a new task to be used by a NPC.
+     * Create a new task to be used by an item.
      *
      * @param[in]  aUID    the unique ID of the script
      * @param[in]  aPath   the path of the Lua script
      */
-    NpcTask(int32_t aUID, const char* aPath);
+    ItemTask(int32_t aUID, const char* aPath);
 
     /* destructor */
-    virtual ~NpcTask();
+    virtual ~ItemTask();
 
     /**
      * Execute the script for the specified client and parameter.
@@ -56,14 +56,10 @@ public:
     virtual err_t execute(Client& aClient, int32_t aParam) const;
 
 private:
-    // MsgDialog Lua methods
-    static int text(lua_State* aState);
-    static int link(lua_State* aState);
-    static int pic(lua_State* aState);
-    static int create(lua_State* aState);
+    // MsgItem Lua methods
 
 private:
     std::string mFct; //!< the function's name to call
 };
 
-#endif // _FAITH_EMULATOR_NPC_TASK_H_
+#endif // _FAITH_EMULATOR_ITEM_TASK_H_

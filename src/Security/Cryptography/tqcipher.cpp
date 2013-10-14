@@ -29,15 +29,15 @@ TqCipher :: ~TqCipher()
 void
 TqCipher :: generateIV(int32_t aP, int32_t aG)
 {
-    uint8_t* p = (uint8_t*)&aP;
-    uint8_t* g = (uint8_t*)&aG;
-
     #if BYTE_ORDER == BIG_ENDIAN
     aP = bswap32(aP);
     aG = bswap32(aG);
     #endif
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
+    uint8_t* p = (uint8_t*)&aP;
+    uint8_t* g = (uint8_t*)&aG;
+
+    static const size_t middle = TqCipher::IV_SIZE  / 2;
     for (size_t i = 0, len = middle; i < len; ++i)
     {
         mIV[i] = p[0];
@@ -61,7 +61,7 @@ TqCipher :: generateKey(int32_t aA, int32_t aB)
     uint8_t* ptr1 = (uint8_t*)&val1;
     uint8_t* ptr2 = (uint8_t*)&val2;
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
+    static const size_t middle = TqCipher::IV_SIZE  / 2;
     for (size_t i = 0, len = middle; i < len; ++i)
     {
         mKey[i] = (uint8_t)(mIV[i] ^ ptr1[i % 4]);
