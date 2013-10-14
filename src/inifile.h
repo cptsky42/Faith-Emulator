@@ -180,10 +180,10 @@ public:
 
 public:
     /** Determine whether or not a file is open. */
-    bool isOpen() { return mFile != nullptr; }
+    bool isOpen() const { return mFile != nullptr; }
 
     /** Get all the sections. */
-    void getSections(std::vector<std::string>& aOutSections);
+    void getSections(std::vector<std::string>& aOutSections) const;
 
 private:
     /** Read an integer. */

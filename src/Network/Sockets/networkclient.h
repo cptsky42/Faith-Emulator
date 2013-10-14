@@ -49,12 +49,12 @@ public:
 
 public:
     /** Get the owner pointer. It may used by some programs. */
-    const void* getOwner() { return mOwner; }
+    const void* getOwner() const { return mOwner; }
     /** Set the owner pointer. It may used by some programs. */
     void setOwner(void* aOwner) { mOwner = aOwner; }
 
     /** Get the server's pointer. It may be used by some programs. */
-    const TcpServer* getServer() { return &mServer; }
+    const TcpServer* getServer() const { return &mServer; }
 
 private:
     /**

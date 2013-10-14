@@ -19,6 +19,7 @@ class Player;
 class Monster;
 class Npc;
 class NpcTask;
+class Worker;
 
 /**
  * Global world object containing all entities, tasks, etc.
@@ -27,6 +28,7 @@ class NpcTask;
 class World : public Environment::Global
 {
     friend class Database; // loading entities, etc...
+    friend class Worker; // entities, etc...
 
     PROHIBIT_COPY(World); // one world per server...
 
@@ -54,7 +56,7 @@ public:
      * @retval TRUE if the entity is found
      * @returns FALSE otherwise
      */
-    bool queryEntity(Entity** aOutEntity, int32_t aUID);
+    bool queryEntity(Entity** aOutEntity, int32_t aUID) const;
 
     /**
      * Search a NPC based on its UID. If the NPC is not found,
@@ -66,7 +68,7 @@ public:
      * @retval TRUE if the NPC is found
      * @returns FALSE otherwise
      */
-    bool queryNpc(Npc** aOutNpc, int32_t aUID);
+    bool queryNpc(Npc** aOutNpc, int32_t aUID) const;
 
 private:
     /* constructor */
@@ -76,12 +78,18 @@ private:
     static World* sInstance; //!< static instance of the singleton
 
 private: // aliases
+    std::map<int32_t, Player*>& AllPlayers;
+
     std::map<int32_t, Npc*>& AllNPCs;
     std::map<int32_t, NpcTask*>& AllTasks;
 
 private:
+    std::map<int32_t, Player*> mAllPlayers; //!< internal map
+
     std::map<int32_t, Npc*> mAllNPCs; //!< internal map
     std::map<int32_t, NpcTask*> mAllTasks; //!< internal map
+
+    Worker* mWorker; //!< separate thread for timer
 };
 
 #endif // _FAITH_EMULATOR_WORLD_H_

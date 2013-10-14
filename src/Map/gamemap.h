@@ -117,9 +117,9 @@ public:
     int16_t getFloorAlt(uint16_t aPosX, uint16_t aPosY) const;
 
     /** Get the map's document ID which corresponds to the UID of the MapData. */
-    uint16_t getDocID() { return mInfo->DocID; }
+    uint16_t getDocID() const { return mInfo->DocID; }
     /** Get the map's light in ARGB code. */
-    uint32_t getLight() { return mInfo->Light; }
+    uint32_t getLight() const { return mInfo->Light; }
 
     //	int		GetWidthOfBlock()				{ return (m_pMapData->GetMapWidth()-1) / CELLS_PER_BLOCK + 1; }
     //	int		GetHeightOfBlock()				{ return (m_pMapData->GetMapHeight()-1) / CELLS_PER_BLOCK + 1; }

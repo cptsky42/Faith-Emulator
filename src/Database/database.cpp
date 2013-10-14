@@ -265,6 +265,13 @@ Database :: getPlayerInfo(Client& aClient)
 
             aClient.mCharacter = player->getName();
             aClient.mPlayer = player;
+
+            World& world = World::getInstance();
+            // TODO check...
+            //ASSERT(world.AllNPCs.find(npc->getUID()) == world.AllNPCs.end());
+
+            world.AllPlayers[player->getUID()] = player;
+
             player = nullptr;
         }
         else if (query.size() == 0)

@@ -46,7 +46,7 @@ IniFile :: close()
 }
 
 void
-IniFile :: getSections(vector<string>& aOutSections)
+IniFile :: getSections(vector<string>& aOutSections) const
 {
     ASSERT(aOutSections.empty());
 

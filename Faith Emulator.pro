@@ -101,7 +101,8 @@ SOURCES += \
     src/Network/msgregister.cpp \
     src/basefunc.cpp \
     src/Script/itemtask.cpp \
-    src/Network/msgallot.cpp
+    src/Network/msgallot.cpp \
+    src/Network/msgtick.cpp
 
 HEADERS += \
     src/server.h \
@@ -181,7 +182,8 @@ HEADERS += \
     src/Network/msgregister.h \
     src/basefunc.h \
     src/Script/itemtask.h \
-    src/Network/msgallot.h
+    src/Network/msgallot.h \
+    src/Network/msgtick.h
 
 INCLUDEPATH += \
     src \

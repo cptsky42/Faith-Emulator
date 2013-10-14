@@ -10,6 +10,7 @@
 #define _FAITH_EMULATOR_ENTITY_H
 
 #include "common.h"
+#include <time.h>
 
 /**
  * Base class of all entity on a map.
@@ -106,22 +107,26 @@ public:
     virtual ~Entity();
 
 public:
+    /** Called when the timer elapse. */
+    virtual void timerElapsed(time_t aTime) = 0;
+
+public:
     /** Get the entity's UID. */
-    uint32_t getUID() { return mUID; }
+    uint32_t getUID() const { return mUID; }
 
     /** Get the entity's name. */
-    const char* getName() { return (mName.empty() ? nullptr : mName.c_str());  }
+    const char* getName() const { return (mName.empty() ? nullptr : mName.c_str());  }
     /** Get the entity's look/face. */
-    uint32_t getLook() { return mLook; }
+    uint32_t getLook() const { return mLook; }
 
     /** Get the entity's map UID. */
-    int32_t getMapId() { return mMapId; }
+    int32_t getMapId() const { return mMapId; }
     /** Get the entity's X coord. */
-    uint16_t getPosX() { return mPosX; }
+    uint16_t getPosX() const { return mPosX; }
     /** Get the entity's Y coord. */
-    uint16_t getPosY() { return mPosY; }
+    uint16_t getPosY() const { return mPosY; }
     /** Get the cardinal direction of the entity. */
-    uint8_t getDirection() { return mDirection; }
+    uint8_t getDirection() const { return mDirection; }
 
     /** Set the map UID of the entity. */
     void setMapId(int32_t aMapId) { mMapId = aMapId; }

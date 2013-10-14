@@ -49,7 +49,7 @@ public:
       *
       * @returns a pointer to the base stream
       */
-    const FILE* getBaseStream() { return mStream; }
+    const FILE* getBaseStream() const { return mStream; }
 
     /**
       * Gets the current position of the stream used by the BinaryReader.

@@ -64,7 +64,7 @@ public:
 
 public:
     /** Get the port on which the server is listening. */
-    uint16_t getPort() { return mPort; }
+    uint16_t getPort() const { return mPort; }
 
 public:
     TCP_CONNECT onConnect; //!< The delegate function to call on new connection

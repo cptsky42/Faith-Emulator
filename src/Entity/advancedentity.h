@@ -25,16 +25,20 @@ public:
     virtual ~AdvancedEntity();
 
 public:
+    /** Called when the timer elapse. */
+    virtual void timerElapsed(time_t aTime) = 0;
+
+public:
     /** Get the entity's level. */
-    uint8_t getLevel() { return mLevel; }
+    uint8_t getLevel() const { return mLevel; }
 
     /** Get the entity's current hit points. */
-    uint16_t getCurHP() { return mCurHP; }
+    uint16_t getCurHP() const { return mCurHP; }
     /** Get the entity's max hit points. */
-    uint16_t getMaxHP() { return mMaxHP; }
+    uint16_t getMaxHP() const { return mMaxHP; }
 
     /** Get the entity's pose. */
-    uint16_t getPose() { return mPose; }
+    uint16_t getPose() const { return mPose; }
 
 protected:
     /* constructor */

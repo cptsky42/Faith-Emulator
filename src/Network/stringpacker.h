@@ -50,7 +50,7 @@ public:
      * @retval TRUE on success
      * @returns FALSE otherwise
      */
-    bool getString(char* aOutBuf, size_t aLen, uint8_t aIndex);
+    bool getString(char* aOutBuf, size_t aLen, uint8_t aIndex) const;
 
 private:
     uint8_t* mBuf; //!< reference to the internal buffer

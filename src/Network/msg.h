@@ -70,10 +70,10 @@ public:
 
 public:
     /** Get a pointer of the buffer. It may not be the internal one. */
-    const uint8_t* getBuffer();
+    const uint8_t* getBuffer() const;
 
     /** Get the length in bytes of the message. */
-    size_t getLength() { return mLen; }
+    size_t getLength() const { return mLen; }
 
 protected:
     /**
@@ -110,7 +110,7 @@ protected:
     size_t mLen; //!< the length in bytes of the buffer
 
     #if BYTE_ORDER == BIG_ENDIAN
-    uint8_t* mData; //!< the swapped copy of the buffer
+    mutable uint8_t* mData; //!< the swapped copy of the buffer
     #endif
 };
 

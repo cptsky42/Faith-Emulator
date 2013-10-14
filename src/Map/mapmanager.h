@@ -70,7 +70,7 @@ public:
      * @retval The game map object if found
      * @returns NULL otherwise
      */
-    GameMap* getMap(int32_t aUID);
+    GameMap* getMap(int32_t aUID) const;
 
 private:
     /* constructor */

@@ -87,19 +87,22 @@ public:
     void linkTask(NpcTask* aTask) { ASSERT(aTask != nullptr); mTask = aTask; }
     bool activateNpc(Client& aClient, int32_t aAction);
 
-public:
-    uint8_t getType() { return mType; }
-    uint8_t getBase() { return mBase; }
-    uint8_t getSort() { return mSort; }
+    /** Called when the timer elapse. */
+    virtual void timerElapsed(time_t aTime) { /* TODO */  }
 
 public:
-    bool isShopNpc() { return mType == TYPE_SHOPKEEPER; }
+    uint8_t getType() const { return mType; }
+    uint8_t getBase() const { return mBase; }
+    uint8_t getSort() const { return mSort; }
+
+public:
+    bool isShopNpc() const { return mType == TYPE_SHOPKEEPER; }
     // NpcShop* queryShop();
 
-    bool isTaskNpc() { return mType == TYPE_TASK || (mSort & SORT_TASK) != 0; }
-    const NpcTask& queryTask() { ASSERT(mTask != nullptr); return *mTask; }
+    bool isTaskNpc() const { return mType == TYPE_TASK || (mSort & SORT_TASK) != 0; }
+    const NpcTask& queryTask() const { ASSERT(mTask != nullptr); return *mTask; }
 
-    bool isStorageNpc() { return mType == TYPE_STORAGE; }
+    bool isStorageNpc() const { return mType == TYPE_STORAGE; }
     // NpcStorage? queryStorage
 
 private:

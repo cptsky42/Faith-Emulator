@@ -14,6 +14,7 @@
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
+#include "msgtick.h"
 
 /* static */
 const char MsgConnect::ERROR_SERVER_DOWN[] = "\xB7\xFE\xCE\xF1\xC6\xF7\xCE\xB4\xC6\xF4\xB6\xAF";

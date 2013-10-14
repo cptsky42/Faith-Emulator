@@ -20,6 +20,7 @@
 #include "msgplayer.h"
 #include "msgregister.h"
 #include "msgtalk.h"
+#include "msgtick.h"
 #include "msguserattrib.h"
 #include "msguserinfo.h"
 #include "msgwalk.h"

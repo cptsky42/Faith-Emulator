@@ -79,6 +79,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
         case MSG_TALK:
             msg = new MsgTalk(aBuf, aLen);
             break;
+        case MSG_TICK:
+            msg = new MsgTick(aBuf, aLen);
+            break;
         case MSG_WALK:
             msg = new MsgWalk(aBuf, aLen);
             break;
@@ -202,7 +205,7 @@ Msg :: dump(const uint8_t* aBuf, size_t aLen)
 }
 
 const uint8_t*
-Msg :: getBuffer()
+Msg :: getBuffer() const
 {
     #if BYTE_ORDER == BIG_ENDIAN
     memcpy(mData, mBuf, mLen);

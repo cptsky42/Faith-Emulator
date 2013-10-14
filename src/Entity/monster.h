@@ -66,6 +66,10 @@ public:
     /* destructor */
     virtual ~Monster();
 
+public:
+    /** Called when the timer elapse. */
+    virtual void timerElapsed(time_t aTime) { /* TODO */  }
+
 private:
     int32_t mId; //!< Monster ID
     uint8_t mType; //!< Monster type
