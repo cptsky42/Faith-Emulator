@@ -6,8 +6,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_CLIENT_H
-#define _FAITH_EMULATOR_CLIENT_H
+#ifndef _FAITH_EMULATOR_CLIENT_H_
+#define _FAITH_EMULATOR_CLIENT_H_
 
 #include "common.h"
 #include "tqcipher.h"
@@ -91,4 +91,4 @@ private:
     const NpcTask* mCurTask; //!< the current NPC task
 };
 
-#endif // _FAITH_EMULATOR_CLIENT_H
+#endif // _FAITH_EMULATOR_CLIENT_H_

@@ -13,11 +13,10 @@
 #include "msg.h"
 #include "mapmanager.h"
 #include "database.h"
+#include "script.h"
 #include "npctask.h"
-#include <QSettings>
-#include <QString>
-
-#include "mapdata.h"
+#include "itemtask.h"
+#include "inifile.h"
 
 using namespace std;
 
@@ -44,35 +43,43 @@ Server :: Server()
 {
     err_t err = ERROR_SUCCESS;
 
+    // init the logger...
     DOIF(err, Logger::init("./", "xyserv"));
 
-    QSettings settings("./settings.cfg", QSettings::IniFormat);
-    QString name = settings.value("FAITH_EMULATOR/NAME", "Faith").toString(); // TODO
-    mServerIP = settings.value("FAITH_EMULATOR/SERVER_IP", "127.0.0.1").toString().toStdString();
+    // parse the config file...
+    IniFile settings;
+    DOIF(err, settings.open("./settings.cfg"));
 
-    QString sql_host = settings.value("FAITH_EMULATOR/SQL_HOST", "localhost").toString();
-    QString sql_db = settings.value("FAITH_EMULATOR/SQL_DB", "xyserver").toString();
-    QString sql_user = settings.value("FAITH_EMULATOR/SQL_USER", "root").toString();
-    QString sql_pwd = settings.value("FAITH_EMULATOR/SQL_PWD", "").toString();
+    string name = settings.readString("FAITH_EMULATOR/NAME", "Faith"); // TODO
+    mServerIP = settings.readString("FAITH_EMULATOR/SERVER_IP", "127.0.0.1");
 
-    MapManager& mgr = MapManager::getInstance();
-    //DOIF(err, mgr.loadData());
+    string sql_host = settings.readString("FAITH_EMULATOR/SQL_HOST", "localhost");
+    string sql_db = settings.readString("FAITH_EMULATOR/SQL_DB", "xyserver");
+    string sql_user = settings.readString("FAITH_EMULATOR/SQL_USER", "root");
+    string sql_pwd = settings.readString("FAITH_EMULATOR/SQL_PWD", "");
 
+    // try to connect to the database...
     Database& db = Database::getInstance();
-    if (!db.connect(qPrintable(sql_host), qPrintable(sql_db),
-                    qPrintable(sql_user), qPrintable(sql_pwd)))
+    if (!db.connect(sql_host.c_str(), sql_db.c_str(),
+                    sql_user.c_str(), sql_pwd.c_str()))
     {
         LOG(ERROR, "Failed to connect to the database...");
-        // failed to connect
+        err = ERROR_INVALID_PASSWORD;
     }
 
     // load Lua VM
-    NpcTask::registerFunctions(); // TODO: Only one call for all ?
+    DOIF(err, Script::registerFunctions()); // register shared Lua functions
+    DOIF(err, NpcTask::registerFunctions()); // register NPC's Lua functions
+    DOIF(err, ItemTask::registerFunctions()); // register item's Lua functions
+
+    // load DMap files
+    MapManager& mgr = MapManager::getInstance();
+    DOIF(err, mgr.loadData());
 
     // load database
-    //DOIF(err, db.loadAllMaps());
-    //DOIF(err, db.loadAllItems());
-    //DOIF(err, db.loadAllNPCs());
+    DOIF(err, db.loadAllMaps());
+    DOIF(err, db.loadAllItems());
+    DOIF(err, db.loadAllNPCs());
 
     fprintf(stdout, "\n");
 

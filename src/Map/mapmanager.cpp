@@ -11,9 +11,8 @@
 #include "gamemap.h"
 #include "mapdata.h"
 #include "finder.h"
+#include "inifile.h"
 #include <stdio.h>
-#include <QSettings>
-#include <QStringList>
 
 using namespace std;
 
@@ -70,21 +69,24 @@ MapManager :: loadData()
     const char* path = "./GameMap.ini";
     if (Finder::fileExists(path))
     {
-        QSettings gamemap(path, QSettings::IniFormat);
-        QStringList groups = gamemap.childGroups();
+        IniFile gamemap;
+        err = gamemap.open(path);
 
-        for (QStringList::const_iterator
-                it = groups.begin(), end = groups.end();
+        vector<string> sections;
+        gamemap.getSections(sections);
+
+        for (vector<string>::const_iterator
+                it = sections.begin(), end = sections.end();
              ERROR_SUCCESS == err && it != end; ++it)
         {
-            const QString& group = *it;
+            const string& section = *it;
             unsigned int mapId = 0;
 
-            if (sscanf(qPrintable(group), "Map%u", &mapId) == 1)
+            if (sscanf(section.c_str(), "Map%u", &mapId) == 1)
             {
                 if (mMaps.find((uint16_t)mapId) == mMaps.end())
                 {
-                    string dataPath = gamemap.value(group + "/File", "N/A").toString().toStdString();
+                    string dataPath = gamemap.readString(section + "/File", "N/A");
                     if (dataPath != "N/A")
                     {
                         map<string, MapData*>::const_iterator data_it;
@@ -122,7 +124,7 @@ MapManager :: loadData()
                     else
                     {
                         LOG(WARN, "Could not find the key 'File' under the group '%s'. Skipping",
-                            qPrintable(group));
+                            section.c_str());
                     }
                 }
                 else
@@ -134,7 +136,7 @@ MapManager :: loadData()
             else
             {
                 LOG(WARN, "Found an invalid group (%s) at root. Skipping.",
-                    qPrintable(group));
+                    section.c_str());
             }
         }
     }

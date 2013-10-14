@@ -1,6 +1,15 @@
+/**
+ * ****** Faith Emulator - Closed Source ******
+ * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
+ *
+ * Please read the WARNING, DISCLAIMER and PATENTS
+ * sections in the LICENSE file.
+ */
+
 #include "inifile.h"
 #include <QSettings>
 #include <QString>
+#include <QStringList>
 
 using namespace std;
 
@@ -34,6 +43,21 @@ void
 IniFile :: close()
 {
     SAFE_DELETE(mFile);
+}
+
+void
+IniFile :: getSections(vector<string>& aOutSections)
+{
+    ASSERT(aOutSections.empty());
+
+    QStringList sections = mFile->childGroups();
+    for (QStringList::const_iterator
+            it = sections.begin(), end = sections.end();
+         it != end; ++it)
+    {
+        const QString& section = *it;
+        aOutSections.push_back(section.toStdString());
+    }
 }
 
 int8_t
