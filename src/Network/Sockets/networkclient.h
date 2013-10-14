@@ -42,6 +42,11 @@ public:
       */
     void send(uint8_t* aBuf, size_t aLen);
 
+    /**
+     * Disconnect the client from the server.
+     */
+    void disconnect();
+
 public:
     /** Get the owner pointer. It may used by some programs. */
     const void* getOwner() { return mOwner; }

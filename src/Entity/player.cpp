@@ -35,7 +35,7 @@ Player :: Player(Client& aClient, uint32_t aUID)
     mMetempsychosis = 0;
 
     mForce = 0;
-    mSpeed = 0;
+    mDexterity = 0;
     mHealth = 0;
     mSoul = 0;
     mAddPoints = 0;
@@ -119,6 +119,16 @@ Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
     // mAction = Action.StandBy; // TODO
 
     // IsInBattle = false, MagicIntone = false, Mining = false
+}
+
+void
+Player :: allot(uint8_t aForce, uint8_t aHealth, uint8_t aDexterity, uint8_t aSoul)
+{
+    mForce += aForce;
+    mHealth += aHealth;
+    mDexterity += aDexterity;
+    mSoul += aSoul;
+    mAddPoints -= (aForce + aHealth + aDexterity + aSoul);
 }
 
 void

@@ -145,8 +145,8 @@ Database :: createPlayer(Client& aClient, const char* aName,
     ASSERT_ERR(aName != nullptr && aName[0] != '\0', ERROR_INVALID_PARAMETER);
 
     const char* cmd = "INSERT INTO `user` (`account_id`, `name`, `lookface`, `profession`, "
-                      "`force`, `speed`, `health`, `soul`, `life`, `mana`) VALUES "
-                      "(:account_id, :name, :lookface, :profession, :force, :speed, "
+                      "`force`, `dexterity`, `health`, `soul`, `life`, `mana`) VALUES "
+                      "(:account_id, :name, :lookface, :profession, :force, :dexterity, "
                       ":health, :soul, :life, :mana)";
 
     err_t err = ERROR_SUCCESS;
@@ -157,7 +157,7 @@ Database :: createPlayer(Client& aClient, const char* aName,
     query.bindValue(":name", aName);
     query.bindValue(":lookface", (Player::FACE_INTERN * 10000) + aLook);
 
-    uint16_t force = 0, speed = 0, health = 0, soul = 0;
+    uint16_t force = 0, dexterity = 0, health = 0, soul = 0;
     switch (aLook) // skip profession, useless...
     {
     case Player::LOOK_HUMAN_MALE:
@@ -184,7 +184,7 @@ Database :: createPlayer(Client& aClient, const char* aName,
     }
 
     query.bindValue(":force", force);
-    query.bindValue(":speed", speed);
+    query.bindValue(":dexterity", dexterity);
     query.bindValue(":health", health);
     query.bindValue(":soul", soul);
 
@@ -209,7 +209,7 @@ Database :: getPlayerInfo(Client& aClient)
     ASSERT_ERR(&aClient != nullptr, ERROR_INVALID_REFERENCE);
 
     const char* cmd = "SELECT `id`, `name`, `mate`, `lookface`, `hair`, `money`, `money_saved`, "
-                      "`level`, `exp`, `force`, `speed`, `health`, `soul`, `add_points`, `life`, "
+                      "`level`, `exp`, `force`, `dexterity`, `health`, `soul`, `add_points`, `life`, "
                       "`mana`, `profession`, `pk`, `virtue`, `metempsychosis`, `record_map`, "
                       "`record_x`, `record_y` FROM `user` WHERE `account_id` = :account_id";
 
@@ -244,7 +244,7 @@ Database :: getPlayerInfo(Client& aClient)
             player->mMetempsychosis = (uint8_t)query.value(19).toInt();
 
             player->mForce = (uint16_t)query.value(9).toInt();
-            player->mSpeed = (uint16_t)query.value(10).toInt();
+            player->mDexterity = (uint16_t)query.value(10).toInt();
             player->mHealth = (uint16_t)query.value(11).toInt();
             player->mSoul = (uint16_t)query.value(12).toInt();
             player->mAddPoints = (uint16_t)query.value(13).toInt();

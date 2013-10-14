@@ -36,7 +36,7 @@ public:
         USER_ATTRIB_SOUL = 14,
         USER_ATTRIB_HEALTH = 15,
         USER_ATTRIB_FORCE = 16,
-        USER_ATTRIB_SPEED = 17,
+        USER_ATTRIB_DEXTERITY = 17,
 
         USER_ATTRIB_HAIR = 27,
         USER_ATTRIB_XP = 28

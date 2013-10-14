@@ -100,6 +100,9 @@ Msg :: create(Msg** aOutMsg, uint8_t** aBuf, size_t aLen)
         case MSG_NPC:
             msg = new MsgNpc(aBuf, aLen);
             break;
+        case MSG_ALLOT:
+            msg = new MsgAllot(aBuf, aLen);
+            break;
         default:
             msg = new Msg(aBuf, aLen);
             break;

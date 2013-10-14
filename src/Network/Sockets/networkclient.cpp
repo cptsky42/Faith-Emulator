@@ -17,6 +17,7 @@ NetworkClient :: NetworkClient(TcpServer& aServer, QTcpSocket** aSocket, QObject
     : QObject(aParent), mServer(aServer)
 {
     mSocket = *aSocket;
+    mSocket->setParent(this);
     *aSocket = nullptr;
 
     mOwner = nullptr;
@@ -35,6 +36,12 @@ void
 NetworkClient :: send(uint8_t* aBuf, size_t aLen)
 {
     mSocket->write((char*)aBuf, aLen);
+}
+
+void
+NetworkClient :: disconnect()
+{
+    mServer.disconnect(this);
 }
 
 void

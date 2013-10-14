@@ -57,7 +57,7 @@ Script :: registerFunctions()
     lua_register(state, "getExp", Script::getExp);
     lua_register(state, "getForce", Script::getForce);
     lua_register(state, "getHealth", Script::getHealth);
-    lua_register(state, "getSpeed", Script::getSpeed);
+    lua_register(state, "getDexterity", Script::getDexterity);
     lua_register(state, "getSoul", Script::getSoul);
     lua_register(state, "getAddPoints", Script::getAddPoints);
     lua_register(state, "getCurHP", Script::getCurHP);
@@ -191,7 +191,7 @@ Script :: getHealth(lua_State* aState)
 
 /* static */
 int
-Script :: getSpeed(lua_State* aState)
+Script :: getDexterity(lua_State* aState)
 {
     Client& client = *((Client*)lua_tointeger(aState, 1));
     ASSERT(&client != nullptr);
@@ -199,7 +199,7 @@ Script :: getSpeed(lua_State* aState)
     Player& player = *client.getPlayer();
     ASSERT(&player != nullptr);
 
-    lua_pushinteger(aState, player.getSpeed());
+    lua_pushinteger(aState, player.getDexterity());
     return 1;
 }
 

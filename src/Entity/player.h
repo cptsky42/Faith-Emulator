@@ -46,6 +46,8 @@ public:
     void enterMap();
     void move(uint16_t aX, uint16_t aY, uint8_t);
 
+    void allot(uint8_t aForce, uint8_t aHealth, uint8_t aDexterity, uint8_t aSoul);
+
     void sendSysMsg(const char* aFmt, ...);
 
     inline void send(Msg* aMsg) { mClient.send(aMsg); }
@@ -61,7 +63,7 @@ public:
     int32_t getExp() { return mExp; }
 
     uint16_t getForce() { return mForce; }
-    uint16_t getSpeed() { return mSpeed; }
+    uint16_t getDexterity() { return mDexterity; }
     uint16_t getHealth() { return mHealth; }
     uint16_t getSoul() { return mSoul; }
     uint16_t getAddPoints() { return mAddPoints; }
@@ -91,7 +93,7 @@ private:
     uint32_t mExp;
 
     uint16_t mForce;
-    uint16_t mSpeed;
+    uint16_t mDexterity;
     uint16_t mHealth;
     uint16_t mSoul;
     uint16_t mAddPoints;

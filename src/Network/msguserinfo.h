@@ -47,13 +47,13 @@ public:
         uint16_t MercenaryLevel;
         /** Unknown bytes (padding ?) */
         uint8_t Padding2[14];
-        /** The Force of the player */
+        /** The force of the player */
         uint16_t Force;
-        /** The Speed of the player */
-        uint16_t Speed;
-        /** The Health of the player */
+        /** The dexterity of the player */
+        uint16_t Dexterity;
+        /** The health of the player */
         uint16_t Health;
-        /** The Soul of the player */
+        /** The soul of the player */
         uint16_t Soul;
         /** The additional points of the player */
         uint16_t AddPoints;
