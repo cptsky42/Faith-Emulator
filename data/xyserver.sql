@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.0
+-- version 4.0.4.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Aug 18, 2013 at 12:53 PM
--- Server version: 5.0.67-log
--- PHP Version: 5.2.15
+-- Client: localhost
+-- Généré le: Lun 14 Octobre 2013 à 13:13
+-- Version du serveur: 5.1.70
+-- Version de PHP: 5.3.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,112 +17,115 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `xyserver`
+-- Base de données: `xyserver`
 --
+CREATE DATABASE IF NOT EXISTS `xyserver` DEFAULT CHARACTER SET latin1 COLLATE latin1_bin;
+USE `xyserver`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `account`
+-- Structure de la table `account`
 --
 
 CREATE TABLE IF NOT EXISTS `account` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `name` char(16) collate latin1_general_ci NOT NULL default '',
-  `email` char(128) collate latin1_general_ci NOT NULL default '',
-  `password` char(16) collate latin1_general_ci NOT NULL default '',
-  `type` tinyint(2) unsigned zerofill NOT NULL default '02',
-  `creationtime` int(8) unsigned zerofill NOT NULL default '20130101',
-  `online` tinyint(1) default '0',
-  `licence` tinyint(1) default '0',
-  `last_ip` char(15) collate latin1_general_ci default '127.0.0.1',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `name` char(16) COLLATE latin1_general_ci NOT NULL DEFAULT '',
+  `email` char(128) COLLATE latin1_general_ci NOT NULL DEFAULT '',
+  `password` char(16) COLLATE latin1_general_ci NOT NULL DEFAULT '',
+  `type` tinyint(2) unsigned zerofill NOT NULL DEFAULT '02',
+  `creationtime` int(8) unsigned zerofill NOT NULL DEFAULT '20130101',
+  `online` tinyint(1) DEFAULT '0',
+  `licence` tinyint(1) DEFAULT '0',
+  `last_ip` char(15) COLLATE latin1_general_ci DEFAULT '127.0.0.1',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `ix_name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `account`
+-- Contenu de la table `account`
 --
 
 INSERT INTO `account` (`id`, `name`, `email`, `password`, `type`, `creationtime`, `online`, `licence`, `last_ip`) VALUES
-(0001, 'cptsky', 'cptsky@faith.net', '123456', 02, 20080920, 0, 0, '127.0.0.1');
+(0001, 'cptsky', 'cptsky@faith.net', '123456', 02, 20080920, 0, 0, '127.0.0.1'),
+(0002, 'test', 'test@test.com', '123', 02, 20130101, 0, 0, '127.0.0.1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `config`
+-- Structure de la table `config`
 --
 
 CREATE TABLE IF NOT EXISTS `config` (
-  `id` int(4) NOT NULL auto_increment,
+  `id` int(4) NOT NULL AUTO_INCREMENT,
   `type` int(4) NOT NULL,
   `data1` int(4) NOT NULL,
   `data2` int(4) NOT NULL,
   `data3` int(4) NOT NULL,
   `data4` int(4) NOT NULL,
   `data5` int(4) NOT NULL,
-  `desc` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_deluser`
+-- Structure de la table `cq_deluser`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_deluser` (
-  `name` varchar(15) character set latin1 collate latin1_bin NOT NULL default '',
-  `mate` varchar(15) character set latin1 collate latin1_bin NOT NULL default '',
-  `lookface` int(4) unsigned NOT NULL default '0',
-  `hair` smallint(2) unsigned NOT NULL default '0',
-  `money` int(4) unsigned NOT NULL default '0',
-  `money_saved` int(4) unsigned NOT NULL default '0',
-  `coin_money` int(3) unsigned NOT NULL default '0',
-  `level` tinyint(1) unsigned NOT NULL default '1',
-  `exp` bigint(4) NOT NULL default '0',
-  `strength` smallint(2) unsigned NOT NULL default '0',
-  `physique` smallint(2) unsigned NOT NULL default '0',
-  `Speed` smallint(2) unsigned NOT NULL default '0',
-  `health` smallint(2) unsigned NOT NULL default '0',
-  `soul` smallint(2) unsigned NOT NULL default '0',
-  `additional_point` smallint(2) unsigned NOT NULL default '0',
-  `auto_allot` tinyint(1) unsigned NOT NULL default '1',
-  `life` smallint(2) unsigned NOT NULL default '0',
-  `mana` smallint(2) unsigned NOT NULL default '0',
-  `profession` tinyint(2) unsigned NOT NULL default '0',
-  `deed` int(4) NOT NULL default '0',
-  `pk` smallint(2) NOT NULL default '0',
-  `nobility` tinyint(1) unsigned NOT NULL default '0',
-  `medal` int(4) unsigned NOT NULL default '0',
-  `medal_select` int(4) unsigned NOT NULL default '0',
-  `metempsychosis` tinyint(1) unsigned NOT NULL default '0',
-  `syndicate_id` int(4) unsigned NOT NULL default '0',
-  `recordmap_id` int(4) unsigned NOT NULL default '0',
-  `recordx` smallint(2) unsigned NOT NULL default '0',
-  `recordy` smallint(2) unsigned NOT NULL default '0',
-  `account_id` int(4) unsigned NOT NULL default '0',
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `last_login` int(8) unsigned NOT NULL default '0',
-  `account` varchar(15) character set latin1 collate latin1_bin NOT NULL default 'ÎÞ',
-  `password` varchar(15) character set latin1 collate latin1_bin NOT NULL default 'ÎÞ',
-  `task_mask` int(4) unsigned zerofill NOT NULL default '0000',
-  `time_of_life` int(4) unsigned zerofill NOT NULL default '0000',
-  `virtue` int(4) unsigned zerofill NOT NULL default '0000',
-  `home_id` int(4) unsigned zerofill NOT NULL default '0000',
-  `lock_key` int(10) unsigned NOT NULL default '0',
-  `emoney` int(4) unsigned NOT NULL default '0',
-  `chk_sum` int(4) unsigned NOT NULL default '0',
-  `god_status` int(4) unsigned NOT NULL default '0',
-  `exp_ball_usage` smallint(2) unsigned NOT NULL default '0',
-  `online_time` int(4) unsigned NOT NULL default '0',
-  `auto_exercise` tinyint(2) unsigned NOT NULL default '0',
-  `last_logout` int(4) unsigned NOT NULL default '0',
-  `big_prize_fails` int(4) unsigned NOT NULL default '0',
-  `small_prize_fails` int(4) unsigned NOT NULL default '0',
-  `mete_lev` int(4) NOT NULL default '0',
-  `current_layout_type` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `mate` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `lookface` int(4) unsigned NOT NULL DEFAULT '0',
+  `hair` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `money` int(4) unsigned NOT NULL DEFAULT '0',
+  `money_saved` int(4) unsigned NOT NULL DEFAULT '0',
+  `coin_money` int(3) unsigned NOT NULL DEFAULT '0',
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `exp` bigint(4) NOT NULL DEFAULT '0',
+  `strength` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `physique` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `Speed` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `health` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `soul` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `additional_point` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `auto_allot` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `life` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `mana` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `profession` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `deed` int(4) NOT NULL DEFAULT '0',
+  `pk` smallint(2) NOT NULL DEFAULT '0',
+  `nobility` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `medal` int(4) unsigned NOT NULL DEFAULT '0',
+  `medal_select` int(4) unsigned NOT NULL DEFAULT '0',
+  `metempsychosis` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `syndicate_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `recordmap_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `recordx` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `recordy` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `account_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `last_login` int(8) unsigned NOT NULL DEFAULT '0',
+  `account` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'ÎÞ',
+  `password` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'ÎÞ',
+  `task_mask` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `time_of_life` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `virtue` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `home_id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `lock_key` int(10) unsigned NOT NULL DEFAULT '0',
+  `emoney` int(4) unsigned NOT NULL DEFAULT '0',
+  `chk_sum` int(4) unsigned NOT NULL DEFAULT '0',
+  `god_status` int(4) unsigned NOT NULL DEFAULT '0',
+  `exp_ball_usage` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `online_time` int(4) unsigned NOT NULL DEFAULT '0',
+  `auto_exercise` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `last_logout` int(4) unsigned NOT NULL DEFAULT '0',
+  `big_prize_fails` int(4) unsigned NOT NULL DEFAULT '0',
+  `small_prize_fails` int(4) unsigned NOT NULL DEFAULT '0',
+  `mete_lev` int(4) NOT NULL DEFAULT '0',
+  `current_layout_type` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
   KEY `index_name` (`name`),
   KEY `index_account` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -130,16 +133,16 @@ CREATE TABLE IF NOT EXISTS `cq_deluser` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_depot`
+-- Structure de la table `cq_depot`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_depot` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `ownerid` int(4) unsigned NOT NULL default '0',
-  `playerid` int(4) unsigned NOT NULL default '0',
-  `level` tinyint(4) unsigned NOT NULL default '0',
-  `pwd` varchar(32) default NULL,
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `ownerid` int(4) unsigned NOT NULL DEFAULT '0',
+  `playerid` int(4) unsigned NOT NULL DEFAULT '0',
+  `level` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `pwd` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -147,167 +150,167 @@ CREATE TABLE IF NOT EXISTS `cq_depot` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_dropitemrule`
+-- Structure de la table `cq_dropitemrule`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_dropitemrule` (
-  `id` int(10) unsigned NOT NULL default '0',
-  `RuleId` int(10) unsigned NOT NULL default '0',
-  `Chance` int(10) unsigned NOT NULL default '0',
-  `Item0` int(10) unsigned NOT NULL default '0',
-  `Item1` int(10) unsigned NOT NULL default '0',
-  `Item2` int(10) unsigned NOT NULL default '0',
-  `Item3` int(10) unsigned NOT NULL default '0',
-  `Item4` int(10) unsigned NOT NULL default '0',
-  `Item5` int(10) unsigned NOT NULL default '0',
-  `Item6` int(10) unsigned NOT NULL default '0',
-  `Item7` int(10) unsigned NOT NULL default '0',
-  `Item8` int(10) unsigned NOT NULL default '0',
-  `Item9` int(10) unsigned NOT NULL default '0',
-  `Item10` int(10) unsigned NOT NULL default '0',
-  `Item11` int(10) unsigned NOT NULL default '0',
-  `Item12` int(10) unsigned NOT NULL default '0',
-  `Item13` int(10) unsigned NOT NULL default '0',
-  `Item14` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`,`RuleId`)
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
+  `RuleId` int(10) unsigned NOT NULL DEFAULT '0',
+  `Chance` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item0` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item1` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item2` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item3` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item4` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item5` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item6` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item7` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item8` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item9` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item10` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item11` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item12` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item13` int(10) unsigned NOT NULL DEFAULT '0',
+  `Item14` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`,`RuleId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_dynamap`
+-- Structure de la table `cq_dynamap`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_dynamap` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `name` varchar(15) character set latin1 collate latin1_bin NOT NULL default 'Î´ÃüÃû',
-  `describe_text` varchar(127) character set latin1 collate latin1_bin NOT NULL default '',
-  `mapdoc` int(4) unsigned NOT NULL default '0',
-  `type` int(4) unsigned zerofill NOT NULL default '0000',
-  `owner_id` int(4) unsigned NOT NULL default '0',
-  `mapgroup` int(4) unsigned zerofill NOT NULL default '0000',
-  `idxserver` int(4) NOT NULL default '-1',
-  `weather` int(4) unsigned zerofill NOT NULL default '0000',
-  `bgmusic` int(4) unsigned zerofill NOT NULL default '0000',
-  `bgmusic_show` int(4) unsigned zerofill NOT NULL default '0000',
-  `portal0_x` int(4) unsigned zerofill NOT NULL default '0000',
-  `portal0_y` int(4) unsigned zerofill NOT NULL default '0000',
-  `reborn_mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `reborn_portal` int(4) unsigned zerofill NOT NULL default '0000',
-  `res_lev` tinyint(3) unsigned NOT NULL default '0',
-  `owner_type` tinyint(3) unsigned NOT NULL default '0',
-  `link_map` int(4) unsigned zerofill NOT NULL default '0000',
-  `link_x` smallint(2) unsigned zerofill NOT NULL default '00',
-  `link_y` smallint(2) unsigned zerofill NOT NULL default '00',
-  `del_flag` tinyint(1) unsigned NOT NULL default '0',
-  `color` int(4) unsigned zerofill default '4294967295',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'Î´ÃüÃû',
+  `describe_text` varchar(127) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `mapdoc` int(4) unsigned NOT NULL DEFAULT '0',
+  `type` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `owner_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `mapgroup` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `idxserver` int(4) NOT NULL DEFAULT '-1',
+  `weather` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bgmusic` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bgmusic_show` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal0_x` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal0_y` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `reborn_mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `reborn_portal` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `res_lev` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `owner_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `link_map` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `link_x` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `link_y` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `del_flag` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `color` int(4) unsigned zerofill DEFAULT '4294967295',
+  PRIMARY KEY (`id`),
   KEY `idx` (`idxserver`,`mapgroup`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_dynanpc`
+-- Structure de la table `cq_dynanpc`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_dynanpc` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `ownerid` int(4) unsigned NOT NULL default '0',
-  `ownertype` tinyint(3) unsigned NOT NULL default '0',
-  `name` varchar(15) character set latin1 collate latin1_bin NOT NULL default 'Unnamed',
-  `type` smallint(2) unsigned zerofill NOT NULL default '00',
-  `lookface` int(4) unsigned zerofill NOT NULL default '0000',
-  `idxserver` tinyint(3) NOT NULL default '-1',
-  `mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `cellx` smallint(2) unsigned zerofill NOT NULL default '00',
-  `celly` smallint(2) unsigned zerofill NOT NULL default '00',
-  `task0` int(4) unsigned zerofill NOT NULL default '0000',
-  `task1` int(4) unsigned zerofill NOT NULL default '0000',
-  `task2` int(4) unsigned zerofill NOT NULL default '0000',
-  `task3` int(4) unsigned zerofill NOT NULL default '0000',
-  `task4` int(4) unsigned zerofill NOT NULL default '0000',
-  `task5` int(4) unsigned zerofill NOT NULL default '0000',
-  `task6` int(4) unsigned zerofill NOT NULL default '0000',
-  `task7` int(4) unsigned zerofill NOT NULL default '0000',
-  `data0` int(4) NOT NULL default '0',
-  `data1` int(4) NOT NULL default '0',
-  `data2` int(4) NOT NULL default '0',
-  `data3` int(4) NOT NULL default '0',
-  `datastr` varchar(255) character set latin1 collate latin1_bin NOT NULL default 'None',
-  `linkid` int(4) unsigned zerofill NOT NULL default '0000',
-  `life` int(4) unsigned zerofill NOT NULL default '0000',
-  `maxlife` int(4) unsigned zerofill NOT NULL default '0000',
-  `base` int(4) unsigned zerofill NOT NULL default '0000',
-  `sort` smallint(2) unsigned zerofill NOT NULL default '00',
-  `itemid` int(4) unsigned zerofill NOT NULL default '0000',
-  `defence` smallint(2) unsigned zerofill NOT NULL default '00',
-  `magic_def` smallint(2) unsigned zerofill NOT NULL default '00',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `ownerid` int(4) unsigned NOT NULL DEFAULT '0',
+  `ownertype` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'Unnamed',
+  `type` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `lookface` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `idxserver` tinyint(3) NOT NULL DEFAULT '-1',
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `cellx` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `celly` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `task0` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task1` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task2` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task3` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task4` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task5` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task6` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `task7` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `data0` int(4) NOT NULL DEFAULT '0',
+  `data1` int(4) NOT NULL DEFAULT '0',
+  `data2` int(4) NOT NULL DEFAULT '0',
+  `data3` int(4) NOT NULL DEFAULT '0',
+  `datastr` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'None',
+  `linkid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `life` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `maxlife` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `base` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `sort` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `itemid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `defence` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `magic_def` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_enemy`
+-- Structure de la table `cq_enemy`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_enemy` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `userid` int(4) unsigned zerofill NOT NULL default '0000',
-  `enemy` int(4) unsigned zerofill NOT NULL default '0000',
-  `enemyname` varchar(15) NOT NULL default '?T',
-  `time` int(4) unsigned zerofill NOT NULL default '0000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `userid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `enemy` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `enemyname` varchar(15) NOT NULL DEFAULT '?T',
+  `time` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
   KEY `userid` (`userid`,`enemy`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_friend`
+-- Structure de la table `cq_friend`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_friend` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `userid` int(4) unsigned zerofill NOT NULL default '0000',
-  `friend` int(4) unsigned zerofill NOT NULL default '0000',
-  `friendname` varchar(32) default '?T',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `userid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `friend` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `friendname` varchar(32) DEFAULT '?T',
+  PRIMARY KEY (`id`),
   KEY `userid` (`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_item`
+-- Structure de la table `cq_item`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_item` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `type` int(4) unsigned NOT NULL default '0',
-  `owner_id` int(4) unsigned NOT NULL default '0',
-  `player_id` int(4) unsigned NOT NULL default '0',
-  `amount` smallint(2) unsigned NOT NULL default '100',
-  `amount_limit` smallint(2) unsigned NOT NULL default '100',
-  `ident` tinyint(1) unsigned NOT NULL default '0',
-  `position` tinyint(1) unsigned NOT NULL default '0',
-  `gem1` tinyint(1) unsigned NOT NULL default '0',
-  `gem2` tinyint(1) unsigned NOT NULL default '0',
-  `magic1` tinyint(1) unsigned NOT NULL default '0',
-  `magic2` tinyint(1) unsigned NOT NULL default '0',
-  `magic3` tinyint(1) unsigned NOT NULL default '0',
-  `data` int(4) NOT NULL default '0',
-  `reduce_dmg` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `add_life` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `anti_monster` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `chk_sum` int(4) unsigned NOT NULL default '0',
-  `plunder` smallint(2) unsigned zerofill NOT NULL default '00',
-  `SpecialFlag` int(4) unsigned NOT NULL default '0',
-  `color` tinyint(1) unsigned default '0',
-  `Addlevel_exp` int(4) unsigned NOT NULL default '0',
-  `monopoly` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(4) unsigned NOT NULL DEFAULT '0',
+  `owner_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `player_id` int(4) unsigned NOT NULL DEFAULT '0',
+  `amount` smallint(2) unsigned NOT NULL DEFAULT '100',
+  `amount_limit` smallint(2) unsigned NOT NULL DEFAULT '100',
+  `ident` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `position` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `gem1` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `gem2` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic1` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic2` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic3` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `data` int(4) NOT NULL DEFAULT '0',
+  `reduce_dmg` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `add_life` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `anti_monster` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `chk_sum` int(4) unsigned NOT NULL DEFAULT '0',
+  `plunder` smallint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `SpecialFlag` int(4) unsigned NOT NULL DEFAULT '0',
+  `color` tinyint(1) unsigned DEFAULT '0',
+  `Addlevel_exp` int(4) unsigned NOT NULL DEFAULT '0',
+  `monopoly` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
   KEY `package` (`owner_id`,`position`,`player_id`),
   KEY `index_item_playerid` (`player_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=770883 ;
@@ -315,185 +318,185 @@ CREATE TABLE IF NOT EXISTS `cq_item` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_leaveword`
+-- Structure de la table `cq_leaveword`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_leaveword` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `user_name` char(15) character set latin1 collate latin1_bin NOT NULL default '????a',
-  `send_name` char(15) character set latin1 collate latin1_bin NOT NULL default '????a',
-  `time` char(15) character set latin1 collate latin1_bin NOT NULL default '00000000000000',
-  `words` char(255) character set latin1 collate latin1_bin NOT NULL default '????¡§1??',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `user_name` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????a',
+  `send_name` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????a',
+  `time` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '00000000000000',
+  `words` char(255) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????¡§1??',
+  PRIMARY KEY (`id`),
   KEY `user_name` (`user_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_magic`
+-- Structure de la table `cq_magic`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_magic` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `ownerid` int(4) unsigned zerofill NOT NULL default '0000',
-  `type` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `level` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `exp` int(4) unsigned zerofill NOT NULL default '0000',
-  `unlearn` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `old_level` smallint(4) unsigned zerofill NOT NULL default '0000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `ownerid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `type` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `level` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `exp` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `unlearn` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `old_level` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
   KEY `user_magic` (`ownerid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8006 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_magictype`
+-- Structure de la table `cq_magictype`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_magictype` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `type` int(4) unsigned zerofill NOT NULL default '0000',
-  `sort` int(4) unsigned zerofill NOT NULL default '0000',
-  `name` varchar(15) character set latin1 collate latin1_bin NOT NULL default '',
-  `crime` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `ground` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `multi` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `target` int(4) unsigned zerofill NOT NULL default '0000',
-  `level` int(4) unsigned zerofill NOT NULL default '0000',
-  `use_mp` int(4) unsigned zerofill NOT NULL default '0000',
-  `power` int(4) NOT NULL default '0',
-  `intone_speed` int(4) unsigned zerofill NOT NULL default '0000',
-  `percent` int(4) unsigned zerofill NOT NULL default '0000',
-  `step_secs` int(4) unsigned zerofill NOT NULL default '0000',
-  `range` int(4) unsigned zerofill NOT NULL default '0000',
-  `distance` int(4) unsigned zerofill NOT NULL default '0000',
-  `status` int(4) unsigned zerofill NOT NULL default '0000',
-  `need_prof` int(4) unsigned zerofill NOT NULL default '0000',
-  `need_exp` int(4) NOT NULL default '0',
-  `need_level` int(4) unsigned zerofill NOT NULL default '0000',
-  `use_xp` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `weapon_subtype` int(4) unsigned zerofill NOT NULL default '0000',
-  `active_times` int(4) unsigned zerofill NOT NULL default '0000',
-  `auto_active` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `floor_attr` int(4) unsigned zerofill NOT NULL default '0000',
-  `auto_learn` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `learn_level` int(4) unsigned zerofill NOT NULL default '0000',
-  `drop_weapon` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `use_ep` int(4) unsigned zerofill NOT NULL default '0000',
-  `weapon_hit` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `use_item` int(4) unsigned zerofill NOT NULL default '0000',
-  `next_magic` int(4) unsigned zerofill default '0000',
-  `delay_ms` int(4) unsigned zerofill NOT NULL default '0000',
-  `use_item_num` int(4) unsigned zerofill NOT NULL default '0001',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `type` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `sort` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `crime` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `ground` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `multi` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `target` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `level` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `use_mp` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `power` int(4) NOT NULL DEFAULT '0',
+  `intone_speed` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `percent` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `step_secs` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `range` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `distance` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `status` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `need_prof` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `need_exp` int(4) NOT NULL DEFAULT '0',
+  `need_level` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `use_xp` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `weapon_subtype` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `active_times` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `auto_active` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `floor_attr` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `auto_learn` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `learn_level` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `drop_weapon` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `use_ep` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `weapon_hit` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `use_item` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `next_magic` int(4) unsigned zerofill DEFAULT '0000',
+  `delay_ms` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `use_item_num` int(4) unsigned zerofill NOT NULL DEFAULT '0001',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_passway`
+-- Structure de la table `cq_passway`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_passway` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `passway_idx` int(4) unsigned zerofill NOT NULL default '0000',
-  `passway_mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `passway_mapportal` int(4) unsigned zerofill NOT NULL default '0000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `passway_idx` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `passway_mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `passway_mapportal` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
   KEY `mapid` (`mapid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_portal`
+-- Structure de la table `cq_portal`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_portal` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `portal_idx` int(4) unsigned zerofill NOT NULL default '0000',
-  `portal_x` int(4) unsigned zerofill NOT NULL default '0000',
-  `portal_y` int(4) unsigned zerofill NOT NULL default '0000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal_idx` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal_x` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal_y` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
   KEY `mapid` (`mapid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_trap`
+-- Structure de la table `cq_trap`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_trap` (
   `id` int(4) unsigned zerofill NOT NULL,
-  `type` int(4) unsigned zerofill NOT NULL default '0000',
+  `type` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
   `look` int(4) unsigned zerofill NOT NULL,
   `owner_id` int(4) unsigned zerofill NOT NULL,
   `map_id` int(4) unsigned zerofill NOT NULL,
   `pos_x` smallint(2) unsigned NOT NULL,
   `pos_y` smallint(2) unsigned NOT NULL,
   `data` int(4) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cq_traptype`
+-- Structure de la table `cq_traptype`
 --
 
 CREATE TABLE IF NOT EXISTS `cq_traptype` (
-  `id` int(4) unsigned zerofill NOT NULL default '0000',
-  `sort` tinyint(3) unsigned zerofill NOT NULL default '000',
-  `look` int(4) unsigned zerofill NOT NULL default '0000',
-  `action_id` int(4) unsigned zerofill NOT NULL default '0000',
-  `level` int(4) unsigned zerofill NOT NULL default '0000',
-  `attack_max` int(4) unsigned zerofill NOT NULL default '0000',
-  `attack_min` int(4) unsigned zerofill NOT NULL default '0000',
-  `dexterity` int(4) unsigned zerofill NOT NULL default '0000',
-  `attack_speed` int(4) unsigned zerofill NOT NULL default '1000',
-  `active_times` int(4) unsigned zerofill NOT NULL default '0000',
-  `magic_type` int(4) unsigned zerofill NOT NULL default '0000',
-  `magic_hitrate` int(4) unsigned zerofill NOT NULL default '0100',
-  `size` int(4) unsigned zerofill NOT NULL default '0000',
-  `atk_mode` int(3) unsigned zerofill NOT NULL default '001',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `sort` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `look` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `action_id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `level` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `attack_max` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `attack_min` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `dexterity` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `attack_speed` int(4) unsigned zerofill NOT NULL DEFAULT '1000',
+  `active_times` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `magic_type` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `magic_hitrate` int(4) unsigned zerofill NOT NULL DEFAULT '0100',
+  `size` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `atk_mode` int(3) unsigned zerofill NOT NULL DEFAULT '001',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forbidname`
+-- Structure de la table `forbidname`
 --
 
 CREATE TABLE IF NOT EXISTS `forbidname` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `check` char(15) collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `check` char(15) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=40 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `generator`
+-- Structure de la table `generator`
 --
 
 CREATE TABLE IF NOT EXISTS `generator` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `mapid` int(4) unsigned zerofill NOT NULL default '0000',
-  `bound_x` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_y` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_cx` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_cy` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `max_npc` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `rest_secs` smallint(4) unsigned zerofill NOT NULL default '0001',
-  `max_per_gen` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `monster_type` int(3) unsigned zerofill NOT NULL default '000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_x` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_y` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_cx` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_cy` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `max_npc` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `rest_secs` smallint(4) unsigned zerofill NOT NULL DEFAULT '0001',
+  `max_per_gen` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `monster_type` int(3) unsigned zerofill NOT NULL DEFAULT '000',
+  PRIMARY KEY (`id`),
   KEY `mapid` (`mapid`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
@@ -501,19 +504,19 @@ CREATE TABLE IF NOT EXISTS `generator` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `goods`
+-- Structure de la table `goods`
 --
 
 CREATE TABLE IF NOT EXISTS `goods` (
-  `id` int(4) unsigned NOT NULL default '1',
+  `id` int(4) unsigned NOT NULL DEFAULT '1',
   `ownerid` int(4) unsigned NOT NULL,
   `itemtype` int(4) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   KEY `index_id` (`ownerid`,`itemtype`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `goods`
+-- Contenu de la table `goods`
 --
 
 INSERT INTO `goods` (`id`, `ownerid`, `itemtype`) VALUES
@@ -1084,48 +1087,48 @@ INSERT INTO `goods` (`id`, `ownerid`, `itemtype`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `itemtype`
+-- Structure de la table `itemtype`
 --
 
 CREATE TABLE IF NOT EXISTS `itemtype` (
-  `id` int(4) unsigned NOT NULL default '0',
-  `name` char(15) collate latin1_general_ci NOT NULL,
-  `req_profession` tinyint(1) unsigned NOT NULL default '0',
-  `req_weaponskill` tinyint(1) unsigned NOT NULL default '0',
-  `req_level` tinyint(1) unsigned NOT NULL default '0',
-  `req_sex` tinyint(1) unsigned NOT NULL default '0',
-  `req_force` smallint(2) unsigned NOT NULL default '0',
-  `req_speed` smallint(2) unsigned NOT NULL default '0',
-  `req_health` smallint(2) unsigned NOT NULL default '0',
-  `req_soul` smallint(2) unsigned NOT NULL default '0',
-  `monopoly` tinyint(1) unsigned NOT NULL default '0',
-  `weight` smallint(2) unsigned NOT NULL default '100',
-  `price` int(4) unsigned NOT NULL default '0',
-  `task` int(4) NOT NULL default '0',
-  `attack_max` smallint(2) unsigned NOT NULL default '0',
-  `attack_min` smallint(2) unsigned NOT NULL default '0',
-  `defense` smallint(2) NOT NULL default '0',
-  `dexterity` smallint(2) NOT NULL default '0',
-  `dodge` smallint(2) NOT NULL default '0',
-  `life` smallint(2) NOT NULL default '0',
-  `mana` smallint(2) NOT NULL default '0',
-  `amount` smallint(2) unsigned NOT NULL default '1',
-  `amount_limit` smallint(2) unsigned NOT NULL default '1',
-  `status` tinyint(1) unsigned NOT NULL default '0',
-  `gem1` tinyint(1) unsigned NOT NULL default '0',
-  `gem2` tinyint(1) unsigned NOT NULL default '0',
-  `magic1` tinyint(1) unsigned NOT NULL default '0',
-  `magic2` tinyint(1) unsigned NOT NULL default '0',
-  `magic3` tinyint(1) unsigned NOT NULL default '0',
-  `magic_atk` smallint(2) unsigned NOT NULL default '0',
-  `magic_def` smallint(2) unsigned NOT NULL default '0',
-  `atk_range` smallint(2) unsigned zerofill NOT NULL default '01',
-  `atk_speed` smallint(2) unsigned zerofill NOT NULL default '800',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned NOT NULL DEFAULT '0',
+  `name` char(15) COLLATE latin1_general_ci NOT NULL,
+  `req_profession` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `req_weaponskill` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `req_level` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `req_sex` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `req_force` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `req_speed` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `req_health` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `req_soul` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `monopoly` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `weight` smallint(2) unsigned NOT NULL DEFAULT '100',
+  `price` int(4) unsigned NOT NULL DEFAULT '0',
+  `task` int(4) NOT NULL DEFAULT '0',
+  `attack_max` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `attack_min` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `defense` smallint(2) NOT NULL DEFAULT '0',
+  `dexterity` smallint(2) NOT NULL DEFAULT '0',
+  `dodge` smallint(2) NOT NULL DEFAULT '0',
+  `life` smallint(2) NOT NULL DEFAULT '0',
+  `mana` smallint(2) NOT NULL DEFAULT '0',
+  `amount` smallint(2) unsigned NOT NULL DEFAULT '1',
+  `amount_limit` smallint(2) unsigned NOT NULL DEFAULT '1',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `gem1` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `gem2` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic1` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic2` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic3` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `magic_atk` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `magic_def` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `atk_range` smallint(2) unsigned zerofill NOT NULL DEFAULT '01',
+  `atk_speed` smallint(2) unsigned zerofill NOT NULL DEFAULT '800',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `itemtype`
+-- Contenu de la table `itemtype`
 --
 
 INSERT INTO `itemtype` (`id`, `name`, `req_profession`, `req_weaponskill`, `req_level`, `req_sex`, `req_force`, `req_speed`, `req_health`, `req_soul`, `monopoly`, `weight`, `price`, `task`, `attack_max`, `attack_min`, `defense`, `dexterity`, `dodge`, `life`, `mana`, `amount`, `amount_limit`, `status`, `gem1`, `gem2`, `magic1`, `magic2`, `magic3`, `magic_atk`, `magic_def`, `atk_range`, `atk_speed`) VALUES
@@ -5766,17 +5769,17 @@ INSERT INTO `itemtype` (`id`, `name`, `req_profession`, `req_weaponskill`, `req_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `levelexp`
+-- Structure de la table `levelexp`
 --
 
 CREATE TABLE IF NOT EXISTS `levelexp` (
-  `level` tinyint(3) unsigned NOT NULL auto_increment,
-  `exp` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`level`)
+  `level` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `exp` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`level`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=120 ;
 
 --
--- Dumping data for table `levelexp`
+-- Contenu de la table `levelexp`
 --
 
 INSERT INTO `levelexp` (`level`, `exp`) VALUES
@@ -5903,29 +5906,29 @@ INSERT INTO `levelexp` (`level`, `exp`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `map`
+-- Structure de la table `map`
 --
 
 CREATE TABLE IF NOT EXISTS `map` (
-  `id` int(4) unsigned NOT NULL default '0',
-  `name` varchar(15) collate latin1_general_ci default NULL,
-  `describe_text` varchar(127) collate latin1_general_ci default NULL,
-  `doc_id` smallint(4) unsigned NOT NULL default '0',
-  `type` int(4) unsigned zerofill default '0000',
-  `weather` int(4) unsigned zerofill default '0000',
-  `bgmusic` int(4) unsigned zerofill default '0000',
-  `bgmusic_show` int(4) unsigned zerofill default '0000',
-  `portal_x` smallint(4) unsigned zerofill default '0000',
-  `portal_y` smallint(4) unsigned zerofill default '0000',
-  `reborn_map` int(4) unsigned default '0',
-  `reborn_portal` int(4) default '0',
-  `light` int(4) unsigned zerofill default '4294967295',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(15) COLLATE latin1_general_ci DEFAULT NULL,
+  `describe_text` varchar(127) COLLATE latin1_general_ci DEFAULT NULL,
+  `doc_id` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `type` int(4) unsigned zerofill DEFAULT '0000',
+  `weather` int(4) unsigned zerofill DEFAULT '0000',
+  `bgmusic` int(4) unsigned zerofill DEFAULT '0000',
+  `bgmusic_show` int(4) unsigned zerofill DEFAULT '0000',
+  `portal_x` smallint(4) unsigned zerofill DEFAULT '0000',
+  `portal_y` smallint(4) unsigned zerofill DEFAULT '0000',
+  `reborn_map` int(4) unsigned DEFAULT '0',
+  `reborn_portal` int(4) DEFAULT '0',
+  `light` int(4) unsigned zerofill DEFAULT '4294967295',
+  PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `map`
+-- Contenu de la table `map`
 --
 
 INSERT INTO `map` (`id`, `name`, `describe_text`, `doc_id`, `type`, `weather`, `bgmusic`, `bgmusic_show`, `portal_x`, `portal_y`, `reborn_map`, `reborn_portal`, `light`) VALUES
@@ -5963,31 +5966,31 @@ INSERT INTO `map` (`id`, `name`, `describe_text`, `doc_id`, `type`, `weather`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `monstertype`
+-- Structure de la table `monstertype`
 --
 
 CREATE TABLE IF NOT EXISTS `monstertype` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `name` char(15) collate latin1_general_ci NOT NULL default 'None',
-  `type` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `look` int(4) unsigned zerofill NOT NULL default '0000',
-  `level` tinyint(3) unsigned NOT NULL default '1',
-  `life` smallint(5) unsigned NOT NULL default '0',
-  `escape_life` smallint(5) unsigned NOT NULL default '0',
-  `attack_min` int(4) unsigned NOT NULL default '0',
-  `attack_max` int(4) unsigned NOT NULL default '0',
-  `defense` int(4) unsigned NOT NULL default '0',
-  `dexterity` tinyint(2) unsigned NOT NULL default '0',
-  `dodge` tinyint(2) unsigned NOT NULL default '0',
-  `view_range` tinyint(2) unsigned NOT NULL default '5',
-  `attack_speed` smallint(4) unsigned zerofill default '1000',
-  `move_speed` smallint(4) unsigned zerofill default '0500',
-  `defy` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `name` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'None',
+  `type` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `look` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `life` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `escape_life` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `attack_min` int(4) unsigned NOT NULL DEFAULT '0',
+  `attack_max` int(4) unsigned NOT NULL DEFAULT '0',
+  `defense` int(4) unsigned NOT NULL DEFAULT '0',
+  `dexterity` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `dodge` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `view_range` tinyint(2) unsigned NOT NULL DEFAULT '5',
+  `attack_speed` smallint(4) unsigned zerofill DEFAULT '1000',
+  `move_speed` smallint(4) unsigned zerofill DEFAULT '0500',
+  `defy` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1013 ;
 
 --
--- Dumping data for table `monstertype`
+-- Contenu de la table `monstertype`
 --
 
 INSERT INTO `monstertype` (`id`, `name`, `type`, `look`, `level`, `life`, `escape_life`, `attack_min`, `attack_max`, `defense`, `dexterity`, `dodge`, `view_range`, `attack_speed`, `move_speed`, `defy`) VALUES
@@ -6074,26 +6077,26 @@ INSERT INTO `monstertype` (`id`, `name`, `type`, `look`, `level`, `life`, `escap
 -- --------------------------------------------------------
 
 --
--- Table structure for table `npc`
+-- Structure de la table `npc`
 --
 
 CREATE TABLE IF NOT EXISTS `npc` (
-  `id` int(4) unsigned zerofill NOT NULL default '0000',
-  `name` char(15) collate latin1_general_ci NOT NULL default 'Unknown',
-  `type` tinyint(2) unsigned zerofill default '02',
-  `lookface` int(4) unsigned zerofill NOT NULL default '0000',
-  `mapid` int(4) unsigned NOT NULL default '0',
-  `cellx` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `celly` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `life` smallint(5) unsigned zerofill default '00000',
-  `maxlife` smallint(5) unsigned zerofill default '00000',
-  `base` tinyint(2) unsigned zerofill NOT NULL default '00',
-  `sort` tinyint(2) unsigned zerofill default '00',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `name` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'Unknown',
+  `type` tinyint(2) unsigned zerofill DEFAULT '02',
+  `lookface` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `mapid` int(4) unsigned NOT NULL DEFAULT '0',
+  `cellx` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `celly` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `life` smallint(5) unsigned zerofill DEFAULT '00000',
+  `maxlife` smallint(5) unsigned zerofill DEFAULT '00000',
+  `base` tinyint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `sort` tinyint(2) unsigned zerofill DEFAULT '00',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `npc`
+-- Contenu de la table `npc`
 --
 
 INSERT INTO `npc` (`id`, `name`, `type`, `lookface`, `mapid`, `cellx`, `celly`, `life`, `maxlife`, `base`, `sort`) VALUES
@@ -6189,22 +6192,22 @@ INSERT INTO `npc` (`id`, `name`, `type`, `lookface`, `mapid`, `cellx`, `celly`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `point_allot`
+-- Structure de la table `point_allot`
 --
 
 CREATE TABLE IF NOT EXISTS `point_allot` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `profession` tinyint(2) unsigned zerofill NOT NULL default '00',
-  `path` tinyint(1) unsigned NOT NULL default '0' COMMENT 'First = 0, Second = 1',
-  `force` smallint(3) unsigned zerofill NOT NULL default '000',
-  `speed` smallint(3) unsigned zerofill NOT NULL default '000',
-  `health` smallint(3) unsigned zerofill NOT NULL default '000',
-  `soul` smallint(3) unsigned zerofill NOT NULL default '000',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `profession` tinyint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `path` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'First = 0, Second = 1',
+  `force` smallint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `speed` smallint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `health` smallint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `soul` smallint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `point_allot`
+-- Contenu de la table `point_allot`
 --
 
 INSERT INTO `point_allot` (`id`, `profession`, `path`, `force`, `speed`, `health`, `soul`) VALUES
@@ -6218,44 +6221,44 @@ INSERT INTO `point_allot` (`id`, `profession`, `path`, `force`, `speed`, `health
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rebirth`
+-- Structure de la table `rebirth`
 --
 
 CREATE TABLE IF NOT EXISTS `rebirth` (
-  `id` int(4) unsigned zerofill NOT NULL default '0000',
-  `need_prof` tinyint(2) unsigned zerofill NOT NULL default '00',
-  `new_prof` tinyint(2) unsigned zerofill NOT NULL default '00',
-  `need_level` tinyint(3) unsigned zerofill NOT NULL default '120',
-  `new_level` tinyint(3) unsigned zerofill NOT NULL default '015',
-  `metepsychosis` tinyint(2) unsigned zerofill NOT NULL default '00',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `need_prof` tinyint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `new_prof` tinyint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `need_level` tinyint(3) unsigned zerofill NOT NULL DEFAULT '120',
+  `new_level` tinyint(3) unsigned zerofill NOT NULL DEFAULT '015',
+  `metepsychosis` tinyint(2) unsigned zerofill NOT NULL DEFAULT '00',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `region`
+-- Structure de la table `region`
 --
 
 CREATE TABLE IF NOT EXISTS `region` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `mapid` int(4) unsigned NOT NULL default '0',
-  `type` int(4) unsigned zerofill NOT NULL default '0000',
-  `bound_x` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_y` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_cx` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `bound_cy` smallint(4) unsigned zerofill NOT NULL default '0000',
-  `datastr` varchar(127) collate latin1_general_ci NOT NULL default '',
-  `data0` int(4) unsigned zerofill NOT NULL default '0000',
-  `data1` int(4) unsigned zerofill NOT NULL default '0000',
-  `data2` int(4) unsigned zerofill NOT NULL default '0000',
-  `data3` int(4) unsigned zerofill NOT NULL default '0000',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned NOT NULL DEFAULT '0',
+  `type` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_x` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_y` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_cx` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `bound_cy` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `datastr` varchar(127) COLLATE latin1_general_ci NOT NULL DEFAULT '',
+  `data0` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `data1` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `data2` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `data3` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
   KEY `mapid` (`mapid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `region`
+-- Contenu de la table `region`
 --
 
 INSERT INTO `region` (`id`, `mapid`, `type`, `bound_x`, `bound_y`, `bound_cx`, `bound_cy`, `datastr`, `data0`, `data1`, `data2`, `data3`) VALUES
@@ -6269,59 +6272,59 @@ INSERT INTO `region` (`id`, `mapid`, `type`, `bound_x`, `bound_y`, `bound_cx`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `superman`
+-- Structure de la table `superman`
 --
 
 CREATE TABLE IF NOT EXISTS `superman` (
-  `id` int(4) unsigned zerofill NOT NULL auto_increment,
-  `number` int(4) unsigned zerofill NOT NULL default '0000' COMMENT 'Number of monsters killed.',
-  `name` char(15) collate latin1_general_ci NOT NULL COMMENT 'Player''s name.',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `number` int(4) unsigned zerofill NOT NULL DEFAULT '0000' COMMENT 'Number of monsters killed.',
+  `name` char(15) COLLATE latin1_general_ci NOT NULL COMMENT 'Player''s name.',
+  PRIMARY KEY (`id`),
   KEY `number` (`number`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `synattr`
+-- Structure de la table `synattr`
 --
 
 CREATE TABLE IF NOT EXISTS `synattr` (
-  `id` int(4) unsigned zerofill NOT NULL default '0000' COMMENT 'Member UID.',
-  `syn_id` smallint(4) unsigned zerofill NOT NULL default '0000' COMMENT 'Syndicate UID.',
-  `rank` tinyint(3) unsigned zerofill NOT NULL default '000' COMMENT 'Rank in the syndicate.',
-  `proffer` int(4) unsigned zerofill NOT NULL default '0000' COMMENT 'Money given to the syndicate.',
-  PRIMARY KEY  (`id`)
+  `id` int(4) unsigned zerofill NOT NULL DEFAULT '0000' COMMENT 'Member UID.',
+  `syn_id` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000' COMMENT 'Syndicate UID.',
+  `rank` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000' COMMENT 'Rank in the syndicate.',
+  `proffer` int(4) unsigned zerofill NOT NULL DEFAULT '0000' COMMENT 'Money given to the syndicate.',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `syndicate`
+-- Structure de la table `syndicate`
 --
 
 CREATE TABLE IF NOT EXISTS `syndicate` (
-  `id` smallint(4) unsigned zerofill NOT NULL auto_increment,
-  `name` char(15) collate latin1_general_ci NOT NULL,
-  `announce` char(255) collate latin1_general_ci default '',
-  `leader_title` char(15) collate latin1_general_ci default '°ïÖ÷' COMMENT '??',
-  `member_title` char(15) collate latin1_general_ci default '°ïÖÚ' COMMENT '??',
+  `id` smallint(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `name` char(15) COLLATE latin1_general_ci NOT NULL,
+  `announce` char(255) COLLATE latin1_general_ci DEFAULT '',
+  `leader_title` char(15) COLLATE latin1_general_ci DEFAULT '°ïÖ÷' COMMENT '??',
+  `member_title` char(15) COLLATE latin1_general_ci DEFAULT '°ïÖÚ' COMMENT '??',
   `leader_id` int(4) unsigned NOT NULL,
-  `leader_name` char(15) collate latin1_general_ci NOT NULL,
-  `money` int(4) unsigned default '0',
-  `fealty_syn` smallint(4) unsigned zerofill default '0000',
-  `del_flag` tinyint(1) default '0',
-  `enemy0` smallint(4) unsigned zerofill default '0000',
-  `enemy1` smallint(4) unsigned zerofill default '0000',
-  `enemy2` smallint(4) unsigned zerofill default '0000',
-  `enemy3` smallint(4) unsigned zerofill default '0000',
-  `enemy4` smallint(4) unsigned zerofill default '0000',
-  `ally0` smallint(4) unsigned zerofill default '0000',
-  `ally1` smallint(4) unsigned zerofill default '0000',
-  `ally2` smallint(4) unsigned zerofill default '0000',
-  `ally3` smallint(4) unsigned zerofill default '0000',
-  `ally4` smallint(4) unsigned zerofill default '0000',
-  PRIMARY KEY  (`id`),
+  `leader_name` char(15) COLLATE latin1_general_ci NOT NULL,
+  `money` int(4) unsigned DEFAULT '0',
+  `fealty_syn` smallint(4) unsigned zerofill DEFAULT '0000',
+  `del_flag` tinyint(1) DEFAULT '0',
+  `enemy0` smallint(4) unsigned zerofill DEFAULT '0000',
+  `enemy1` smallint(4) unsigned zerofill DEFAULT '0000',
+  `enemy2` smallint(4) unsigned zerofill DEFAULT '0000',
+  `enemy3` smallint(4) unsigned zerofill DEFAULT '0000',
+  `enemy4` smallint(4) unsigned zerofill DEFAULT '0000',
+  `ally0` smallint(4) unsigned zerofill DEFAULT '0000',
+  `ally1` smallint(4) unsigned zerofill DEFAULT '0000',
+  `ally2` smallint(4) unsigned zerofill DEFAULT '0000',
+  `ally3` smallint(4) unsigned zerofill DEFAULT '0000',
+  `ally4` smallint(4) unsigned zerofill DEFAULT '0000',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `index_money` (`money`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
@@ -6329,71 +6332,68 @@ CREATE TABLE IF NOT EXISTS `syndicate` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Structure de la table `user`
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `account_id` int(4) unsigned default '0',
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` char(15) collate latin1_general_ci NOT NULL default 'Unknown',
-  `mate` char(15) collate latin1_general_ci default 'None',
+  `account_id` int(4) unsigned DEFAULT '0',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'Unknown',
+  `mate` char(15) COLLATE latin1_general_ci DEFAULT 'None',
   `lookface` int(7) unsigned zerofill NOT NULL,
-  `hair` smallint(3) unsigned zerofill default '101',
-  `money` int(4) unsigned default '1000',
-  `money_saved` int(4) unsigned default '0',
-  `level` tinyint(3) unsigned default '1',
-  `exp` int(10) unsigned default '0',
-  `force` smallint(3) unsigned NOT NULL default '0',
-  `speed` smallint(3) unsigned NOT NULL default '0',
-  `health` smallint(3) unsigned NOT NULL default '0',
-  `soul` smallint(3) unsigned NOT NULL default '0',
-  `add_points` smallint(3) unsigned default '0',
-  `life` smallint(5) unsigned NOT NULL default '1',
-  `mana` smallint(5) unsigned NOT NULL default '0',
-  `profession` tinyint(3) unsigned NOT NULL default '0',
-  `pk` smallint(5) default '0',
-  `virtue` int(4) default '0',
-  `nobility` tinyint(1) unsigned default '0',
-  `medal` int(4) unsigned default '0',
-  `medal_select` int(4) unsigned default '0',
-  `metempsychosis` tinyint(1) unsigned default '0',
-  `syndicate_id` smallint(4) unsigned zerofill default '0000',
-  `record_map` smallint(4) unsigned default '1000',
-  `record_x` smallint(4) unsigned zerofill default '0400',
-  `record_y` smallint(4) unsigned zerofill default '0400',
-  `last_login` int(8) unsigned default '20130101',
-  PRIMARY KEY  (`id`),
+  `hair` smallint(3) unsigned zerofill DEFAULT '101',
+  `money` int(4) unsigned DEFAULT '1000',
+  `money_saved` int(4) unsigned DEFAULT '0',
+  `level` tinyint(3) unsigned DEFAULT '1',
+  `exp` int(10) unsigned DEFAULT '0',
+  `force` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `dexterity` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `health` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `soul` smallint(3) unsigned NOT NULL DEFAULT '0',
+  `add_points` smallint(3) unsigned DEFAULT '0',
+  `life` smallint(5) unsigned NOT NULL DEFAULT '1',
+  `mana` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `profession` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pk` smallint(5) DEFAULT '0',
+  `virtue` int(4) DEFAULT '0',
+  `nobility` tinyint(1) unsigned DEFAULT '0',
+  `medal` int(4) unsigned DEFAULT '0',
+  `medal_select` int(4) unsigned DEFAULT '0',
+  `metempsychosis` tinyint(1) unsigned DEFAULT '0',
+  `syndicate_id` smallint(4) unsigned zerofill DEFAULT '0000',
+  `record_map` smallint(4) unsigned DEFAULT '1000',
+  `record_x` smallint(4) unsigned zerofill DEFAULT '0400',
+  `record_y` smallint(4) unsigned zerofill DEFAULT '0400',
+  `last_login` int(8) unsigned DEFAULT '20130101',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `index_name` (`name`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `account_id` (`account_id`),
-  KEY `index_account` USING BTREE (`account_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1000002 ;
+  KEY `index_account` (`account_id`) USING BTREE
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1000003 ;
 
 --
--- Dumping data for table `user`
+-- Contenu de la table `user`
 --
 
-INSERT INTO `user` (`account_id`, `id`, `name`, `mate`, `lookface`, `hair`, `money`, `money_saved`, `level`, `exp`, `force`, `speed`, `health`, `soul`, `add_points`, `life`, `mana`, `profession`, `pk`, `virtue`, `nobility`, `medal`, `medal_select`, `metempsychosis`, `syndicate_id`, `record_map`, `record_x`, `record_y`, `last_login`) VALUES
-(1, 1000001, 'CptSky[PM]', 'None', 1010005, 101, 1000, 0, 1, 0, 5, 7, 9, 11, 3, 150, 100, 10, 30, 0, 0, 0, 0, 0, 0000, 1000, 0400, 0400, 0);
+INSERT INTO `user` (`account_id`, `id`, `name`, `mate`, `lookface`, `hair`, `money`, `money_saved`, `level`, `exp`, `force`, `dexterity`, `health`, `soul`, `add_points`, `life`, `mana`, `profession`, `pk`, `virtue`, `nobility`, `medal`, `medal_select`, `metempsychosis`, `syndicate_id`, `record_map`, `record_x`, `record_y`, `last_login`) VALUES
+(1, 1000001, 'CptSky[PM]', 'None', 1010005, 101, 1000, 0, 1, 0, 5, 7, 9, 11, 30, 150, 100, 10, 30, 0, 0, 0, 0, 0, 0000, 1000, 0400, 0400, 0),
+(2, 1000002, 'Test', 'None', 0010002, 101, 1000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0000, 1000, 0400, 0400, 20130101);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wanted`
+-- Structure de la table `wanted`
 --
 
 CREATE TABLE IF NOT EXISTS `wanted` (
-  `id` int(4) unsigned NOT NULL auto_increment,
-  `target` char(15) collate latin1_general_ci default NULL COMMENT 'Name of the target.',
-  `payer` char(15) collate latin1_general_ci default NULL COMMENT 'Name of the payer.',
-  `bounty` int(4) unsigned default NULL COMMENT 'Price for the contract.',
-  `order_time` bigint(8) unsigned default NULL COMMENT 'UNIX timestamp when the order was added.',
-  `hunter` char(15) collate latin1_general_ci default NULL COMMENT 'Name of the hunder.',
-  `finish_time` bigint(8) unsigned default NULL COMMENT 'UNIX timestamp when the target was hunted.',
-  PRIMARY KEY  (`id`),
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `target` char(15) COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Name of the target.',
+  `payer` char(15) COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Name of the payer.',
+  `bounty` int(4) unsigned DEFAULT NULL COMMENT 'Price for the contract.',
+  `order_time` bigint(8) unsigned DEFAULT NULL COMMENT 'UNIX timestamp when the order was added.',
+  `hunter` char(15) COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Name of the hunder.',
+  `finish_time` bigint(8) unsigned DEFAULT NULL COMMENT 'UNIX timestamp when the target was hunted.',
+  PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
