@@ -124,6 +124,16 @@ MsgTalk :: process(Client* aClient)
                 MsgItemInfo msg(data, MsgItemInfo::ACTION_ADD_ITEM);
                 client.send(&msg);
             }
+            else if (sscanf(words, "/lvl %d", &param))
+            {
+                MsgUserAttrib msg(&player, param, MsgUserAttrib::USER_ATTRIB_LEV);
+                client.send(&msg);
+            }
+            else if (sscanf(words, "/job %d", &param))
+            {
+                MsgUserAttrib msg(&player, param, MsgUserAttrib::USER_ATTRIB_PROFESSION);
+                client.send(&msg);
+            }
             else
             {
                 player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");
@@ -142,7 +152,7 @@ MsgTalk :: process(Client* aClient)
 }
 
 void
-MsgTalk :: swap(uint8_t* aBuf)
+MsgTalk :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

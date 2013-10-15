@@ -103,7 +103,7 @@ MsgWalk :: process(Client* aClient)
 }
 
 void
-MsgWalk :: swap(uint8_t* aBuf)
+MsgWalk :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

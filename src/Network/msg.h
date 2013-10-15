@@ -103,7 +103,7 @@ protected:
      *
      * @param[in]     aBuf        a pointer to the buffer to swap
      */
-    virtual void swap(uint8_t* aBuf) { aBuf = nullptr; }
+    virtual void swap(uint8_t* aBuf) const { aBuf = nullptr; }
 
 protected:
     uint8_t* mBuf; //!< the internal buffer

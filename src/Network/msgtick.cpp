@@ -73,7 +73,7 @@ MsgTick :: process(Client* aClient)
 }
 
 void
-MsgTick :: swap(uint8_t* aBuf)
+MsgTick :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

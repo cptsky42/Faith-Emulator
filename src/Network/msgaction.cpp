@@ -180,7 +180,7 @@ MsgAction :: process(Client* aClient)
 }
 
 void
-MsgAction :: swap(uint8_t* aBuf)
+MsgAction :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

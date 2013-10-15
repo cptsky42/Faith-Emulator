@@ -102,7 +102,8 @@ SOURCES += \
     src/basefunc.cpp \
     src/Script/itemtask.cpp \
     src/Network/msgallot.cpp \
-    src/Network/msgtick.cpp
+    src/Network/msgtick.cpp \
+    src/third_party/minilzo-2.06/minilzo.c
 
 HEADERS += \
     src/server.h \
@@ -183,7 +184,10 @@ HEADERS += \
     src/basefunc.h \
     src/Script/itemtask.h \
     src/Network/msgallot.h \
-    src/Network/msgtick.h
+    src/Network/msgtick.h \
+    src/third_party/minilzo-2.06/minilzo.h \
+    src/third_party/minilzo-2.06/lzodefs.h \
+    src/third_party/minilzo-2.06/lzoconf.h
 
 INCLUDEPATH += \
     src \

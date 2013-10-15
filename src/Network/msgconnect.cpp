@@ -139,7 +139,7 @@ MsgConnect :: process(Client* aClient)
 }
 
 void
-MsgConnect :: swap(uint8_t* aBuf)
+MsgConnect :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

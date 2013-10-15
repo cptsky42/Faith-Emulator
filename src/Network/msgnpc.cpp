@@ -138,7 +138,7 @@ MsgNpc :: process(Client* aClient)
 }
 
 void
-MsgNpc :: swap(uint8_t* aBuf)
+MsgNpc :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

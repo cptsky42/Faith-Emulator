@@ -88,7 +88,7 @@ MsgRegister :: process(Client* aClient)
 }
 
 void
-MsgRegister :: swap(uint8_t* aBuf)
+MsgRegister :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

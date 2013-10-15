@@ -53,7 +53,7 @@ MsgItemInfo :: create(void* aItem, Action aAction)
 }
 
 void
-MsgItemInfo :: swap(uint8_t* aBuf)
+MsgItemInfo :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

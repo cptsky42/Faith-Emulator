@@ -67,7 +67,7 @@ MsgNpcInfo :: create(Npc& aNpc)
 }
 
 void
-MsgNpcInfo :: swap(uint8_t* aBuf)
+MsgNpcInfo :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

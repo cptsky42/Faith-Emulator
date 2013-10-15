@@ -48,7 +48,7 @@ MsgUserAttrib :: create(Entity* aEntity, int32_t aData, UserAttrType aType)
 }
 
 void
-MsgUserAttrib :: swap(uint8_t* aBuf)
+MsgUserAttrib :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

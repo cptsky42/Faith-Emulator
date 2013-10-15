@@ -75,6 +75,7 @@ MapManager :: loadData()
         vector<string> sections;
         gamemap.getSections(sections);
 
+        // TODO: Multi-threaded loading ?
         for (vector<string>::const_iterator
                 it = sections.begin(), end = sections.end();
              ERROR_SUCCESS == err && it != end; ++it)

@@ -154,7 +154,7 @@ MsgDialog :: process(Client* aClient)
 }
 
 void
-MsgDialog :: swap(uint8_t* aBuf)
+MsgDialog :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

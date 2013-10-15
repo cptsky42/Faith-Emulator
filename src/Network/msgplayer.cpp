@@ -131,7 +131,7 @@ MsgPlayer :: create(Monster& aMonster)
 }
 
 void
-MsgPlayer :: swap(uint8_t* aBuf)
+MsgPlayer :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

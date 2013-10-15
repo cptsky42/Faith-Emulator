@@ -230,7 +230,7 @@ private:
     void create(Entity* aEntity, int32_t aData, Action aAction);
 
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

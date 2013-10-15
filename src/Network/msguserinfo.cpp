@@ -87,7 +87,7 @@ MsgUserInfo :: create(Player& aPlayer)
 }
 
 void
-MsgUserInfo :: swap(uint8_t* aBuf)
+MsgUserInfo :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 
