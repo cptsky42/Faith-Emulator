@@ -103,9 +103,26 @@ MapManager :: loadData()
                                 LOG(INFO, "Loaded map data at '%s' for id=%u.",
                                     dataPath.c_str(), mapId);
 
-                                mData[dataPath] = data;
-                                mMaps[(uint16_t)mapId] = data;
-                                data = nullptr;
+                                // TODO: parallel compression ?
+                                LOG(DBG, "Compressing map data of '%s'...",
+                                    dataPath.c_str());
+                                err = data->pack();
+
+                                if (IS_SUCCESS(err))
+                                {
+                                    LOG(INFO, "Compressed map data of '%s'...",
+                                        dataPath.c_str());
+
+                                    mData[dataPath] = data;
+                                    mMaps[(uint16_t)mapId] = data;
+                                    data = nullptr;
+                                }
+                                else
+                                {
+                                    LOG(ERROR, "Could not compress the map data file '%s'. Ignoring error.",
+                                        dataPath.c_str());
+                                    err = ERROR_SUCCESS;
+                                }
                             }
                             else if (ERROR_FILE_NOT_FOUND == err)
                             {

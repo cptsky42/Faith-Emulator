@@ -12,6 +12,7 @@
 #include "common.h"
 #include "mapbase.h"
 #include "mapdata.h"
+#include <map>
 
 class Client;
 class Entity;
@@ -179,14 +180,14 @@ public:
      *
      * @param[in]   aEntity     the entity to add
      */
-    void enterRoom(Entity& aEntity) const;
+    void enterRoom(Entity& aEntity);
 
     /**
      * Remove an entity from the map.
      *
      * @param[in]   aEntity     the entity to remove
      */
-    void leaveRoom(Entity& aEntity) const;
+    void leaveRoom(Entity& aEntity);
 
 private:
     /* constructor */
@@ -195,7 +196,9 @@ private:
 private:
     const int32_t mUID; //!< The map's unique ID.
     Info* mInfo; //!< The map's information.
-    const MapData& mData; //!< The map's data.
+    MapData& mData; //!< The map's data.
+
+    std::map<uint32_t, Entity*> mEntities; //!< the entities on the map
 };
 
 #endif // _FAITH_EMULATOR_GAMEMAP_H_

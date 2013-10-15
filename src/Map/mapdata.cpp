@@ -10,6 +10,7 @@
 #include "mapdata.h"
 #include "finder.h"
 #include "binaryreader.h"
+#include "minilzo.h"
 
 using namespace std;
 
@@ -54,7 +55,8 @@ MapData :: load(MapData** aOutData, const char* aPath)
 }
 
 MapData :: MapData()
-    : mWidth(0), mHeight(0), mCells(nullptr)
+    : mWidth(0), mHeight(0), mCells(nullptr),
+      mPckData(nullptr), mPckLen(0)
 {
 
 }
@@ -70,6 +72,9 @@ MapData :: ~MapData()
         Passage* passage = *it;
         SAFE_DELETE(passage);
     }
+
+    free(mPckData);
+    mPckData = nullptr;
 }
 
 
@@ -356,6 +361,100 @@ MapData :: loadLayerData(BinaryReader& aReader)
                 err = ERROR_BAD_FORMAT;
                 break;
             }
+        }
+    }
+
+    return err;
+}
+
+err_t
+MapData :: pack()
+{
+    err_t err = ERROR_SUCCESS;
+
+    if (mPckData == nullptr)
+    {
+        ASSERT(mCells != nullptr);
+
+        size_t len = mWidth * mHeight * (sizeof(uint8_t) + sizeof(int16_t));
+        uint8_t* buf = new uint8_t[len];
+        uint8_t* ptr = buf;
+
+        for (uint16_t y = 0; ERROR_SUCCESS == err && y < mHeight; ++y)
+        {
+            for (uint16_t x = 0; ERROR_SUCCESS == err && x < mWidth; ++x)
+            {
+                const Cell& cell = mCells[pos2idx(x, y)];
+
+                *(ptr++) = cell.Accessible ? TRUE : FALSE;
+                *(ptr++) = cell.Altitude & INT16_C(0xFF);
+                *(ptr++) = (cell.Altitude >> 8) & INT16_C(0xFF);
+            }
+        }
+
+        mPckData = (uint8_t*)malloc(len * 1.06f); // LZO might expand to 106%...
+
+        void* wrkmem = malloc(LZO1X_1_MEM_COMPRESS);
+        lzo_uint newlen = 0;
+
+        lzo1x_1_compress(buf, len, mPckData, &newlen, wrkmem);
+        free(wrkmem);
+
+        mPckData = (uint8_t*)realloc(mPckData, newlen);
+        mPckLen = newlen;
+
+        SAFE_DELETE_ARRAY(buf);
+        if (IS_SUCCESS(err))
+        {
+            SAFE_DELETE_ARRAY(mCells);
+        }
+        else
+        {
+            free(mPckData);
+            mPckData = nullptr;
+        }
+    }
+
+    return err;
+}
+
+err_t
+MapData :: unpack()
+{
+    err_t err = ERROR_SUCCESS;
+
+    if (mPckData != nullptr)
+    {
+        ASSERT(mCells == nullptr);
+
+        mCells = new Cell[mWidth * mHeight];
+
+        size_t len = mWidth * mHeight * (sizeof(uint8_t) + sizeof(int16_t));
+        uint8_t* buf = new uint8_t[len];
+        uint8_t* ptr = buf;
+
+        lzo_uint newlen = 0;
+        lzo1x_decompress(mPckData, mPckLen, buf, &newlen, nullptr);
+
+        for (uint16_t y = 0; ERROR_SUCCESS == err && y < mHeight; ++y)
+        {
+            for (uint16_t x = 0; ERROR_SUCCESS == err && x < mWidth; ++x)
+            {
+                Cell& cell = mCells[pos2idx(x, y)];
+                cell.Accessible = *(ptr++) != FALSE;
+                cell.Altitude = (int16_t)(*(ptr++) | (*(ptr++) << 8));
+            }
+        }
+
+        SAFE_DELETE_ARRAY(buf);
+        if (IS_SUCCESS(err))
+        {
+            free(mPckData);
+            mPckData = nullptr;
+        }
+        else
+        {
+            SAFE_DELETE_ARRAY(mCells);
         }
     }
 

@@ -6,8 +6,8 @@
  * sections in the LICENSE file.
  */
 
-#include "log.h"
 #include "gamemap.h"
+#include "entity.h"
 
 GameMap :: GameMap(int32_t aUID, Info** aInfo, MapData& aData)
     : mUID(aUID), mInfo(*aInfo), mData(aData)
@@ -33,4 +33,30 @@ GameMap :: getFloorAlt(uint16_t aPosX, uint16_t aPosY) const
 {
     const Cell& cell = mData.getCell(aPosX, aPosY);
     return cell.Altitude;
+}
+
+
+void
+GameMap :: enterRoom(Entity& aEntity)
+{
+    // activate the map...
+    if (mEntities.size() == 0)
+    {
+        mData.unpack();
+    }
+
+    //TODO
+    mEntities[aEntity.getUID()] = &aEntity;
+}
+
+void
+GameMap :: leaveRoom(Entity& aEntity)
+{
+    // TODO
+
+    // desactivate the map...
+    if (mEntities.size() == 0)
+    {
+        mData.pack();
+    }
 }

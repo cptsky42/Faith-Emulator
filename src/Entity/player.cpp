@@ -8,6 +8,7 @@
 
 #include "player.h"
 #include "world.h"
+#include "mapmanager.h"
 #include "msgtalk.h"
 #include "msgaction.h"
 #include "msgnpcinfo.h"
@@ -76,44 +77,34 @@ Player :: ~Player()
 void
 Player :: enterMap()
 {
-//    SendLight();
-//    int	nKeepSecs = 0;		// keep light
+    const MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(mMapId);
 
-    MsgAction msg(this, 0xFFFFFF, MsgAction::ACTION_MAP_ARGB); // TODO : get map color
-    send(&msg);
+    if (map != nullptr)
+    {
+        //    SendLight();
+        //    int	nKeepSecs = 0;		// keep light
 
-    // TODO: HACK!
-//    World& world = World::getInstance();
-//    NpcTask* task = new NpcTask(21, "/Users/jpboivin/Development/Faith Emulator/data/NPCs/21.lua");
-//    for (map<int32_t, Npc*>::iterator
-//            it = world.AllNPCs.begin(), end = world.AllNPCs.end();
-//         it != end; ++it)
-//    {
-//        Npc* npc = it->second;
+        MsgAction msg(this, map->getLight(), MsgAction::ACTION_MAP_ARGB);
+        send(&msg);
 
-//        if (npc->getMapId() == mMapId)
-//        {
-//            npc->linkTask(task);
+        //		UpdateBroadcastSet();
 
-//            MsgNpcInfo info(*npc);
-//            send(&info);
-//        }
-//    }
+        map->enterRoom(*this);
+        //		pMap->SendRegionInfo(this);
+        //		pMap->SendMapInfo(this);
 
-//	CMapPtr pMap = GetMap();
-//	if(pMap)
-//	{
-//		UpdateBroadcastSet();
+        //	if (pMap && pMap->IsBoothEnable())
+        //		DetachStatus((IRole*)this, STATUS_XPFULL);
 
-//		pMap->EnterRoom(this->QueryMapThing(), WITH_BLOCK);
-//		pMap->SendRegionInfo(this);
-//		pMap->SendMapInfo(this);
-//	}
-
-//	if (pMap && pMap->IsBoothEnable())
-//		DetachStatus((IRole*)this, STATUS_XPFULL);
-
-//	CRole::AttachStatus(this->QueryRole(), STATUS_PK_PROTECT, 0, CHGMAP_LOCK_SECS);
+        //	CRole::AttachStatus(this->QueryRole(), STATUS_PK_PROTECT, 0, CHGMAP_LOCK_SECS);
+    }
+    else
+    {
+        // invalid map...
+        mClient.disconnect();
+        return;
+    }
 }
 
 void

@@ -200,7 +200,8 @@ INCLUDEPATH += \
     src/Network/Sockets \
     src/Script \
     src/Security/Cryptography \
-    src/third_party/lua-5.2.2/src
+    src/third_party/lua-5.2.2/src \
+    src/third_party/minilzo-2.06
 
 OTHER_FILES += \
     data/settings.cfg

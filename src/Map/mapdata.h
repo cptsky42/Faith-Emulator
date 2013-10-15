@@ -37,6 +37,10 @@ public:
     ~MapData();
 
 public:
+    err_t pack();
+    err_t unpack();
+
+public:
     uint16_t getWidth() const { return mWidth; }
     uint16_t getHeight() const { return mHeight; }
 
@@ -99,6 +103,9 @@ private:
 
     Cell* mCells; //!< all the cells of the map
     std::vector<Passage*> mPassages; //!< all the passages of the map
+
+    uint8_t* mPckData; //!< the packed data of the map (cells)
+    size_t mPckLen; //!< the size of the packed data
 };
 
 #endif // _FAITH_EMULATOR_MAP_DATA_H_
