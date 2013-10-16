@@ -35,6 +35,14 @@ Client :: ~Client()
 }
 
 void
+Client :: save()
+{
+    // TODO
+    printf("Calling save for %p ... %s\n",
+           this, mPlayer != nullptr ? mPlayer->getName() : "");
+}
+
+void
 Client :: send(Msg* aMsg)
 {
     ASSERT(aMsg != nullptr);
@@ -60,4 +68,11 @@ Client :: send(uint8_t* aBuf, size_t aLen)
     mSocket->send(data, aLen);
 
     SAFE_DELETE_ARRAY(data);
+}
+
+void
+Client :: disconnect()
+{
+    // TODO
+    mSocket->disconnect();
 }

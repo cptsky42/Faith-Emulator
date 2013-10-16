@@ -46,18 +46,21 @@ public:
 
 public:
     void enterMap();
-    void move(uint16_t aX, uint16_t aY, uint8_t);
+    bool move(uint16_t aX, uint16_t aY, uint8_t);
+
+    /** Send the entity spawn msg. */
+    virtual void sendShow(const Player& aPlayer) const;
 
     /** Called when the timer elapse. */
     virtual void timerElapsed(time_t aTime);
 
     void allot(uint8_t aForce, uint8_t aHealth, uint8_t aDexterity, uint8_t aSoul);
 
-    void sendSysMsg(const char* aFmt, ...);
+    void sendSysMsg(const char* aFmt, ...) const;
     void processTick(int32_t aClientTime, uint32_t aMsgCount);
 
-    inline void send(Msg* aMsg) { mClient.send(aMsg); }
-    inline void send(uint8_t* aBuf, size_t aLen) { mClient.send(aBuf, aLen); }
+    inline void send(Msg* aMsg) const { mClient.send(aMsg); }
+    inline void send(uint8_t* aBuf, size_t aLen) const { mClient.send(aBuf, aLen); }
 
 public:
     const char* getMate() const { return mMate.c_str(); }

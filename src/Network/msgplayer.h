@@ -103,14 +103,14 @@ public:
      *
      * @param[in]   aPlayer     a reference to the player object
      */
-    MsgPlayer(Player& aPlayer);
+    MsgPlayer(const Player& aPlayer);
 
     /**
      * Create a new MsgPlayer packet for the specified monster.
      *
      * @param[in]   aMonster     a reference to the monster object
      */
-    MsgPlayer(Monster& aMonster); //TODO...
+    MsgPlayer(const Monster& aMonster); //TODO...
 
 
     /**
@@ -132,8 +132,8 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(Player& aPlayer);
-    void create(Monster& aMonster);
+    void create(const Player& aPlayer);
+    void create(const Monster& aMonster);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;

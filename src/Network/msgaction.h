@@ -198,7 +198,7 @@ public:
      * @param[in]   aData       the data of the action
      * @param[in]   aAction     the action Id
      */
-    MsgAction(Entity* aEntity, int32_t aData, Action aAction);
+    MsgAction(const Entity* aEntity, int32_t aData, Action aAction);
 
     /**
      * Create a message object from the specified buffer.
@@ -227,7 +227,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(Entity* aEntity, int32_t aData, Action aAction);
+    void create(const Entity* aEntity, int32_t aData, Action aAction);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;

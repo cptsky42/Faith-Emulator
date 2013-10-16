@@ -67,14 +67,31 @@ MsgWalk :: process(Client* aClient)
 
     switch (dir)
     {
-    case 0: { newY += 1; break; }
-    case 1: { newX -= 1; newY += 1; break; }
-    case 2: { newX -= 1; break; }
-    case 3: { newX -= 1; newY -= 1; break; }
-    case 4: { newY -= 1; break; }
-    case 5: { newX += 1; newY -= 1; break; }
-    case 6: { newX += 1; break; }
-    case 7: { newX += 1; newY += 1; break; }
+        case 0: { newY += 1; break; }
+        case 1: { newX -= 1; newY += 1; break; }
+        case 2: { newX -= 1; break; }
+        case 3: { newX -= 1; newY -= 1; break; }
+        case 4: { newY -= 1; break; }
+        case 5: { newX += 1; newY -= 1; break; }
+        case 6: { newX += 1; break; }
+        case 7: { newX += 1; newY += 1; break; }
+    }
+
+    // running... double the step
+    if (mInfo->Mode >= 20 && mInfo->Mode <= 27)
+    {
+        dir = mInfo->Mode - 20;
+        switch (dir)
+        {
+            case 0: { newY += 1; break; }
+            case 1: { newX -= 1; newY += 1; break; }
+            case 2: { newX -= 1; break; }
+            case 3: { newX -= 1; newY -= 1; break; }
+            case 4: { newY -= 1; break; }
+            case 5: { newX += 1; newY -= 1; break; }
+            case 6: { newX += 1; break; }
+            case 7: { newX += 1; newY += 1; break; }
+        }
     }
 
     // TODO: Implement
@@ -84,22 +101,11 @@ MsgWalk :: process(Client* aClient)
     //    return;
     //}
 
-    MapManager& mgr = MapManager::getInstance();
-    GameMap* map = mgr.getMap(player.getMapId());
-    if (map != nullptr)
+    if (player.move(newX, newY, dir))
     {
-        if (map->getFloorAccess(player.getPosX(), player.getPosY()))
-        {
-            player.sendSysMsg(STR_INVALID_COORDINATE);
-            //player.kickBack(); // TODO
-            return;
-        }
+        // broadcast the message to everyone
+        player.broadcastRoomMsg(this, true);
     }
-
-    player.move(newX, newY, dir);
-
-    client.send(this);
-    //  Player.Screen.Move(Buffer);
 }
 
 void

@@ -7,6 +7,8 @@
  */
 
 #include "monster.h"
+#include "player.h"
+#include "msgplayer.h"
 
 Monster :: Monster(int32_t aUID, Monster::Info& aInfo)
     : AdvancedEntity(aUID)
@@ -38,4 +40,11 @@ Monster :: Monster(int32_t aUID, Monster::Info& aInfo)
 Monster :: ~Monster()
 {
 
+}
+
+void
+Monster :: sendShow(const Player& aPlayer) const
+{
+    MsgPlayer msg(*this);
+    aPlayer.send(&msg);
 }

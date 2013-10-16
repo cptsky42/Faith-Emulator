@@ -11,8 +11,8 @@
 #include "mapmanager.h"
 #include "msgtalk.h"
 #include "msgaction.h"
-#include "msgnpcinfo.h"
 #include "msgtick.h"
+#include "msgplayer.h"
 #include <stdarg.h>
 #include <map>
 
@@ -88,11 +88,10 @@ Player :: enterMap()
         MsgAction msg(this, map->getLight(), MsgAction::ACTION_MAP_ARGB);
         send(&msg);
 
-        //		UpdateBroadcastSet();
-
         map->enterRoom(*this);
         //		pMap->SendRegionInfo(this);
         //		pMap->SendMapInfo(this);
+        updateBroadcastSet(true);
 
         //	if (pMap && pMap->IsBoothEnable())
         //		DetachStatus((IRole*)this, STATUS_XPFULL);
@@ -107,18 +106,50 @@ Player :: enterMap()
     }
 }
 
-void
+bool
 Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
 {
-    mPrevX = mPosX;
-    mPrevY = mPosY;
+    const MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(mMapId);
 
-    mPosX = aX;
-    mPosY = aY;
-    mDirection = aDir;
-    // mAction = Action.StandBy; // TODO
+    if (map != nullptr)
+    {
+        if (!map->isValidPoint(aX, aY) || !map->isStandEnable(aX, aY))
+        {
+            sendSysMsg(STR_INVALID_COORDINATE);
+            //kickBack(); // TODO
+            return false;
+        }
 
-    // IsInBattle = false, MagicIntone = false, Mining = false
+        // detach status STATUS_HIDDEN //TODO
+
+        // StandRestart()
+        // map->ChangeRegion()
+
+        mPrevX = mPosX;
+        mPrevY = mPosY;
+
+        mPosX = aX;
+        mPosY = aY;
+        mDirection = aDir;
+        // mAction = Action.StandBy; // TODO
+
+        updateBroadcastSet();
+
+        // IsInBattle = false, MagicIntone = false, Mining = false
+        // ProcessAfterMove()
+    }
+
+    return true;
+}
+
+void
+Player :: sendShow(const Player& aPlayer) const
+{
+    MsgPlayer msg(*this);
+    aPlayer.send(&msg);
+
+    // TODO KO number ?
 }
 
 void
@@ -416,7 +447,7 @@ Player :: allot(uint8_t aForce, uint8_t aHealth, uint8_t aDexterity, uint8_t aSo
 }
 
 void
-Player :: sendSysMsg(const char* aFmt, ...)
+Player :: sendSysMsg(const char* aFmt, ...) const
 {
     va_list args;
     va_start(args, aFmt);

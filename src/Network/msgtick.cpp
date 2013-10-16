@@ -68,8 +68,6 @@ MsgTick :: process(Client* aClient)
     }
 
     player.processTick(time, msgCount);
-
-    // TODO: must send each 10s
 }
 
 void

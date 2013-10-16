@@ -12,10 +12,13 @@
 #include "common.h"
 #include "mapbase.h"
 #include "mapdata.h"
+#include <math.h>
 #include <map>
+#include <algorithm>
 
 class Client;
 class Entity;
+class Player;
 
 /**
  * A game map object which is linked to a MapData object.
@@ -98,6 +101,10 @@ public:
     static const int32_t DYNAMIC_MAP_UID = 1000000;
 
 public:
+    static inline int distance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+    { return std::max(abs((int)x1 - (int)x2), abs((int)y1 - (int)y2)); }
+
+public:
     /* destructor */
     ~GameMap();
 
@@ -135,6 +142,8 @@ public:
     bool isLayItemEnable(uint16_t aPosX, uint16_t aPosY) const { return getFloorAccess(aPosX, aPosY); }
     /** Determine whether or not the coords are in the map' zone's limits. */
     bool isValidPoint(uint16_t aPosX, uint16_t aPosY) const { return (aPosX < getWidth() && aPosY < getHeight()); }
+    /** Determine whether or not the cell is valid a player. */
+    bool isStandEnable(uint16_t aPosX, uint16_t aPosY) const { return getFloorAccess(aPosX, aPosY); }
     /** Determine whether or not it is a newbie map. */
     bool isNewbieMap() const { return NEWBIE_MAP_UID == mUID; }
     /** Determine whether or not it is a dynamic map. */
@@ -172,8 +181,10 @@ public:
 
 
 public:
-//	int		Distance(int x1, int y1, int x2, int y2)	{ return __max(abs(x1-x2), abs(y1-y2)); }
     void sendMapInfo(Client* aClient) const;
+    void sendBlockInfo(const Player& aPlayer) const;
+
+    void updateBroadcastSet(const Entity& aEntity) const;
 
     /**
      * Add a new entity on the map.

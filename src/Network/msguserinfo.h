@@ -84,7 +84,7 @@ public:
      *
      * @param[in]   aPlayer     a reference to the player object
      */
-    MsgUserInfo(Player& aPlayer);
+    MsgUserInfo(const Player& aPlayer);
 
     /**
      * Create a message object from the specified buffer.
@@ -105,7 +105,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(Player& aPlayer);
+    void create(const Player& aPlayer);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;

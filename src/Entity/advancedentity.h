@@ -12,6 +12,8 @@
 #include "common.h"
 #include "entity.h"
 
+class Player;
+
 /**
  * Base class of all advanced entity on a map.
  * An advanced entity can be in a battle.
@@ -25,6 +27,9 @@ public:
     virtual ~AdvancedEntity();
 
 public:
+    /** Send the entity spawn msg. */
+    virtual void sendShow(const Player& aPlayer) const = 0;
+
     /** Called when the timer elapse. */
     virtual void timerElapsed(time_t aTime) = 0;
 
@@ -42,7 +47,7 @@ public:
 
 protected:
     /* constructor */
-    AdvancedEntity(int32_t aUID);
+    AdvancedEntity(uint32_t aUID);
 
 protected:
     uint8_t mLevel; //!< Entity level

@@ -49,10 +49,12 @@ public:
     Client(NetworkClient* aSocket);
     ~Client();
 
+    void save();
+
     void send(Msg* aMsg);
     void send(uint8_t* aBuf, size_t aLen);
 
-    void disconnect() {  /* TODO... */ }
+    void disconnect();
 
 public:
     /** Get a reference to the client cipher */

@@ -134,6 +134,11 @@ MsgTalk :: process(Client* aClient)
                 MsgUserAttrib msg(&player, param, MsgUserAttrib::USER_ATTRIB_PROFESSION);
                 client.send(&msg);
             }
+            else if (sscanf(words, "/attr %d %d", &param, &type))
+            {
+                MsgUserAttrib msg(&player, param, (MsgUserAttrib::UserAttrType)type);
+                client.send(&msg);
+            }
             else
             {
                 player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");

@@ -8,6 +8,10 @@
 
 #include "gamemap.h"
 #include "entity.h"
+#include "player.h"
+#include <vector>
+
+using namespace std;
 
 GameMap :: GameMap(int32_t aUID, Info** aInfo, MapData& aData)
     : mUID(aUID), mInfo(*aInfo), mData(aData)
@@ -35,6 +39,66 @@ GameMap :: getFloorAlt(uint16_t aPosX, uint16_t aPosY) const
     return cell.Altitude;
 }
 
+
+void
+GameMap :: sendBlockInfo(const Player& aPlayer) const
+{
+    ASSERT(&aPlayer != nullptr);
+
+    // the player must be on the map...
+    if (mEntities.end() != mEntities.find(aPlayer.getUID()))
+    {
+        // TODO: thread-safe
+        for (map<uint32_t, Entity*>::const_iterator
+                it = mEntities.begin(), end = mEntities.end();
+             it != end; ++it)
+        {
+            const Entity& entity = *it->second;
+
+            if (entity.getUID() == aPlayer.getUID())
+                continue;
+
+            if (distance(aPlayer.getPosX(), aPlayer.getPosY(),
+                         entity.getPosX(), entity.getPosY()) < Entity::CELLS_PER_VIEW)
+            {
+                // send the entity spawn...
+                entity.sendShow(aPlayer);
+            }
+        }
+    }
+}
+
+void
+GameMap :: updateBroadcastSet(const Entity& aEntity) const
+{
+    ASSERT(&aEntity != nullptr);
+
+    // the entity must be on the map...
+    if (mEntities.end() != mEntities.find(aEntity.getUID()))
+    {
+        // TODO: items
+        // TODO: thread-safe
+        for (map<uint32_t, Entity*>::const_iterator
+                it = mEntities.begin(), end = mEntities.end();
+             it != end; ++it)
+        {
+            const Entity& entity = *it->second;
+
+            if (entity.getUID() == aEntity.getUID())
+                continue;
+
+            if (distance(aEntity.getPosX(), aEntity.getPosY(),
+                         entity.getPosX(), entity.getPosY()) <= Entity::CELLS_PER_VIEW)
+            {
+                // add the entity to the set...
+                aEntity.addEntityToBCSet(entity);
+                entity.addEntityToBCSet(aEntity);
+            }
+
+            // TODO remove others
+        }
+    }
+}
 
 void
 GameMap :: enterRoom(Entity& aEntity)

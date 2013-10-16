@@ -11,7 +11,7 @@
 #include "player.h"
 #include <string.h>
 
-MsgUserInfo :: MsgUserInfo(Player& aPlayer)
+MsgUserInfo :: MsgUserInfo(const Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
           strlen(aPlayer.getName()) + 1 +
           strlen(aPlayer.getMate()) + 1),
@@ -37,7 +37,7 @@ MsgUserInfo :: ~MsgUserInfo()
 }
 
 void
-MsgUserInfo :: create(Player& aPlayer)
+MsgUserInfo :: create(const Player& aPlayer)
 {
     ASSERT(&aPlayer != nullptr);
     ASSERT(aPlayer.getName() != nullptr && aPlayer.getName()[0] != '\0');

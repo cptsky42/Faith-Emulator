@@ -12,7 +12,7 @@
 #include "monster.h"
 #include <string.h>
 
-MsgPlayer :: MsgPlayer(Player& aPlayer)
+MsgPlayer :: MsgPlayer(const Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
           strlen(aPlayer.getName()) + 1)
 {
@@ -20,7 +20,7 @@ MsgPlayer :: MsgPlayer(Player& aPlayer)
     create(aPlayer);
 }
 
-MsgPlayer :: MsgPlayer(Monster& aMonster)
+MsgPlayer :: MsgPlayer(const Monster& aMonster)
     : Msg(sizeof(MsgInfo) +
           strlen(aMonster.getName()) + 1),
       mInfo((MsgInfo*)mBuf)
@@ -44,7 +44,7 @@ MsgPlayer :: ~MsgPlayer()
 }
 
 void
-MsgPlayer :: create(Player& aPlayer)
+MsgPlayer :: create(const Player& aPlayer)
 {
     ASSERT(&aPlayer != nullptr);
     ASSERT(aPlayer.getName() != nullptr && aPlayer.getName()[0] != '\0');
@@ -86,7 +86,7 @@ MsgPlayer :: create(Player& aPlayer)
 }
 
 void
-MsgPlayer :: create(Monster& aMonster)
+MsgPlayer :: create(const Monster& aMonster)
 {
     ASSERT(&aMonster != nullptr);
     ASSERT(aMonster.getName() != nullptr && aMonster.getName()[0] != '\0');

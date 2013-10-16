@@ -11,6 +11,10 @@
 
 #include "common.h"
 #include <time.h>
+#include <map>
+
+class Player;
+class Msg;
 
 /**
  * Base class of all entity on a map.
@@ -88,25 +92,36 @@ public:
 
 public:
     /** Determine wheter or not the entity is a NPC. */
-    bool isNpc() { return isNpc(mUID); }
+    bool isNpc() const { return isNpc(mUID); }
     /** Determine wheter or not the entity is a system NPC. */
-    bool isSysNpc() { return isSysNpc(mUID); }
+    bool isSysNpc() const { return isSysNpc(mUID); }
     /** Determine wheter or not the entity is a user/dynamic NPC. */
-    bool isDynNpc() { return isDynNpc(mUID); }
+    bool isDynNpc() const { return isDynNpc(mUID); }
     /** Determine wheter or not the entity is a monster. */
-    bool isMonster() { return isMonster(mUID); }
+    bool isMonster() const { return isMonster(mUID); }
     /** Determine wheter or not the entity is a pet. */
-    bool isPet() { return isPet(mUID); }
+    bool isPet() const { return isPet(mUID); }
     /** Determine wheter or not the entity is a called pet. */
-    bool isCallPet() { return isCallPet(mUID); }
+    bool isCallPet() const { return isCallPet(mUID); }
     /** Determine wheter or not the entity is a player. */
-    bool isPlayer() { return isPlayer(mUID); }
+    bool isPlayer() const { return isPlayer(mUID); }
 
 public:
     /* destructor */
     virtual ~Entity();
 
 public:
+    /** Send the entity spawn msg. */
+    virtual void sendShow(const Player& aPlayer) const = 0;
+
+    void updateBroadcastSet(bool aClearSet = false) const;
+    void clearBroadcastSet() const;
+    void addEntityToBCSet(const Entity& aEntity) const;
+    void removeEntityFromBCSet(const Entity& aEntity) const;
+
+    void broadcastRoomMsg(Msg* aMsg, bool aIncludeSelf) const;
+    void broadcastRoomMsg(uint8_t* aBuf, size_t aLen, bool aIncludeSelf) const;
+
     /** Called when the timer elapse. */
     virtual void timerElapsed(time_t aTime) = 0;
 
@@ -137,7 +152,7 @@ public:
 
 protected:
     /* constructor */
-    Entity(int32_t aUID);
+    Entity(uint32_t aUID);
 
 protected:
     const uint32_t mUID; //!< Entity UID
@@ -149,6 +164,8 @@ protected:
     uint16_t mPosX; //!< Entity X coord.
     uint16_t mPosY; //!< Entity Y coord.
     uint8_t mDirection; //!< Entity cardinal direction
+
+    mutable std::map<uint32_t, const Entity*> mViewSet;
 };
 
 #endif // _FAITH_EMULATOR_ENTITY_H

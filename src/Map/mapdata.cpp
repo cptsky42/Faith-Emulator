@@ -129,7 +129,7 @@ MapData :: loadMapData(BinaryReader& aReader)
                                    ((altitude + 2) * (x + 1 + terrain)));
 
             Cell& cell = mCells[pos2idx(x, y)];
-            cell.Accessible = mask != FALSE;
+            cell.Accessible = mask != 1;
             cell.Altitude = altitude;
         }
         DOIF(err, aReader.readUInt32(tmp));

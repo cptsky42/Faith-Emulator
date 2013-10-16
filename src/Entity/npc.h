@@ -15,6 +15,7 @@
 
 class NpcTask;
 class Client;
+class Player;
 
 class Npc : public Entity
 {
@@ -86,6 +87,9 @@ public:
 public:
     void linkTask(NpcTask* aTask) { ASSERT(aTask != nullptr); mTask = aTask; }
     bool activateNpc(Client& aClient, int32_t aAction);
+
+    /** Send the entity spawn msg. */
+    virtual void sendShow(const Player& aPlayer) const;
 
     /** Called when the timer elapse. */
     virtual void timerElapsed(time_t aTime) { /* TODO */  }

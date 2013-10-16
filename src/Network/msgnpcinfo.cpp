@@ -10,7 +10,7 @@
 #include "npc.h"
 #include "stringpacker.h"
 
-MsgNpcInfo :: MsgNpcInfo(Npc& aNpc)
+MsgNpcInfo :: MsgNpcInfo(const Npc& aNpc)
     : Msg(sizeof(MsgInfo) +
           (aNpc.getName() != nullptr ? strlen(aNpc.getName()) + 1 : 0)),
       mInfo((MsgInfo*)mBuf)
@@ -34,7 +34,7 @@ MsgNpcInfo :: ~MsgNpcInfo()
 }
 
 void
-MsgNpcInfo :: create(Npc& aNpc)
+MsgNpcInfo :: create(const Npc& aNpc)
 {
     ASSERT(&aNpc != nullptr);
 

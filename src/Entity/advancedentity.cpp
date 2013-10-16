@@ -8,7 +8,7 @@
 
 #include "advancedentity.h"
 
-AdvancedEntity :: AdvancedEntity(int32_t aUID)
+AdvancedEntity :: AdvancedEntity(uint32_t aUID)
     : Entity(aUID)
 {
     mName = "Unknown";

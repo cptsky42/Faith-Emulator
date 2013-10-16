@@ -12,7 +12,7 @@
 #include "player.h"
 #include "msgplayer.h"
 
-MsgAction :: MsgAction(Entity* aEntity, int32_t aData, Action aAction)
+MsgAction :: MsgAction(const Entity* aEntity, int32_t aData, Action aAction)
     : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
     create(aEntity, aData, aAction);
@@ -35,7 +35,7 @@ MsgAction :: ~MsgAction()
 }
 
 void
-MsgAction :: create(Entity* aEntity, int32_t aData, Action aAction)
+MsgAction :: create(const Entity* aEntity, int32_t aData, Action aAction)
 {
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_ACTION;

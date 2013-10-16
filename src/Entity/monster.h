@@ -13,6 +13,8 @@
 #include "advancedentity.h"
 #include <string>
 
+class Player;
+
 /**
  * Base class of all monsters.
  */
@@ -67,6 +69,9 @@ public:
     virtual ~Monster();
 
 public:
+    /** Send the entity spawn msg. */
+    virtual void sendShow(const Player& aPlayer) const;
+
     /** Called when the timer elapse. */
     virtual void timerElapsed(time_t aTime) { /* TODO */  }
 

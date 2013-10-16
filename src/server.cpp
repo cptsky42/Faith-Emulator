@@ -195,7 +195,7 @@ Server :: disconnectionHandler(NetworkClient* aClient)
     {
         // TODO? clean this line and add some checks
         Client* client = (Client*)aClient->getOwner();
-        //client->save();
+        client->save();
 
         SAFE_DELETE(client);
     }

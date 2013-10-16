@@ -10,6 +10,8 @@
 #include "npc.h"
 #include "npctask.h"
 #include "client.h"
+#include "player.h"
+#include "msgnpcinfo.h"
 
 Npc :: Npc(int32_t aUID, const char* aName,
            uint8_t aType, int16_t aLook,
@@ -59,4 +61,11 @@ Npc :: activateNpc(Client& aClient, int32_t aAction)
     }
 
     return result;
+}
+
+void
+Npc :: sendShow(const Player& aPlayer) const
+{
+    MsgNpcInfo msg(*this);
+    aPlayer.send(&msg);
 }

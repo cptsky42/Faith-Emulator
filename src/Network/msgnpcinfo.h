@@ -52,7 +52,7 @@ public:
      *
      * @param[in]   aNpc     a reference to the npc object
      */
-    MsgNpcInfo(Npc& aNpc);
+    MsgNpcInfo(const Npc& aNpc);
 
     /**
      * Create a message object from the specified buffer.
@@ -73,7 +73,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(Npc& aNpc);
+    void create(const Npc& aNpc);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;
