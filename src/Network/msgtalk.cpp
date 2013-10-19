@@ -141,7 +141,7 @@ MsgTalk :: process(Client* aClient)
                 client.send(&msg);
 
                 player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
-                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
+                                  player.getMaxLife(), player.getMaxMana(), player.getMaxEnergy(), player.getMaxWeight());
                 player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
                                   player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
                                   player.getMDef(), player.getDext());
