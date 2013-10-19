@@ -128,11 +128,23 @@ MsgTalk :: process(Client* aClient)
             {
                 MsgUserAttrib msg(&player, param, MsgUserAttrib::USER_ATTRIB_LEV);
                 client.send(&msg);
+
+                player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
+                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
+                player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
+                                  player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
+                                  player.getMDef(), player.getDext());
             }
             else if (sscanf(words, "/job %d", &param))
             {
                 MsgUserAttrib msg(&player, param, MsgUserAttrib::USER_ATTRIB_PROFESSION);
                 client.send(&msg);
+
+                player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
+                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
+                player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
+                                  player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
+                                  player.getMDef(), player.getDext());
             }
             else if (sscanf(words, "/attr %d %d", &param, &type))
             {

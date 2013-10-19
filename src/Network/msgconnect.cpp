@@ -117,7 +117,7 @@ MsgConnect :: process(Client* aClient)
                 SAFE_DELETE(msg);
 
                 // HACK !
-                msg = new MsgUserAttrib(&player, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
+                msg = new MsgUserAttrib(&player, player.getMaxEnergy(), MsgUserAttrib::USER_ATTRIB_ENERGY);
                 client.send(msg);
                 SAFE_DELETE(msg);
 
@@ -128,6 +128,12 @@ MsgConnect :: process(Client* aClient)
                 msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
                 client.send(msg);
                 SAFE_DELETE(msg);
+
+                player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
+                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
+                player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
+                                  player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
+                                  player.getMDef(), player.getDext());
             }
 
             break;
