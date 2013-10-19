@@ -23,6 +23,25 @@ class AdvancedEntity : public Entity
     PROHIBIT_COPY(AdvancedEntity); // constant UID, should be unique...
 
 public:
+    static const uint16_t POSE_DANCE1       =   1;
+    static const uint16_t POSE_STANDBY      = 100;
+    static const uint16_t POSE_LAUGH        = 150;
+    static const uint16_t POSE_GUFFAW       = 151;
+    static const uint16_t POSE_FURY         = 160;
+    static const uint16_t POSE_SAD          = 170;
+    static const uint16_t POSE_EXCITEMENT   = 180;
+    static const uint16_t POSE_SAYHELLO     = 190;
+    static const uint16_t POSE_SALUTE       = 200;
+    static const uint16_t POSE_GENUFLECT    = 210;
+    static const uint16_t POSE_KNEEL        = 220;
+    static const uint16_t POSE_COOL         = 230;
+    static const uint16_t POSE_SWIM         = 240;
+    static const uint16_t POSE_SITDOWN      = 250;
+    static const uint16_t POSE_ZAZEN        = 260;
+    static const uint16_t POSE_FAINT        = 270;
+    static const uint16_t POSE_LIE          = 271;
+
+public:
     /* destructor */
     virtual ~AdvancedEntity();
 

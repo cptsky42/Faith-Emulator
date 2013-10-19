@@ -118,6 +118,7 @@ public:
         actionDelHonorTitle		=66,		// to server	idUser is Player ID, dwData is title
         actionAddHonorTitle		=67,		// to client	idUser is Player ID, dwData is title
         actionSelectHonorTitle	=68,		// to server	idUser is Player ID, dwData is title
+        // TODO 1 - 8
         ACTION_OPEN_DIALOG = 69, // to client only, open a dialog, dwData is id of dialog
         actionFlashStatus		=70,		// broadcast to client only, team member only. dwData is dwStatus
 
