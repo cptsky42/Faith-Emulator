@@ -90,6 +90,26 @@ public:
     uint16_t getMercenaryExp() const { return mMercenaryExp; }
     uint16_t getMercenaryLevel() const { return mMercenaryLevel; }
 
+public:
+    int32_t getMinAtk();
+    int32_t getMaxAtk();
+    int32_t getDefense();
+    int32_t getMAtk();
+    int32_t getMDef();
+
+    int32_t getAdditionAtk();
+    int32_t getAdditionDef();
+    int32_t getAdditionMAtk();
+    int32_t getAdditionMDef();
+
+    uint8_t getDext();
+
+    uint16_t getMaxLife();
+    uint16_t getMaxMana();
+    uint8_t getMaxXP();
+    uint8_t  getMaxEnergy();
+    uint16_t getMaxWeight();
+
 private:
     Client& mClient;
 
@@ -116,6 +136,7 @@ private:
 
     uint8_t mEnergy;
     uint8_t mXP;
+    uint16_t mWeight;
 
     uint16_t mMercenaryExp;
     uint16_t mMercenaryLevel;

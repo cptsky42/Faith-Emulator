@@ -14,7 +14,9 @@
 #include "msgtick.h"
 #include "msgplayer.h"
 #include <stdarg.h>
+#include <math.h>
 #include <map>
+#include <algorithm>
 
 #include "npc.h"
 #include "npctask.h"
@@ -72,6 +74,336 @@ Player :: Player(Client& aClient, uint32_t aUID)
 Player :: ~Player()
 {
 
+}
+
+/// TODO real...
+#define MAX_EQUIPMENT 0
+
+int32_t
+Player :: getMinAtk()
+{
+    double atk = 0.5;
+    switch (mProfession)
+    {
+        case PROFESSION_MAGE:
+            atk += mForce * 0.5;
+            break;
+        case PROFESSION_WARRIOR:
+            atk += mForce * 1.0;
+            break;
+        case PROFESSION_ARCHER:
+            atk += mDexterity * 0.5;
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // fDef += m_pEquipment[i]->GetMinAttack();
+    }
+
+    return max(0.0, atk);
+}
+
+int32_t
+Player :: getMaxAtk()
+{
+    double atk = 0.5;
+    switch (mProfession)
+    {
+        case PROFESSION_MAGE:
+            atk += mForce * 0.5;
+            break;
+        case PROFESSION_WARRIOR:
+            atk += mForce * 1.0;
+            break;
+        case PROFESSION_ARCHER:
+            atk += mDexterity * 0.5;
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // fDef += m_pEquipment[i]->GetMaxAttack();
+    }
+
+    return max(0.0, atk);
+}
+
+int32_t
+Player :: getDefense()
+{
+    double def = 0.5;
+    def += mHealth * 0.5;
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // fDef += m_pEquipment[i]->GetDefense();
+    }
+
+    return (int32_t)def;
+}
+
+int32_t
+Player :: getMAtk()
+{
+    double atk = 0.5;
+    if (PROFESSION_MAGE == mProfession)
+    {
+        atk += mSoul * 0.5;
+    }
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // fDef += m_pEquipment[i]->GetMaxMagicAttack();
+    }
+
+    return max(0.0, atk);
+}
+
+int32_t
+Player :: getMDef()
+{
+    double def = 0.5;
+    switch (mProfession)
+    {
+        case PROFESSION_WARRIOR:
+            def += mHealth * 0.5;
+            break;
+        case PROFESSION_ARCHER:
+        case PROFESSION_MAGE:
+            def += mSoul * 0.5;
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // fDef += m_pEquipment[i]->GetMagicDefense();
+    }
+
+    return (int32_t)def;
+}
+
+int32_t
+Player :: getAdditionAtk()
+{
+    int32_t atk = 0;
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        //		CItem* pItem = m_pEquipment[i];
+        //		if(pItem && !pItem->TestStatus(_ITEM_STATUS_MAGIC_ADD))
+        //		{
+        //			if ( i + 1 == ITEMPOSITION_SPRITE )
+        //			{
+        //				if ( pItem->GetProfessionRequired() == _SPRITE_ADDITION_PATK )
+        //				{
+        //					nAttack += pItem->GetAmountLimit() ;
+        //				}
+        //			}
+        //			else if(i+1 == ITEMPOSITION_WEAPONR || i+1 == ITEMPOSITION_RINGR ||  i+1 == ITEMPOSITION_SHOES)
+        //				nAttack += m_pEquipment[i]->GetAddition();
+        //		}
+    }
+
+    return atk;
+}
+
+int32_t
+Player :: getAdditionDef()
+{
+    int32_t def = 0;
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        //		CItem* pItem = m_pEquipment[i];
+        //		if(pItem && !pItem->TestStatus(_ITEM_STATUS_MAGIC_ADD))
+        //		{
+        //			if ( i + 1 == ITEMPOSITION_SPRITE )
+        //			{
+        //				if ( pItem->GetProfessionRequired() == _SPRITE_ADDITION_PDEF )
+        //				{
+        //					nDef += pItem->GetAmountLimit() ;
+        //				}
+        //			}
+        //			else if(i+1 == ITEMPOSITION_ARMOR || i+1 == ITEMPOSITION_HELMET
+        //					||  i+1 == ITEMPOSITION_NECKLACE || i+1 == ITEMPOSITION_WEAPONL)
+        //				nDef += m_pEquipment[i]->GetAddition();
+        //		}
+    }
+
+    return def;
+}
+
+int32_t
+Player :: getAdditionMAtk()
+{
+    int32_t atk = 0;
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+    //		CItem* pItem = m_pEquipment[i];
+    //		if(pItem && pItem->TestStatus(_ITEM_STATUS_MAGIC_ADD))
+    //		{
+    //			if ( i + 1 == ITEMPOSITION_SPRITE )
+    //			{
+    //				if ( pItem->GetProfessionRequired() == _SPRITE_ADDITION_MATK )
+    //				{
+    //					nAttack += pItem->GetAmountLimit() ;
+    //				}
+    //			}
+    //			else if(i+1 == ITEMPOSITION_WEAPONR || i+1 == ITEMPOSITION_RINGR ||  i+1 == ITEMPOSITION_SHOES)
+    //				nAttack += m_pEquipment[i]->GetAddition();
+    //		}
+    }
+
+    return atk;
+}
+
+int32_t
+Player :: getAdditionMDef()
+{
+    int32_t def = 0;
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        //		CItem* pItem = m_pEquipment[i];
+        //		if(pItem && pItem->TestStatus(_ITEM_STATUS_MAGIC_ADD))
+        //		{
+        //			if ( i + 1 == ITEMPOSITION_SPRITE )
+        //			{
+        //				if ( pItem->GetProfessionRequired() == _SPRITE_ADDITION_MDEF )
+        //				{
+        //					nDef += pItem->GetAmountLimit() ;
+        //				}
+        //			}
+        //			else if(i+1 == ITEMPOSITION_ARMOR || i+1 == ITEMPOSITION_HELMET
+        //						||  i+1 == ITEMPOSITION_NECKLACE || i+1 == ITEMPOSITION_WEAPONL)
+        //				nDef += m_pEquipment[i]->GetAddition();
+        //		}
+    }
+
+    return def;
+}
+
+uint8_t
+Player :: getDext()
+{
+    uint8_t dext = mDexterity;
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // nDex += m_pEquipment[i]->GetDodge();
+    }
+
+    return dext;
+}
+
+uint16_t
+Player :: getMaxLife()
+{
+    int32_t life = 30 + ((mLevel - 1) * 3);
+    switch (mProfession)
+    {
+        case PROFESSION_MAGE:
+            life += mHealth * 6;
+            break;
+        case PROFESSION_WARRIOR:
+            life += mHealth * 5;
+            break;
+        case PROFESSION_ARCHER:
+            life += mHealth * 7;
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // nLife += m_pEquipment[i]->GetLife();
+    }
+
+    return max(0, life);
+}
+
+uint16_t
+Player :: getMaxMana()
+{
+    int32_t mana = (mSoul * 5) + ((mLevel - 1) * 3);
+
+    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    {
+        // TODO get equipment
+        // nMaxMana += m_pEquipment[i]->GetMana();
+    }
+
+    return max(0, mana);
+}
+
+uint8_t
+Player :: getMaxXP()
+{
+    return 100;
+}
+
+uint8_t
+Player :: getMaxEnergy()
+{
+    int32_t energy = 100;
+    switch (mProfession)
+    {
+        case PROFESSION_MAGE:
+            energy += ((mLevel - 1) * 2);
+            break;
+        case PROFESSION_WARRIOR:
+            energy += (mLevel / 10);
+            break;
+        case PROFESSION_ARCHER:
+            energy += ((mLevel / 10) * 2);
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    return energy;
+}
+
+uint16_t
+Player :: getMaxWeight()
+{
+    int32_t weight = 0;
+    switch (mProfession)
+    {
+        case PROFESSION_WARRIOR:
+            weight += 30 + ((mLevel - 1) * 3);
+            break;
+        case PROFESSION_MAGE:
+        case PROFESSION_ARCHER:
+            weight += 20 + ((mLevel - 1) * 3);
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
+
+    return weight;
 }
 
 void

@@ -58,6 +58,8 @@ protected:
     int32_t mMinAtk; //!< Entity minimum attack
     int32_t mMaxAtk; //!< Entity maximum attack
     int32_t mDefense; //!< Entity defense
+    int32_t mMAtk; //!< Entity magic attack
+    int32_t mMDef; //!< Entity magic def
     uint8_t mDexterity; //!< Entity dexterity
     uint8_t mDodge; //!< Entity dodge
 
