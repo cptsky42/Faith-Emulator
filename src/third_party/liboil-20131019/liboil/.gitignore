@@ -1,9 +1,0 @@
-build_class_decls
-build_marshal
-build_prototypes
-build_prototypes_04
-build_prototypes_doc
-build_trampolines
-liboilarray.c.tmp
-liboil-stdint.h
-liboilarray.c
