@@ -295,6 +295,68 @@ Database :: getPlayerInfo(Client& aClient)
 }
 
 err_t
+Database :: savePlayer(Client& aClient)
+{
+    ASSERT_ERR(&aClient != nullptr, ERROR_INVALID_REFERENCE);
+    ASSERT_ERR(aClient.getPlayer() != nullptr, ERROR_INVALID_POINTER);
+
+    const char* cmd = "UPDATE `user` SET `mate` = :mate, `lookface` = :lookface, `hair` = :hair, "
+                      "`money` = :money, `money_saved` = :money_saved, "
+                      "`level` = :level, `exp` = :exp, "
+                      "`force` = :force, `dexterity` = :dexterity, `health` = :health, "
+                      "`soul` = :soul, `add_points` = :add_points, `life` = :life, `mana` = :mana, "
+                      "`pk` = :pk, `virtue` = :virtue, `metempsychosis` = :metempsychosis, "
+                      "`record_map` = :record_map, `record_x` = :record_x, `record_y` = :record_y "
+                      "WHERE `account_id` = :account_id";
+
+    err_t err = ERROR_SUCCESS;
+
+    Player& player = *aClient.getPlayer();
+
+    QSqlQuery query(mConnection);
+    query.prepare(cmd);
+    query.bindValue(":account_id", aClient.getAccountID());
+
+    query.bindValue(":mate", player.getMate());
+    query.bindValue(":lookface", player.getLook());
+    query.bindValue(":hair", player.getHair());
+
+    query.bindValue(":money", player.getMoney());
+    query.bindValue(":money_saved", 0); // TODO
+
+    query.bindValue(":level", player.getLevel());
+    query.bindValue(":exp", player.getExp());
+    query.bindValue(":metempsychosis", player.getMetempsychosis());
+
+    query.bindValue(":force", player.getForce());
+    query.bindValue(":dexterity", player.getDexterity());
+    query.bindValue(":health", player.getHealth());
+    query.bindValue(":soul", player.getSoul());
+    query.bindValue(":add_points", player.getAddPoints());
+
+    query.bindValue(":life", player.getCurHP());
+    query.bindValue(":mana", player.getCurMP());
+
+    query.bindValue(":pk", player.getPkPoints());
+    query.bindValue(":virtue", player.getVirtue());
+
+    query.bindValue(":record_map", player.getMapId());
+    query.bindValue(":record_x", player.getPosX());
+    query.bindValue(":record_y", player.getPosY());
+
+    LOG(DBG, "Executing SQL: %s", qPrintable(getSqlCommand(query)));
+
+    if (!query.exec())
+    {
+        LOG(ERROR, "Failed to execute the following cmd : \"%s\"\nError: %s",
+            cmd, qPrintable(query.lastError().text()));
+        err = ERROR_EXEC_FAILED;
+    }
+
+    return err;
+}
+
+err_t
 Database :: loadAllNPCs()
 {
     const char* cmd = "SELECT * FROM `npc`";

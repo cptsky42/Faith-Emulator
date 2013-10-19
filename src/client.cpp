@@ -10,6 +10,7 @@
 #include "networkclient.h"
 #include "msg.h"
 #include "player.h"
+#include "database.h"
 #include <stdlib.h>
 
 Client :: Client(NetworkClient* aSocket)
@@ -40,6 +41,33 @@ Client :: save()
     // TODO
     printf("Calling save for %p ... %s\n",
            this, mPlayer != nullptr ? mPlayer->getName() : "");
+
+    err_t err = ERROR_SUCCESS;
+    int tries = 0;
+
+    if (mPlayer != nullptr)
+    {
+        Database& db = Database::getInstance();
+
+        do
+        {
+            err = db.savePlayer(*this);
+            ++tries;
+
+            if (!IS_SUCCESS(err))
+            {
+                LOG(WARN, "Failed to save player %s for %p. Trying again.",
+                    mPlayer->getName(), this);
+            }
+        }
+        while (err != ERROR_SUCCESS && tries < 3);
+
+        if (!IS_SUCCESS(err))
+        {
+            LOG(CRIT, "Failed to save player %s for %p.",
+                mPlayer->getName(), this);
+        }
+    }
 }
 
 void

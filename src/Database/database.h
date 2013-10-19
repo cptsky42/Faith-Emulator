@@ -92,6 +92,17 @@ public:
     err_t getPlayerInfo(Client& aClient);
 
     /**
+     * Try to save the player information for the specified client.
+     *
+     * @param[in]   aClient     the client
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t savePlayer(Client& aClient);
+
+    /**
      * Load all NPCs in memory from the database.
      *
      * @retval ERROR_SUCCESS on success
