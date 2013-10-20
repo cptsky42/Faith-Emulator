@@ -48,7 +48,7 @@ public:
      * @retval ERROR_SUCCESS on success
      * @returns Error code otherwise
      */
-    err_t createMap(int32_t aUID, GameMap::Info** aInfo);
+    err_t createMap(uint32_t aUID, GameMap::Info** aInfo);
 
     /**
      * Create a dynamic map based on another map.
@@ -59,7 +59,7 @@ public:
      * @retval ERROR_SUCCESS on success
      * @returns Error code otherwise
      */
-    err_t linkMap(int32_t aUID, int32_t aRefUID);
+    err_t linkMap(uint32_t aUID, uint32_t aRefUID);
 
 public:
     /**
@@ -70,7 +70,7 @@ public:
      * @retval The game map object if found
      * @returns NULL otherwise
      */
-    GameMap* getMap(int32_t aUID) const;
+    GameMap* getMap(uint32_t aUID) const;
 
 private:
     /* constructor */
@@ -80,7 +80,7 @@ private:
     static MapManager* sInstance; //!< static instance of the singleton
 
 private:
-    std::map<int32_t, GameMap*> mGameMaps; //!< all game maps
+    std::map<uint32_t, GameMap*> mGameMaps; //!< all game maps
     std::map<uint16_t, MapData*> mMaps; //!< all map data based on the UID
     std::map<std::string, MapData*> mData; //!< all map data based on the file
 };

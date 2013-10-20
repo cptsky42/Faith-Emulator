@@ -21,11 +21,11 @@ ItemTask :: registerFunctions()
     return err;
 }
 
-ItemTask :: ItemTask(int32_t aUID, const char* aPath)
+ItemTask :: ItemTask(uint32_t aUID, const char* aPath)
     : Script(aUID, aPath)
 {
     char fct[128];
-    snprintf(fct, sizeof(fct), "processAction%d", aUID);
+    snprintf(fct, sizeof(fct), "processAction%u", aUID);
 
     mFct = fct;
 }

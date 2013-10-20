@@ -71,7 +71,7 @@ Script :: registerFunctions()
     return err;
 }
 
-Script :: Script(int32_t aUID, const char* aPath)
+Script :: Script(uint32_t aUID, const char* aPath)
     : mUID(aUID)
 {
     ASSERT(aPath != nullptr && aPath[0] != '\0');

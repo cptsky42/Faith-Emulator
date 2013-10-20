@@ -38,7 +38,7 @@ public:
      * @param[in]  aUID    the unique ID of the script
      * @param[in]  aPath   the path of the Lua script
      */
-    NpcTask(int32_t aUID, const char* aPath);
+    NpcTask(uint32_t aUID, const char* aPath);
 
     /* destructor */
     virtual ~NpcTask();

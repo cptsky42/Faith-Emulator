@@ -141,7 +141,7 @@ private:
     uint16_t mMercenaryExp;
     uint16_t mMercenaryLevel;
 
-    uint16_t mPrevMap;
+    uint32_t mPrevMap;
     uint16_t mPrevX;
     uint16_t mPrevY;
 

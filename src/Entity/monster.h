@@ -63,7 +63,7 @@ public:
 
 public:
     /* constructor */
-    Monster(int32_t aUID, Monster::Info& aInfo);
+    Monster(uint32_t aUID, Monster::Info& aInfo);
 
     /* destructor */
     virtual ~Monster();

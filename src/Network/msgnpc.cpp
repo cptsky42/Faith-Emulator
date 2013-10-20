@@ -15,7 +15,7 @@
 
 using namespace std;
 
-MsgNpc :: MsgNpc(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
+MsgNpc :: MsgNpc(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
     : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
     create(aId, aData, aType, aEvent);
@@ -37,7 +37,7 @@ MsgNpc :: ~MsgNpc()
 }
 
 void
-MsgNpc :: create(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
+MsgNpc :: create(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
 {
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_NPC;

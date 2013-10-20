@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.0.8
 -- http://www.phpmyadmin.net
 --
--- Client: localhost
--- Généré le: Lun 14 Octobre 2013 à 13:13
--- Version du serveur: 5.1.70
--- Version de PHP: 5.3.27
+-- Client: localhost:3306
+-- Généré le: Dim 20 Octobre 2013 à 17:46
+-- Version du serveur: 5.6.14
+-- Version de PHP: 5.4.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données: `xyserver`
 --
-CREATE DATABASE IF NOT EXISTS `xyserver` DEFAULT CHARACTER SET latin1 COLLATE latin1_bin;
-USE `xyserver`;
 
 -- --------------------------------------------------------
 
@@ -6361,7 +6359,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `medal_select` int(4) unsigned DEFAULT '0',
   `metempsychosis` tinyint(1) unsigned DEFAULT '0',
   `syndicate_id` smallint(4) unsigned zerofill DEFAULT '0000',
-  `record_map` smallint(4) unsigned DEFAULT '1000',
+  `record_map` int(4) unsigned DEFAULT '1000',
   `record_x` smallint(4) unsigned zerofill DEFAULT '0400',
   `record_y` smallint(4) unsigned zerofill DEFAULT '0400',
   `last_login` int(8) unsigned DEFAULT '20130101',
@@ -6397,3 +6395,7 @@ CREATE TABLE IF NOT EXISTS `wanted` (
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

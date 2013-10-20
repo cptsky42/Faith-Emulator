@@ -29,11 +29,11 @@ NpcTask :: registerFunctions()
     return err;
 }
 
-NpcTask :: NpcTask(int32_t aUID, const char* aPath)
+NpcTask :: NpcTask(uint32_t aUID, const char* aPath)
     : Script(aUID, aPath)
 {
     char fct[128];
-    snprintf(fct, sizeof(fct), "processTask%d", aUID);
+    snprintf(fct, sizeof(fct), "processTask%u", aUID);
 
     mFct = fct;
 }

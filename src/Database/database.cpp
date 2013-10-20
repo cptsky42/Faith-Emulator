@@ -255,7 +255,7 @@ Database :: getPlayerInfo(Client& aClient)
             player->mPkPoints = (int16_t)query.value(17).toInt();
             player->mVirtue = (int32_t)query.value(18).toInt();
 
-            player->mMapId = (uint16_t)query.value(20).toInt();
+            player->mMapId = (uint32_t)query.value(20).toInt();
             player->mPosX = (uint16_t)query.value(21).toInt();
             player->mPosY = (uint16_t)query.value(22).toInt();
 
@@ -378,7 +378,7 @@ Database :: loadAllNPCs()
                            nullptr,
                            (uint8_t)query.value(2).toInt(),
                            (int16_t)query.value(3).toInt(),
-                           (int16_t)query.value(4).toInt(),
+                           (uint32_t)query.value(4).toInt(),
                            (uint16_t)query.value(5).toInt(),
                            (uint16_t)query.value(6).toInt(),
                            (uint8_t)query.value(9).toInt(),
@@ -424,7 +424,7 @@ Database :: loadAllMaps()
         while (ERROR_SUCCESS == err && query.next())
         {
             GameMap::Info* info = new GameMap::Info();
-            int32_t uid = query.value(0).toInt();
+            uint32_t uid = (uint32_t)query.value(0).toInt();
 
             info->OwnerUID = 0;
             info->DocID = (uint16_t)query.value(1).toInt();
@@ -432,7 +432,7 @@ Database :: loadAllMaps()
             // TODO: weather
             info->PortalX = (uint16_t)query.value(4).toInt();
             info->PortalY = (uint16_t)query.value(5).toInt();
-            info->RebornMap = (int32_t)query.value(6).toInt();
+            info->RebornMap = (uint32_t)query.value(6).toInt();
             info->RebornPortal = (int32_t)query.value(7).toInt();
             info->Light = (uint32_t)query.value(8).toInt();
 

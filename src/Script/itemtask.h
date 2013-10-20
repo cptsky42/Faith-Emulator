@@ -38,7 +38,7 @@ public:
      * @param[in]  aUID    the unique ID of the script
      * @param[in]  aPath   the path of the Lua script
      */
-    ItemTask(int32_t aUID, const char* aPath);
+    ItemTask(uint32_t aUID, const char* aPath);
 
     /* destructor */
     virtual ~ItemTask();

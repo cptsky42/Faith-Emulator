@@ -13,7 +13,7 @@
 
 using namespace std;
 
-GameMap :: GameMap(int32_t aUID, Info** aInfo, MapData& aData)
+GameMap :: GameMap(uint32_t aUID, Info** aInfo, MapData& aData)
     : mUID(aUID), mInfo(*aInfo), mData(aData)
 {
     ASSERT(aInfo != nullptr && *aInfo != nullptr);

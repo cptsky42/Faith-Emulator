@@ -57,7 +57,7 @@ public:
 
 public:
     /** Get the unique ID of the script. */
-    int32_t getUID() const { return mUID; }
+    uint32_t getUID() const { return mUID; }
 
 protected:
     // Getters / Setters Lua methods
@@ -81,10 +81,10 @@ protected:
 
 protected:
     /* constructor */
-    Script(int32_t aUID, const char* aPath);
+    Script(uint32_t aUID, const char* aPath);
 
 protected:
-    const int32_t mUID; //!< The unique ID of the script owner.
+    const uint32_t mUID; //!< The unique ID of the script owner.
 
 
 

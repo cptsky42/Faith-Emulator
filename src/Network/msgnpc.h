@@ -31,7 +31,7 @@ public:
     {
         /** Generic header of all msgs */
         Msg::Header Header;
-        int32_t Id;
+        uint32_t Id;
 
         union
         {
@@ -49,7 +49,7 @@ public:
     #pragma pack(pop)
 
 public:
-    MsgNpc(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent);
+    MsgNpc(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent);
 
     /**
      * Create a message object from the specified buffer.
@@ -78,7 +78,7 @@ public:
 
 private:
     /* internal filling of the packet */
-    void create(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent);
+    void create(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;

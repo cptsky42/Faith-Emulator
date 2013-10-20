@@ -103,7 +103,8 @@ SOURCES += \
     src/Script/itemtask.cpp \
     src/Network/msgallot.cpp \
     src/Network/msgtick.cpp \
-    src/third_party/minilzo-2.06/minilzo.c
+    src/third_party/minilzo-2.06/minilzo.c \
+    src/Network/msgmapinfo.cpp
 
 HEADERS += \
     src/server.h \
@@ -187,7 +188,8 @@ HEADERS += \
     src/Network/msgtick.h \
     src/third_party/minilzo-2.06/minilzo.h \
     src/third_party/minilzo-2.06/lzodefs.h \
-    src/third_party/minilzo-2.06/lzoconf.h
+    src/third_party/minilzo-2.06/lzoconf.h \
+    src/Network/msgmapinfo.h
 
 INCLUDEPATH += \
     src \

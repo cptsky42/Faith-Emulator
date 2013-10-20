@@ -10,7 +10,7 @@
 #include "player.h"
 #include "msgplayer.h"
 
-Monster :: Monster(int32_t aUID, Monster::Info& aInfo)
+Monster :: Monster(uint32_t aUID, Monster::Info& aInfo)
     : AdvancedEntity(aUID)
 {
     mId = aInfo.Id;

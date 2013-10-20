@@ -18,7 +18,7 @@ public:
     struct Info
     {
     public:
-        int32_t Id;
+        uint32_t Id;
         std::string Name;
         uint8_t ReqProf;
         uint8_t ReqWeaponSkill;
@@ -31,7 +31,7 @@ public:
         uint8_t Monopoly;
         uint16_t Weight;
         uint32_t Price;
-        int32_t Task; //TODO: ItemTask*
+        uint32_t Task; //TODO: ItemTask*
         uint16_t MaxAtk;
         uint16_t MinAtk;
         int16_t Defense;
@@ -54,11 +54,11 @@ public:
     };
 
 public:
-    Item(int32_t aUID, Item::Info& aInfo);
+    Item(uint32_t aUID, Item::Info& aInfo);
     ~Item();
 
 private:
-    const int32_t mUID;
+    const uint32_t mUID;
     Item::Info& mInfo;
 };
 

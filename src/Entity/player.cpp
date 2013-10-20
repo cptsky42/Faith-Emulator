@@ -487,9 +487,6 @@ Player :: sendShow(const Player& aPlayer) const
 void
 Player :: timerElapsed(time_t aTime)
 {
-    if (mMapId <= 0)
-        return;
-
     int32_t now = timeGetTime();
 
     //////////////////////////////////////////////////////////////

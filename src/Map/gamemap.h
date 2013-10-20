@@ -79,13 +79,13 @@ public:
         /** The type (bitfield) of the map. */
         uint32_t Type;
         /** The owner UID of the map. */
-        int32_t OwnerUID;
+        uint32_t OwnerUID;
         /** The main portal X-coord. It is used for reborn. */
         uint16_t PortalX;
         /** The main portal Y-coord. It is used for reborn. */
         uint16_t PortalY;
         /** The reborn map UID. */
-        int32_t RebornMap;
+        uint32_t RebornMap;
         /** The reborn portal UID. Zero corresponds to the main portal. */
         int32_t RebornPortal;
         /** The light in ARGB code. */
@@ -94,11 +94,11 @@ public:
 
 public:
     /** The unique ID of the prison map. */
-    static const int32_t PRISON_MAP_UID = 10000; // TODO
+    static const uint32_t PRISON_MAP_UID = 10000; // TODO
     /** The unique ID of the newbie map. */
-    static const int32_t NEWBIE_MAP_UID = 10001; // TODO
+    static const uint32_t NEWBIE_MAP_UID = 10001; // TODO
     /** The first valid unique ID for dynamic maps. */
-    static const int32_t DYNAMIC_MAP_UID = 1000000;
+    static const uint32_t DYNAMIC_MAP_UID = 1000000;
 
 public:
     static inline int distance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
@@ -110,9 +110,9 @@ public:
 
 public:
     /** Get the map's UID. */
-    int32_t getUID() const { return mUID; }
+    uint32_t getUID() const { return mUID; }
     /** Get the map's owner's UID. */
-    int32_t getOwnerUID() const { return mInfo->OwnerUID; }
+    uint32_t getOwnerUID() const { return mInfo->OwnerUID; }
 
     /** Get the map's width in term of cells count. */
     uint16_t getWidth() const { ASSERT(&mData != nullptr); return mData.getWidth(); }
@@ -202,10 +202,10 @@ public:
 
 private:
     /* constructor */
-    GameMap(int32_t aUID, Info** aInfo, MapData& aData);
+    GameMap(uint32_t aUID, Info** aInfo, MapData& aData);
 
 private:
-    const int32_t mUID; //!< The map's unique ID.
+    const uint32_t mUID; //!< The map's unique ID.
     Info* mInfo; //!< The map's information.
     MapData& mData; //!< The map's data.
 

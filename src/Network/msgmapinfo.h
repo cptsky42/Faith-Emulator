@@ -6,48 +6,39 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_MSG_ITEMINFO_H_
-#define _FAITH_EMULATOR_MSG_ITEMINFO_H_
+#ifndef _FAITH_EMULATOR_MSG_MAPINFO_H_
+#define _FAITH_EMULATOR_MSG_MAPINFO_H_
 
 #include "common.h"
 #include "msg.h"
 
-class MsgItemInfo : public Msg
-{
-public:
-    enum Action
-    {
-        ACTION_NONE = 0,
-        ACTION_ADD_ITEM = 1,
-        ACTION_TRADE = 2,
-        ACTION_UPDATE = 3,
-        ACTION_OTHER_PLAYER_EQUIP = 4, // uid is user uid
-        ACTION_AUCTION = 5
-    };
+class GameMap;
 
+/**
+ * Msg sent to the client by the MsgServer to fill all the map variables.
+ */
+class MsgMapInfo : public Msg
+{
 public:
     #pragma pack(push, 1)
     typedef struct
     {
         /** Generic header of all msgs */
         Msg::Header Header;
+        /** The unique Id of the player */
         uint32_t UniqId;
+        uint32_t DocId;
         uint32_t Type;
-        uint16_t Amount;
-        uint16_t AmountLimit;
-        uint8_t Action;
-        uint8_t Ident;
-        uint8_t Position;
-        uint8_t Gem1;
-        uint8_t Gem2;
-        uint8_t Magic1; // Attr
-        uint8_t Magic2; // Unknown
-        uint8_t Magic3; // Plus
     }MsgInfo;
     #pragma pack(pop)
 
 public:
-    MsgItemInfo(void* aItem, Action aAction); // FIXME!
+    /**
+     * Create a new MsgMapInfo packet for the specified map.
+     *
+     * @param[in]   aMap     a reference to the map object
+     */
+    MsgMapInfo(const GameMap& aMap);
 
     /**
      * Create a message object from the specified buffer.
@@ -61,14 +52,14 @@ public:
      *                            the pointer will be set to null
      * @param[in]     aLen        the length in bytes of the buffer
      */
-    MsgItemInfo(uint8_t** aBuf, size_t aLen);
+    MsgMapInfo(uint8_t** aBuf, size_t aLen);
 
     /* destructor */
-    virtual ~MsgItemInfo();
+    virtual ~MsgMapInfo();
 
 private:
     /* internal filling of the packet */
-    void create(void* aItem, Action aAction); // FIXME!
+    void create(const GameMap& aMap);
 
     /* internal swapping of the integers for neutral-endian support */
     virtual void swap(uint8_t* aBuf) const;
@@ -77,4 +68,4 @@ private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer
 };
 
-#endif // _FAITH_EMULATOR_MSG_ITEMINFO_H_
+#endif // _FAITH_EMULATOR_MSG_MAPINFO_H_

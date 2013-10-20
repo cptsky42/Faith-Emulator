@@ -13,9 +13,9 @@
 #include "player.h"
 #include "msgnpcinfo.h"
 
-Npc :: Npc(int32_t aUID, const char* aName,
+Npc :: Npc(uint32_t aUID, const char* aName,
            uint8_t aType, int16_t aLook,
-           int16_t aMapId, uint16_t aPosX, uint16_t aPosY,
+           uint32_t aMapId, uint16_t aPosX, uint16_t aPosY,
            uint8_t aBase, uint8_t aSort)
     : Entity(aUID)
 {
