@@ -126,6 +126,8 @@ public:
 
     /** Get the map's document ID which corresponds to the UID of the MapData. */
     uint16_t getDocID() const { return mInfo->DocID; }
+    /** Get the map's type flags. */
+    uint32_t getType() const { return mInfo->Type; }
     /** Get the map's light in ARGB code. */
     uint32_t getLight() const { return mInfo->Light; }
 
