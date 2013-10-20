@@ -183,7 +183,7 @@ public:
 
 
 public:
-    void sendMapInfo(Client* aClient) const;
+    void sendMapInfo(const Player& aPlayer) const;
     void sendBlockInfo(const Player& aPlayer) const;
 
     void updateBroadcastSet(const Entity& aEntity) const;

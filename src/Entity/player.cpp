@@ -422,7 +422,7 @@ Player :: enterMap()
 
         map->enterRoom(*this);
         //		pMap->SendRegionInfo(this);
-        //		pMap->SendMapInfo(this);
+        map->sendMapInfo(*this);
         updateBroadcastSet(true);
 
         //	if (pMap && pMap->IsBoothEnable())

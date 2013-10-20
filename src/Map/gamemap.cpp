@@ -9,6 +9,7 @@
 #include "gamemap.h"
 #include "entity.h"
 #include "player.h"
+#include "msgmapinfo.h"
 #include <vector>
 
 using namespace std;
@@ -39,6 +40,18 @@ GameMap :: getFloorAlt(uint16_t aPosX, uint16_t aPosY) const
     return cell.Altitude;
 }
 
+void
+GameMap :: sendMapInfo(const Player& aPlayer) const
+{
+    ASSERT(&aPlayer != nullptr);
+
+    // the player must be on the map...
+    if (mEntities.end() != mEntities.find(aPlayer.getUID()))
+    {
+        MsgMapInfo msg(*this);
+        aPlayer.send(&msg);
+    }
+}
 
 void
 GameMap :: sendBlockInfo(const Player& aPlayer) const

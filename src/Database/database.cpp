@@ -478,7 +478,7 @@ Database :: loadAllItems()
             Item::Info* item = new Item::Info();
             ASSERT(item != nullptr);
 
-            item->Id = (int32_t)query.value(0).toInt();
+            item->Id = (uint32_t)query.value(0).toInt();
             item->Name = query.value(1).toString().toStdString();
             item->ReqForce = (uint8_t)query.value(2).toInt();
             item->ReqWeaponSkill = (uint8_t)query.value(3).toInt();
@@ -491,7 +491,7 @@ Database :: loadAllItems()
             item->Monopoly = (uint8_t)query.value(10).toInt();
             item->Weight = (uint16_t)query.value(11).toInt();
             item->Price = (uint32_t)query.value(12).toInt();
-            item->Task = (int32_t)query.value(13).toInt();
+            item->Task = (uint32_t)query.value(13).toInt();
             item->MaxAtk = (uint16_t)query.value(14).toInt();
             item->MinAtk = (uint16_t)query.value(15).toInt();
             item->Defense = (int16_t)query.value(16).toInt();
