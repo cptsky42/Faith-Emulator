@@ -151,9 +151,13 @@ MsgTalk :: process(Client* aClient)
                 MsgUserAttrib msg(&player, param, (MsgUserAttrib::UserAttrType)type);
                 client.send(&msg);
             }
+            else if (strcmp(words, "/break") == 0)
+            {
+                client.disconnect();
+            }
             else
             {
-                player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");
+                player.sendSysMsg("Unknown command or invalid syntax.");
             }
         }
         return;

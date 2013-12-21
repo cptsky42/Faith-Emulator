@@ -11,6 +11,7 @@
 #include "msg.h"
 #include "player.h"
 #include "database.h"
+#include "world.h"
 #include <stdlib.h>
 
 Client :: Client(NetworkClient* aSocket)
@@ -32,7 +33,14 @@ Client :: Client(NetworkClient* aSocket)
 Client :: ~Client()
 {
     mSocket = nullptr; // Qt handle the memory
-    SAFE_DELETE(mPlayer);
+
+    if (mPlayer != nullptr)
+    {
+        World& world = World::getInstance();
+        world.removePlayer(*mPlayer);
+
+        SAFE_DELETE(mPlayer);
+    }
 }
 
 void

@@ -10,6 +10,7 @@
 #include "client.h"
 #include "player.h"
 #include "database.h"
+#include "world.h"
 #include "msgtalk.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
@@ -85,7 +86,6 @@ MsgConnect :: process(Client* aClient)
         }
         case Client::NORMAL: // Sent to the MsgServer
         {
-            // TODO: load character from DB()
             // TODO: if online, disconnect
 
             TqCipher& cipher = client.getCipher();
@@ -107,6 +107,17 @@ MsgConnect :: process(Client* aClient)
             else
             {
                 Player& player = *client.getPlayer();
+                Player* other = nullptr;
+                World& world = World::getInstance();
+
+                // TODO: valid sequence with client ? to avoid rollback..
+                if (world.queryPlayer(&other, player.getUID()))
+                {
+                    world.removePlayer(*other);
+                    other->disconnect();
+                }
+
+                world.addPlayer(player);
 
                 msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK, MsgTalk::CHANNEL_ENTRANCE);
                 client.send(msg);

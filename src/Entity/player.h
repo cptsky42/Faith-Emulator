@@ -62,6 +62,8 @@ public:
     inline void send(Msg* aMsg) const { mClient.send(aMsg); }
     inline void send(uint8_t* aBuf, size_t aLen) const { mClient.send(aBuf, aLen); }
 
+    inline void disconnect() { mClient.disconnect(); }
+
 public:
     const char* getMate() const { return mMate.c_str(); }
 

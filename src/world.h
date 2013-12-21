@@ -47,6 +47,26 @@ public:
 
 public:
     /**
+     * Add a player to the world.
+     *
+     * @param[in]   aPlayer    a reference to the player to add
+     *
+     * @retval TRUE if the player is added
+     * @returns FALSE otherwise
+     */
+    bool addPlayer(Player& aPlayer);
+
+    /**
+     * Remove a player from the world.
+     *
+     * @param[in]   aPlayer    a reference to the player to remove
+     *
+     * @retval TRUE if the player is removed
+     * @returns FALSE otherwise
+     */
+    bool removePlayer(Player& aPlayer);
+
+    /**
      * Search an entity based on its UID. If the entity is not found,
      * the output entity will be null.
      *
@@ -56,7 +76,32 @@ public:
      * @retval TRUE if the entity is found
      * @returns FALSE otherwise
      */
-    bool queryEntity(Entity** aOutEntity, int32_t aUID) const;
+    bool queryEntity(Entity** aOutEntity, uint32_t aUID) const;
+
+    /**
+     * Search a player based on its UID. If the player is not found,
+     * the output player will be null.
+     *
+     * @param[in,out]   aOutPlayer   a pointer to the object receiving the player
+     * @param[in]       aUID         the UID of the player
+     *
+     * @retval TRUE if the player is found
+     * @returns FALSE otherwise
+     */
+    bool queryPlayer(Player** aOutPlayer, uint32_t aUID) const;
+
+    /**
+     * Search a player based on its name. If the player is not found,
+     * the output player will be null.
+     *
+     * @param[in,out]   aOutPlayer   a pointer to the object receiving the player
+     * @param[in]       aName        the name of the player
+     *
+     * @retval TRUE if the player is found
+     * @returns FALSE otherwise
+     */
+    bool queryPlayer(Player** aOutPlayer, const char* aName) const;
+    bool queryPlayer(Player** aOutPlayer, const std::string& aName) const;
 
     /**
      * Search a NPC based on its UID. If the NPC is not found,
@@ -68,7 +113,7 @@ public:
      * @retval TRUE if the NPC is found
      * @returns FALSE otherwise
      */
-    bool queryNpc(Npc** aOutNpc, int32_t aUID) const;
+    bool queryNpc(Npc** aOutNpc, uint32_t aUID) const;
 
 private:
     /* constructor */
@@ -78,16 +123,18 @@ private:
     static World* sInstance; //!< static instance of the singleton
 
 private: // aliases
-    std::map<int32_t, Player*>& AllPlayers;
+    std::map<uint32_t, Player*>& AllPlayers;
+    std::map<std::string, Player*>& AllPlayerNames;
 
-    std::map<int32_t, Npc*>& AllNPCs;
-    std::map<int32_t, NpcTask*>& AllTasks;
+    std::map<uint32_t, Npc*>& AllNPCs;
+    std::map<uint32_t, NpcTask*>& AllTasks;
 
 private:
-    std::map<int32_t, Player*> mAllPlayers; //!< internal map
+    std::map<uint32_t, Player*> mAllPlayers; //!< internal map
+    std::map<std::string, Player*> mAllPlayerNames; //!< internal map
 
-    std::map<int32_t, Npc*> mAllNPCs; //!< internal map
-    std::map<int32_t, NpcTask*> mAllTasks; //!< internal map
+    std::map<uint32_t, Npc*> mAllNPCs; //!< internal map
+    std::map<uint32_t, NpcTask*> mAllTasks; //!< internal map
 
     Worker* mWorker; //!< separate thread for timer
 };

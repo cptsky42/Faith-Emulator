@@ -69,7 +69,8 @@ World :: getInstance()
 }
 
 World :: World()
-    : AllPlayers(mAllPlayers), AllNPCs(mAllNPCs), AllTasks(mAllTasks)
+    : AllPlayers(mAllPlayers), AllPlayerNames(mAllPlayerNames),
+      AllNPCs(mAllNPCs), AllTasks(mAllTasks)
 {
     mWorker = new Worker();
     mWorker->start(QThread::LowPriority);
@@ -83,8 +84,9 @@ World :: ~World()
 
     // clients will free the players...
     mAllPlayers.clear();
+    mAllPlayerNames.clear();
 
-    for (map<int32_t, Npc*>::iterator
+    for (map<uint32_t, Npc*>::iterator
             it = mAllNPCs.begin(), end = mAllNPCs.end();
          it != end; ++it)
     {
@@ -93,7 +95,7 @@ World :: ~World()
     }
     mAllNPCs.clear();
 
-    for (map<int32_t, NpcTask*>::iterator
+    for (map<uint32_t, NpcTask*>::iterator
             it = mAllTasks.begin(), end = mAllTasks.end();
          it != end; ++it)
     {
@@ -104,7 +106,132 @@ World :: ~World()
 }
 
 bool
-World :: queryNpc(Npc** aOutNpc, int32_t aUID) const
+World :: addPlayer(Player& aPlayer)
+{
+    ASSERT_ERR(&aPlayer != nullptr, false);
+
+    bool success = false;
+
+    string name = aPlayer.getName();
+
+    // TODO thread-safe
+    if (AllPlayers.end() == AllPlayers.find(aPlayer.getUID()) &&
+        AllPlayerNames.end() == AllPlayerNames.find(name))
+    {
+        AllPlayers[aPlayer.getUID()] = &aPlayer;
+        AllPlayerNames[name] = &aPlayer;
+
+        success = true;
+    }
+
+    return success;
+}
+
+bool
+World :: removePlayer(Player& aPlayer)
+{
+    ASSERT_ERR(&aPlayer != nullptr, false);
+
+    bool success = false;
+
+    string name = aPlayer.getName();
+
+    // TODO thread-safe
+    map<uint32_t, Player*>::iterator first_it =
+            AllPlayers.find(aPlayer.getUID());
+    map<string, Player*>::iterator second_it =
+            AllPlayerNames.find(name);
+
+    if (AllPlayers.end() != first_it &&
+        AllPlayerNames.end() != second_it)
+    {
+        AllPlayers.erase(first_it);
+        AllPlayerNames.erase(second_it);
+
+        success = true;
+    }
+
+    return success;
+}
+
+bool
+World :: queryEntity(Entity** aOutEntity, uint32_t aUID) const
+{
+    ASSERT_ERR(aOutEntity != nullptr && *aOutEntity == nullptr, false);
+
+    bool found = false;
+
+    if (Entity::isPlayer(aUID))
+    {
+        Player* player = nullptr;
+        found = queryPlayer(&player, aUID);
+        *aOutEntity = player;
+    }
+    else if (Entity::isNpc(aUID))
+    {
+        Npc* npc = nullptr;
+        found = queryNpc(&npc, aUID);
+        *aOutEntity = npc;
+    }
+    else
+    {
+        // not implemented yet...
+        ASSERT_ERR(false, false);
+    }
+
+    return found;
+}
+
+bool
+World :: queryPlayer(Player** aOutPlayer, uint32_t aUID) const
+{
+    ASSERT_ERR(aOutPlayer != nullptr && *aOutPlayer == nullptr, false);
+    ASSERT_ERR(Entity::isPlayer(aUID), false);
+
+    // TODO: Thread-safe ?
+
+    bool found = false;
+    map<uint32_t, Player*>::const_iterator it;
+
+    if ((it = mAllPlayers.find(aUID)) != mAllPlayers.end())
+    {
+        *aOutPlayer = it->second;
+        found = true;
+    }
+
+    return found;
+}
+
+bool
+World :: queryPlayer(Player** aOutPlayer, const char* aName) const
+{
+    ASSERT_ERR(aName != nullptr && aName[0] != '\0', false);
+
+    string name = aName;
+    return queryPlayer(aOutPlayer, name);
+}
+bool
+World :: queryPlayer(Player** aOutPlayer, const std::string& aName) const
+{
+    ASSERT_ERR(aOutPlayer != nullptr && *aOutPlayer == nullptr, false);
+    ASSERT_ERR(!aName.empty(), false);
+
+    // TODO: Thread-safe ?
+
+    bool found = false;
+    map<string, Player*>::const_iterator it;
+
+    if ((it = mAllPlayerNames.find(aName)) != mAllPlayerNames.end())
+    {
+        *aOutPlayer = it->second;
+        found = true;
+    }
+
+    return found;
+}
+
+bool
+World :: queryNpc(Npc** aOutNpc, uint32_t aUID) const
 {
     ASSERT_ERR(aOutNpc != nullptr && *aOutNpc == nullptr, false);
     ASSERT_ERR(Entity::isNpc(aUID), false);
@@ -112,7 +239,7 @@ World :: queryNpc(Npc** aOutNpc, int32_t aUID) const
     // TODO: Thread-safe ?
 
     bool found = false;
-    map<int32_t, Npc*>::const_iterator it;
+    map<uint32_t, Npc*>::const_iterator it;
 
     if ((it = mAllNPCs.find(aUID)) != mAllNPCs.end())
     {
