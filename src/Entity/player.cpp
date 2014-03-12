@@ -885,7 +885,7 @@ Player :: processTick(int32_t aClientTime, uint32_t aMsgCount)
         mMsgCount = aMsgCount;
     }
 
-    if (mMsgCount > aMsgCount || mMsgCount + 16 < aMsgCount) // cheater found !
+    if (mMsgCount > aMsgCount /*|| mMsgCount + 16 < aMsgCount*/) // cheater found !
     {
         LOG(WARN, "[CHEAT] Msg counter of %s (client=%p) is too off. (Should be around %u, got %u).",
             mName.c_str(), &mClient, mMsgCount, aMsgCount);
