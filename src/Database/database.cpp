@@ -849,9 +849,6 @@ Database :: loadAllMonsters()
             info->DropMoney = (uint32_t)query.value(Monster::SQLDATA_DROP_MONEY).toUInt();
             info->DropHP = (uint32_t)query.value(Monster::SQLDATA_DROP_HP).toUInt();
             info->DropMP = (uint32_t)query.value(Monster::SQLDATA_DROP_MP).toUInt();
-            info->ExtraBattleLvl = (uint16_t)query.value(Monster::SQLDATA_EXTRA_BATTLE_LVL).toUInt();
-            info->ExtraExp = (uint16_t)query.value(Monster::SQLDATA_EXTRA_EXP).toUInt();
-            info->ExtraDmg = (uint16_t)query.value(Monster::SQLDATA_EXTRA_DMG).toUInt();
 
             ASSERT(info != nullptr);
             ASSERT(mAllMonsters.find(info->Id) == mAllMonsters.end());

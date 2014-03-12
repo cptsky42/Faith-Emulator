@@ -92,12 +92,6 @@ public:
         uint32_t DropHP;
         /** The MP dropped by the monster. */
         uint32_t DropMP;
-        /** The battle level of the monster. */
-        uint16_t ExtraBattleLvl;
-        /** The extra exp of the monster. */
-        uint16_t ExtraExp;
-        /** The extra damage of the monster. */
-        uint16_t ExtraDmg;
     };
 
     /** Position of the SQL data in the result set. */
@@ -134,10 +128,7 @@ public:
         SQLDATA_DROP_SHOES,
         SQLDATA_DROP_MONEY,
         SQLDATA_DROP_HP,
-        SQLDATA_DROP_MP,
-        SQLDATA_EXTRA_BATTLE_LVL,
-        SQLDATA_EXTRA_EXP,
-        SQLDATA_EXTRA_DMG
+        SQLDATA_DROP_MP
     };
 
 public:

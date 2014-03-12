@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost:3306
--- Généré le: Dim 20 Octobre 2013 à 17:46
--- Version du serveur: 5.6.14
--- Version de PHP: 5.4.17
+-- Généré le: Mer 12 Mars 2014 à 18:11
+-- Version du serveur: 5.1.72
+-- Version de PHP: 5.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -64,68 +64,6 @@ CREATE TABLE IF NOT EXISTS `config` (
   `data5` int(4) NOT NULL,
   `desc` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `cq_deluser`
---
-
-CREATE TABLE IF NOT EXISTS `cq_deluser` (
-  `name` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
-  `mate` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
-  `lookface` int(4) unsigned NOT NULL DEFAULT '0',
-  `hair` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `money` int(4) unsigned NOT NULL DEFAULT '0',
-  `money_saved` int(4) unsigned NOT NULL DEFAULT '0',
-  `coin_money` int(3) unsigned NOT NULL DEFAULT '0',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `exp` bigint(4) NOT NULL DEFAULT '0',
-  `strength` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `physique` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `Speed` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `health` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `soul` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `additional_point` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `auto_allot` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `life` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `mana` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `profession` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `deed` int(4) NOT NULL DEFAULT '0',
-  `pk` smallint(2) NOT NULL DEFAULT '0',
-  `nobility` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `medal` int(4) unsigned NOT NULL DEFAULT '0',
-  `medal_select` int(4) unsigned NOT NULL DEFAULT '0',
-  `metempsychosis` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `syndicate_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `recordmap_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `recordx` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `recordy` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `account_id` int(4) unsigned NOT NULL DEFAULT '0',
-  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
-  `last_login` int(8) unsigned NOT NULL DEFAULT '0',
-  `account` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'ÎÞ',
-  `password` varchar(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'ÎÞ',
-  `task_mask` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `time_of_life` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `virtue` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `home_id` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `lock_key` int(10) unsigned NOT NULL DEFAULT '0',
-  `emoney` int(4) unsigned NOT NULL DEFAULT '0',
-  `chk_sum` int(4) unsigned NOT NULL DEFAULT '0',
-  `god_status` int(4) unsigned NOT NULL DEFAULT '0',
-  `exp_ball_usage` smallint(2) unsigned NOT NULL DEFAULT '0',
-  `online_time` int(4) unsigned NOT NULL DEFAULT '0',
-  `auto_exercise` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `last_logout` int(4) unsigned NOT NULL DEFAULT '0',
-  `big_prize_fails` int(4) unsigned NOT NULL DEFAULT '0',
-  `small_prize_fails` int(4) unsigned NOT NULL DEFAULT '0',
-  `mete_lev` int(4) NOT NULL DEFAULT '0',
-  `current_layout_type` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `index_name` (`name`),
-  KEY `index_account` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -316,22 +254,6 @@ CREATE TABLE IF NOT EXISTS `cq_item` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cq_leaveword`
---
-
-CREATE TABLE IF NOT EXISTS `cq_leaveword` (
-  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `user_name` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????a',
-  `send_name` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????a',
-  `time` char(15) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '00000000000000',
-  `words` char(255) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '????¡§1??',
-  PRIMARY KEY (`id`),
-  KEY `user_name` (`user_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `cq_magic`
 --
 
@@ -389,38 +311,6 @@ CREATE TABLE IF NOT EXISTS `cq_magictype` (
   `delay_ms` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
   `use_item_num` int(4) unsigned zerofill NOT NULL DEFAULT '0001',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `cq_passway`
---
-
-CREATE TABLE IF NOT EXISTS `cq_passway` (
-  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `passway_idx` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `passway_mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `passway_mapportal` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  PRIMARY KEY (`id`),
-  KEY `mapid` (`mapid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `cq_portal`
---
-
-CREATE TABLE IF NOT EXISTS `cq_portal` (
-  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `portal_idx` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `portal_x` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  `portal_y` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
-  PRIMARY KEY (`id`),
-  KEY `mapid` (`mapid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -5767,11 +5657,27 @@ INSERT INTO `itemtype` (`id`, `name`, `req_profession`, `req_weaponskill`, `req_
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `leaveword`
+--
+
+CREATE TABLE IF NOT EXISTS `leaveword` (
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `speaker` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'Unknown',
+  `hearer` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'Unknown',
+  `time` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT '00000000000000',
+  `words` char(255) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL DEFAULT 'N/A',
+  PRIMARY KEY (`id`),
+  KEY `user_name` (`speaker`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `levelexp`
 --
 
 CREATE TABLE IF NOT EXISTS `levelexp` (
-  `level` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `level` tinyint(3) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `exp` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`level`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=120 ;
@@ -5781,105 +5687,105 @@ CREATE TABLE IF NOT EXISTS `levelexp` (
 --
 
 INSERT INTO `levelexp` (`level`, `exp`) VALUES
-(1, 447),
-(2, 1169),
-(3, 2818),
-(4, 4883),
-(5, 8730),
-(6, 14142),
-(7, 21219),
-(8, 30247),
-(9, 41551),
-(10, 60421),
-(11, 68444),
-(12, 79229),
-(13, 93355),
-(14, 105804),
-(15, 119094),
-(16, 159649),
-(17, 177503),
-(18, 196087),
-(19, 221279),
-(20, 252618),
-(21, 275496),
-(22, 304770),
-(23, 347994),
-(24, 387397),
-(25, 527087),
-(26, 580615),
-(27, 636431),
-(28, 694725),
-(29, 765100),
-(30, 850205),
-(31, 914523),
-(32, 993612),
-(33, 1089494),
-(34, 1186580),
-(35, 1287167),
-(36, 1391057),
-(37, 1498431),
-(38, 1609361),
-(39, 1736578),
-(40, 2360359),
-(41, 2504139),
-(42, 2678430),
-(43, 2886807),
-(44, 3090607),
-(45, 3300183),
-(46, 3515469),
-(47, 3736388),
-(48, 3963253),
-(49, 4215759),
-(50, 4514412),
-(51, 4740346),
-(52, 5012268),
-(53, 5335295),
-(54, 5643737),
-(55, 5959503),
-(56, 6282345),
-(57, 6612546),
-(58, 6949787),
-(59, 7318123),
-(60, 7751690),
-(61, 8078447),
-(62, 8470447),
-(63, 8933839),
-(64, 9343681),
-(65, 9761348),
-(66, 10187073),
-(67, 10620699),
-(68, 11062272),
-(69, 11511710),
-(70, 12046308),
-(71, 12434367),
-(72, 12907637),
-(73, 13471983),
-(74, 13962945),
-(75, 14461858),
-(76, 14968787),
-(77, 15483643),
-(78, 16006318),
-(79, 16537007),
-(80, 17172539),
-(81, 17621951),
-(82, 18176469),
-(83, 18841708),
-(84, 19447229),
-(85, 20061339),
-(86, 20684172),
-(87, 21315622),
-(88, 21955700),
-(89, 22674679),
-(90, 23522417),
-(91, 24142599),
-(92, 24891857),
-(93, 25777506),
-(94, 26586315),
-(95, 27406123),
-(96, 28236582),
-(97, 29077903),
-(98, 29930047),
-(99, 30831791),
+(001, 447),
+(002, 1169),
+(003, 2818),
+(004, 4883),
+(005, 8730),
+(006, 14142),
+(007, 21219),
+(008, 30247),
+(009, 41551),
+(010, 60421),
+(011, 68444),
+(012, 79229),
+(013, 93355),
+(014, 105804),
+(015, 119094),
+(016, 159649),
+(017, 177503),
+(018, 196087),
+(019, 221279),
+(020, 252618),
+(021, 275496),
+(022, 304770),
+(023, 347994),
+(024, 387397),
+(025, 527087),
+(026, 580615),
+(027, 636431),
+(028, 694725),
+(029, 765100),
+(030, 850205),
+(031, 914523),
+(032, 993612),
+(033, 1089494),
+(034, 1186580),
+(035, 1287167),
+(036, 1391057),
+(037, 1498431),
+(038, 1609361),
+(039, 1736578),
+(040, 2360359),
+(041, 2504139),
+(042, 2678430),
+(043, 2886807),
+(044, 3090607),
+(045, 3300183),
+(046, 3515469),
+(047, 3736388),
+(048, 3963253),
+(049, 4215759),
+(050, 4514412),
+(051, 4740346),
+(052, 5012268),
+(053, 5335295),
+(054, 5643737),
+(055, 5959503),
+(056, 6282345),
+(057, 6612546),
+(058, 6949787),
+(059, 7318123),
+(060, 7751690),
+(061, 8078447),
+(062, 8470447),
+(063, 8933839),
+(064, 9343681),
+(065, 9761348),
+(066, 10187073),
+(067, 10620699),
+(068, 11062272),
+(069, 11511710),
+(070, 12046308),
+(071, 12434367),
+(072, 12907637),
+(073, 13471983),
+(074, 13962945),
+(075, 14461858),
+(076, 14968787),
+(077, 15483643),
+(078, 16006318),
+(079, 16537007),
+(080, 17172539),
+(081, 17621951),
+(082, 18176469),
+(083, 18841708),
+(084, 19447229),
+(085, 20061339),
+(086, 20684172),
+(087, 21315622),
+(088, 21955700),
+(089, 22674679),
+(090, 23522417),
+(091, 24142599),
+(092, 24891857),
+(093, 25777506),
+(094, 26586315),
+(095, 27406123),
+(096, 28236582),
+(097, 29077903),
+(098, 29930047),
+(099, 30831791),
 (100, 31930141),
 (101, 32749228),
 (102, 33726269),
@@ -5971,18 +5877,35 @@ CREATE TABLE IF NOT EXISTS `monstertype` (
   `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `name` char(15) COLLATE latin1_general_ci NOT NULL DEFAULT 'None',
   `type` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+  `ai_type` tinyint(2) unsigned zerofill DEFAULT '00',
   `look` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
   `level` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `life` smallint(5) unsigned NOT NULL DEFAULT '0',
   `escape_life` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `attack_user` tinyint(1) unsigned DEFAULT '3',
   `attack_min` int(4) unsigned NOT NULL DEFAULT '0',
   `attack_max` int(4) unsigned NOT NULL DEFAULT '0',
   `defense` int(4) unsigned NOT NULL DEFAULT '0',
   `dexterity` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `dodge` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `magic_type` int(4) unsigned zerofill DEFAULT '0000',
+  `magic_def` int(4) unsigned DEFAULT '0',
+  `magic_hitrate` int(4) unsigned zerofill DEFAULT '0100',
   `view_range` tinyint(2) unsigned NOT NULL DEFAULT '5',
+  `attack_range` tinyint(2) unsigned DEFAULT '2',
   `attack_speed` smallint(4) unsigned zerofill DEFAULT '1000',
   `move_speed` smallint(4) unsigned zerofill DEFAULT '0500',
+  `run_speed` smallint(4) unsigned zerofill DEFAULT '0400',
+  `drop_armet` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_necklace` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_armor` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_ring` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_weapon` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_shield` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_shoes` tinyint(3) unsigned zerofill DEFAULT '099',
+  `drop_money` int(4) unsigned zerofill DEFAULT '0000',
+  `drop_hp` int(4) unsigned DEFAULT '0',
+  `drop_mp` int(4) unsigned DEFAULT '0',
   `defy` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1013 ;
@@ -5991,86 +5914,86 @@ CREATE TABLE IF NOT EXISTS `monstertype` (
 -- Contenu de la table `monstertype`
 --
 
-INSERT INTO `monstertype` (`id`, `name`, `type`, `look`, `level`, `life`, `escape_life`, `attack_min`, `attack_max`, `defense`, `dexterity`, `dodge`, `view_range`, `attack_speed`, `move_speed`, `defy`) VALUES
-(0001, 'Hound', 0, 0123, 1, 100, 0, 2, 3, 0, 0, 0, 5, 1000, 0500, 0),
-(0002, 'Bull', 0, 0103, 4, 266, 0, 8, 12, 0, 0, 0, 5, 1000, 0500, 0),
-(0003, 'Wolf', 0, 0102, 7, 400, 0, 25, 30, 0, 0, 0, 5, 1000, 0500, 0),
-(0004, 'Boar', 0, 0113, 10, 564, 0, 30, 36, 0, 0, 0, 5, 1000, 0500, 0),
-(0005, 'Tiger', 0, 0106, 13, 760, 0, 40, 43, 0, 0, 0, 5, 1000, 0500, 0),
-(0006, 'BloodyTiger', 0, 0107, 16, 968, 0, 54, 82, 0, 0, 0, 5, 1000, 0500, 0),
-(0007, 'Pan', 0, 0112, 19, 1258, 0, 59, 89, 0, 0, 0, 5, 1000, 0500, 0),
-(0008, 'Rat', 0, 0110, 24, 1638, 0, 72, 108, 0, 0, 0, 5, 1000, 0500, 0),
-(0009, 'Bear', 0, 0111, 29, 2055, 0, 85, 127, 0, 0, 0, 5, 1000, 0500, 0),
-(0010, 'Werewolf', 0, 0108, 34, 2520, 0, 93, 139, 0, 0, 0, 5, 1000, 0500, 0),
-(0011, 'WildWerewolf', 0, 0108, 39, 3021, 0, 109, 163, 0, 0, 0, 5, 1000, 0500, 0),
-(0012, 'Penguin', 0, 0124, 44, 3570, 0, 118, 178, 0, 0, 0, 5, 1000, 0500, 0),
-(0013, 'SnowWolf', 0, 0128, 49, 4113, 0, 127, 191, 0, 0, 0, 5, 1000, 0500, 0),
-(0014, 'KodiakBear', 0, 0107, 53, 4674, 0, 139, 209, 0, 0, 0, 5, 1000, 0500, 0),
-(0015, 'SnowWerewolf', 0, 0127, 57, 5250, 0, 150, 224, 0, 0, 0, 5, 1000, 0500, 0),
-(0016, 'SnowLeopard', 0, 0126, 61, 5859, 0, 154, 232, 0, 0, 0, 5, 1000, 0500, 0),
-(0017, 'FrostGiant', 0, 0125, 65, 6512, 0, 163, 245, 0, 0, 0, 5, 1000, 0500, 0),
-(0018, 'Guard', 0, 0000, 120, 50000, 0, 0, 0, 100, 0, 0, 5, 1000, 0500, 0),
-(0019, 'Orc', 0, 0100, 24, 998, 0, 95, 116, 48, 0, 0, 5, 1000, 0500, 0),
-(0020, 'Spider', 0, 0115, 24, 1186, 0, 95, 116, 24, 0, 0, 5, 1000, 0500, 0),
-(0021, 'OrcBoss', 0, 0101, 24, 3328, 0, 165, 202, 64, 0, 0, 5, 1000, 0500, 0),
-(0022, 'AberrantSpider', 0, 0115, 34, 1400, 0, 128, 158, 63, 0, 0, 5, 1000, 0500, 0),
-(0023, 'Cerberus', 0, 0113, 34, 2218, 0, 128, 158, 31, 0, 0, 5, 1000, 0500, 0),
-(0024, 'BoneDemon', 0, 0134, 34, 4700, 0, 224, 274, 83, 0, 0, 5, 1000, 0500, 0),
-(0025, 'GhostSpider', 0, 0116, 38, 1680, 0, 145, 177, 70, 0, 0, 5, 1000, 0500, 0),
-(0026, 'Chimera', 0, 0120, 38, 2664, 0, 145, 177, 70, 0, 0, 5, 1000, 0500, 0),
-(0027, 'VileCaster', 0, 0105, 38, 1260, 0, 111, 111, 35, 0, 0, 5, 1000, 0500, 0),
-(0028, 'HorrorDemon', 0, 0119, 38, 747, 0, 145, 177, 47, 0, 0, 5, 1000, 0500, 0),
-(0029, 'LesserDragon', 0, 0121, 38, 5600, 0, 245, 300, 93, 0, 0, 5, 1000, 0500, 0),
-(0030, 'ChimeraBoss', 0, 0120, 38, 5600, 0, 245, 300, 93, 0, 0, 5, 1000, 0500, 0),
-(0031, 'RockGolem', 0, 0129, 51, 2750, 0, 185, 225, 48, 0, 0, 5, 1000, 0500, 0),
-(0032, 'Hawkman', 0, 0130, 51, 3672, 0, 185, 225, 48, 0, 0, 5, 1000, 0500, 0),
-(0033, 'IceQueen', 0, 0133, 51, 9168, 0, 318, 389, 48, 0, 0, 5, 1000, 0500, 0),
-(0034, 'Skeleton', 0, 0134, 57, 3552, 0, 213, 260, 48, 0, 0, 5, 1000, 0500, 0),
-(0035, 'FleshGolem', 0, 0135, 57, 4256, 0, 213, 260, 48, 0, 0, 5, 1000, 0500, 0),
-(0036, 'SnowQueen', 0, 0132, 57, 11840, 0, 357, 436, 48, 0, 0, 5, 1000, 0500, 0),
-(0037, 'TowerGuard', 0, 0140, 57, 3552, 0, 213, 260, 48, 0, 0, 5, 1000, 0500, 0),
-(0038, 'Ghost', 0, 0141, 57, 4256, 0, 213, 260, 48, 0, 0, 5, 1000, 0500, 0),
-(0039, 'IceQueen', 0, 0133, 57, 11840, 0, 357, 436, 48, 0, 0, 5, 1000, 0500, 0),
-(0040, 'CorpseKing', 0, 0000, 64, 4250, 0, 0, 0, 126, 0, 0, 5, 1000, 0500, 0),
-(0041, 'CorpseGobelin', 0, 0000, 64, 5410, 0, 0, 0, 63, 0, 0, 5, 1000, 0500, 0),
-(0042, 'AncientWizard', 0, 0000, 64, 1890, 0, 0, 0, 63, 0, 0, 5, 1000, 0500, 0),
-(0043, 'Drake', 0, 0000, 64, 14168, 0, 0, 0, 169, 0, 0, 5, 1000, 0500, 0),
-(0044, 'AncientWizard', 0, 0140, 64, 1890, 0, 156, 190, 156, 0, 0, 5, 1000, 0500, 0),
-(0045, 'Lich', 0, 0137, 64, 5410, 0, 182, 231, 182, 0, 0, 5, 1000, 0500, 0),
-(0046, 'LichLord', 0, 0136, 64, 4250, 0, 227, 272, 224, 0, 0, 5, 1000, 0500, 0),
-(0047, 'FireDragon', 0, 0138, 64, 14168, 0, 395, 483, 169, 0, 0, 5, 1000, 0500, 0),
-(0048, 'Beetle', 0, 0160, 73, 8614, 0, 264, 323, 0, 0, 0, 5, 1000, 0500, 0),
-(0049, 'Scorpion', 0, 0166, 73, 8614, 0, 214, 273, 0, 0, 0, 5, 1000, 0500, 0),
-(0050, 'Savage', 0, 0167, 73, 8614, 0, 264, 323, 0, 0, 0, 5, 1000, 0500, 0),
-(0051, 'GhostLord', 0, 0168, 73, 10658, 0, 214, 273, 0, 0, 0, 5, 1000, 0500, 0),
-(0052, 'StoneGolem', 0, 0164, 77, 9828, 0, 273, 334, 0, 0, 0, 5, 1000, 0500, 0),
-(0053, 'Cyclops', 0, 0157, 78, 9828, 0, 264, 323, 0, 0, 0, 5, 1000, 0500, 0),
-(0054, 'WraithWatcher', 0, 0156, 78, 24570, 0, 449, 549, 0, 0, 0, 5, 1000, 0500, 0),
-(0055, 'CarrionBird', 0, 0152, 69, 7188, 0, 178, 268, 0, 0, 0, 5, 1000, 0500, 0),
-(0056, 'Zombie', 0, 0150, 73, 7920, 0, 186, 278, 0, 0, 0, 5, 1000, 0500, 0),
-(0057, 'Wraith', 0, 0154, 77, 8663, 0, 190, 286, 0, 0, 0, 5, 1000, 0500, 0),
-(0058, 'LizzardMan', 0, 0153, 81, 9438, 0, 200, 300, 0, 0, 0, 5, 1000, 0500, 0),
-(0059, 'ZombieSoldier', 0, 0151, 85, 10206, 0, 213, 319, 0, 0, 0, 5, 1000, 0500, 0),
-(0060, 'Scavenger', 0, 0162, 78, 9828, 0, 273, 334, 0, 0, 0, 5, 1000, 0500, 0),
-(0061, 'Ghoul', 0, 0163, 78, 12137, 0, 223, 284, 0, 0, 0, 5, 1000, 0500, 0),
-(0062, 'Ogre', 0, 0165, 82, 10463, 0, 281, 343, 0, 0, 0, 5, 1000, 0500, 0),
-(0063, 'LizzardMagus', 0, 0166, 82, 7088, 0, 223, 284, 0, 0, 0, 5, 1000, 0500, 0),
-(0064, 'Picaroon', 0, 0158, 82, 10463, 0, 281, 343, 0, 0, 0, 5, 1000, 0500, 0),
-(0065, 'HellLord', 0, 0161, 82, 7088, 0, 223, 284, 0, 0, 0, 5, 1000, 0500, 0),
-(0066, 'Dinosaur', 0, 0159, 82, 26158, 0, 491, 600, 0, 0, 0, 5, 1000, 0500, 0),
-(1000, 'BigBeholder', 0, 0170, 89, 11183, 0, 230, 335, 0, 0, 0, 5, 1000, 0500, 0),
-(1001, 'GhostBird', 0, 0171, 93, 12224, 0, 236, 345, 0, 0, 0, 5, 1000, 0500, 0),
-(1002, 'Wasp', 0, 0172, 97, 13268, 0, 245, 360, 0, 0, 0, 5, 1000, 0500, 0),
-(1003, 'FineDeadWood', 0, 0173, 101, 14379, 0, 250, 376, 0, 0, 0, 5, 1000, 0500, 0),
-(1004, 'Ant', 0, 0174, 105, 15555, 0, 255, 383, 0, 0, 0, 5, 1000, 0500, 0),
-(1005, 'FeiHuTailBoa', 0, 0175, 109, 16753, 0, 262, 394, 0, 0, 0, 5, 1000, 0500, 0),
-(1006, 'Garygole', 0, 0176, 113, 18188, 0, 276, 414, 0, 0, 0, 5, 1000, 0500, 0),
-(1007, 'Harpies', 0, 0177, 117, 19799, 0, 282, 422, 0, 0, 0, 5, 1000, 0500, 0),
-(1008, 'Chesterton', 0, 0178, 93, 18336, 0, 236, 345, 220, 0, 0, 5, 1000, 0500, 0),
-(1009, 'Barocco', 0, 0179, 101, 21569, 0, 236, 345, 120, 0, 0, 5, 1000, 0500, 0),
-(1010, 'HeadlessHorsema', 0, 0195, 109, 25130, 0, 262, 394, 260, 0, 0, 5, 1000, 0500, 0),
-(1011, 'ConfusionSwords', 0, 0196, 117, 29699, 0, 282, 422, 180, 0, 0, 5, 1000, 0500, 0),
-(1012, 'Death', 0, 0198, 255, 65535, 0, 1250, 2000, 5000, 0, 0, 5, 1000, 0500, 0);
+INSERT INTO `monstertype` (`id`, `name`, `type`, `ai_type`, `look`, `level`, `life`, `escape_life`, `attack_user`, `attack_min`, `attack_max`, `defense`, `dexterity`, `dodge`, `magic_type`, `magic_def`, `magic_hitrate`, `view_range`, `attack_range`, `attack_speed`, `move_speed`, `run_speed`, `drop_armet`, `drop_necklace`, `drop_armor`, `drop_ring`, `drop_weapon`, `drop_shield`, `drop_shoes`, `drop_money`, `drop_hp`, `drop_mp`, `defy`) VALUES
+(0001, 'Hound', 0, 00, 0123, 1, 100, 0, 3, 2, 3, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0002, 'Bull', 0, 00, 0103, 4, 266, 0, 3, 8, 12, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0003, 'Wolf', 0, 00, 0102, 7, 400, 0, 3, 25, 30, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0004, 'Boar', 0, 00, 0113, 10, 564, 0, 3, 30, 36, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0005, 'Tiger', 0, 00, 0106, 13, 760, 0, 3, 40, 43, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0006, 'BloodyTiger', 0, 00, 0107, 16, 968, 0, 3, 54, 82, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0007, 'Pan', 0, 00, 0112, 19, 1258, 0, 3, 59, 89, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0008, 'Rat', 0, 00, 0110, 24, 1638, 0, 3, 72, 108, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0009, 'Bear', 0, 00, 0111, 29, 2055, 0, 3, 85, 127, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0010, 'Werewolf', 0, 00, 0108, 34, 2520, 0, 3, 93, 139, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0011, 'WildWerewolf', 0, 00, 0108, 39, 3021, 0, 3, 109, 163, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0012, 'Penguin', 0, 00, 0124, 44, 3570, 0, 3, 118, 178, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0013, 'SnowWolf', 0, 00, 0128, 49, 4113, 0, 3, 127, 191, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0014, 'KodiakBear', 0, 00, 0107, 53, 4674, 0, 3, 139, 209, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0015, 'SnowWerewolf', 0, 00, 0127, 57, 5250, 0, 3, 150, 224, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0016, 'SnowLeopard', 0, 00, 0126, 61, 5859, 0, 3, 154, 232, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0017, 'FrostGiant', 0, 00, 0125, 65, 6512, 0, 3, 163, 245, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0018, 'Guard', 0, 00, 0000, 120, 50000, 0, 3, 0, 0, 100, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0019, 'Orc', 0, 00, 0100, 24, 998, 0, 3, 95, 116, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0020, 'Spider', 0, 00, 0115, 24, 1186, 0, 3, 95, 116, 24, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0021, 'OrcBoss', 0, 00, 0101, 24, 3328, 0, 3, 165, 202, 64, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0022, 'AberrantSpider', 0, 00, 0115, 34, 1400, 0, 3, 128, 158, 63, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0023, 'Cerberus', 0, 00, 0113, 34, 2218, 0, 3, 128, 158, 31, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0024, 'BoneDemon', 0, 00, 0134, 34, 4700, 0, 3, 224, 274, 83, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0025, 'GhostSpider', 0, 00, 0116, 38, 1680, 0, 3, 145, 177, 70, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0026, 'Chimera', 0, 00, 0120, 38, 2664, 0, 3, 145, 177, 70, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0027, 'VileCaster', 0, 00, 0105, 38, 1260, 0, 3, 111, 111, 35, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0028, 'HorrorDemon', 0, 00, 0119, 38, 747, 0, 3, 145, 177, 47, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0029, 'LesserDragon', 0, 00, 0121, 38, 5600, 0, 3, 245, 300, 93, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0030, 'ChimeraBoss', 0, 00, 0120, 38, 5600, 0, 3, 245, 300, 93, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0031, 'RockGolem', 0, 00, 0129, 51, 2750, 0, 3, 185, 225, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0032, 'Hawkman', 0, 00, 0130, 51, 3672, 0, 3, 185, 225, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0033, 'IceQueen', 0, 00, 0133, 51, 9168, 0, 3, 318, 389, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0034, 'Skeleton', 0, 00, 0134, 57, 3552, 0, 3, 213, 260, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0035, 'FleshGolem', 0, 00, 0135, 57, 4256, 0, 3, 213, 260, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0036, 'SnowQueen', 0, 00, 0132, 57, 11840, 0, 3, 357, 436, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0037, 'TowerGuard', 0, 00, 0140, 57, 3552, 0, 3, 213, 260, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0038, 'Ghost', 0, 00, 0141, 57, 4256, 0, 3, 213, 260, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0039, 'IceQueen', 0, 00, 0133, 57, 11840, 0, 3, 357, 436, 48, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0040, 'CorpseKing', 0, 00, 0000, 64, 4250, 0, 3, 0, 0, 126, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0041, 'CorpseGobelin', 0, 00, 0000, 64, 5410, 0, 3, 0, 0, 63, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0042, 'AncientWizard', 0, 00, 0000, 64, 1890, 0, 3, 0, 0, 63, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0043, 'Drake', 0, 00, 0000, 64, 14168, 0, 3, 0, 0, 169, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0044, 'AncientWizard', 0, 00, 0140, 64, 1890, 0, 3, 156, 190, 156, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0045, 'Lich', 0, 00, 0137, 64, 5410, 0, 3, 182, 231, 182, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0046, 'LichLord', 0, 00, 0136, 64, 4250, 0, 3, 227, 272, 224, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0047, 'FireDragon', 0, 00, 0138, 64, 14168, 0, 3, 395, 483, 169, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0048, 'Beetle', 0, 00, 0160, 73, 8614, 0, 3, 264, 323, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0049, 'Scorpion', 0, 00, 0166, 73, 8614, 0, 3, 214, 273, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0050, 'Savage', 0, 00, 0167, 73, 8614, 0, 3, 264, 323, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0051, 'GhostLord', 0, 00, 0168, 73, 10658, 0, 3, 214, 273, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0052, 'StoneGolem', 0, 00, 0164, 77, 9828, 0, 3, 273, 334, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0053, 'Cyclops', 0, 00, 0157, 78, 9828, 0, 3, 264, 323, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0054, 'WraithWatcher', 0, 00, 0156, 78, 24570, 0, 3, 449, 549, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0055, 'CarrionBird', 0, 00, 0152, 69, 7188, 0, 3, 178, 268, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0056, 'Zombie', 0, 00, 0150, 73, 7920, 0, 3, 186, 278, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0057, 'Wraith', 0, 00, 0154, 77, 8663, 0, 3, 190, 286, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0058, 'LizzardMan', 0, 00, 0153, 81, 9438, 0, 3, 200, 300, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0059, 'ZombieSoldier', 0, 00, 0151, 85, 10206, 0, 3, 213, 319, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0060, 'Scavenger', 0, 00, 0162, 78, 9828, 0, 3, 273, 334, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0061, 'Ghoul', 0, 00, 0163, 78, 12137, 0, 3, 223, 284, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0062, 'Ogre', 0, 00, 0165, 82, 10463, 0, 3, 281, 343, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0063, 'LizzardMagus', 0, 00, 0166, 82, 7088, 0, 3, 223, 284, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0064, 'Picaroon', 0, 00, 0158, 82, 10463, 0, 3, 281, 343, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0065, 'HellLord', 0, 00, 0161, 82, 7088, 0, 3, 223, 284, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(0066, 'Dinosaur', 0, 00, 0159, 82, 26158, 0, 3, 491, 600, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1000, 'BigBeholder', 0, 00, 0170, 89, 11183, 0, 3, 230, 335, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1001, 'GhostBird', 0, 00, 0171, 93, 12224, 0, 3, 236, 345, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1002, 'Wasp', 0, 00, 0172, 97, 13268, 0, 3, 245, 360, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1003, 'FineDeadWood', 0, 00, 0173, 101, 14379, 0, 3, 250, 376, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1004, 'Ant', 0, 00, 0174, 105, 15555, 0, 3, 255, 383, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1005, 'FeiHuTailBoa', 0, 00, 0175, 109, 16753, 0, 3, 262, 394, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1006, 'Garygole', 0, 00, 0176, 113, 18188, 0, 3, 276, 414, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1007, 'Harpies', 0, 00, 0177, 117, 19799, 0, 3, 282, 422, 0, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1008, 'Chesterton', 0, 00, 0178, 93, 18336, 0, 3, 236, 345, 220, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1009, 'Barocco', 0, 00, 0179, 101, 21569, 0, 3, 236, 345, 120, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1010, 'HeadlessHorsema', 0, 00, 0195, 109, 25130, 0, 3, 262, 394, 260, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1011, 'ConfusionSwords', 0, 00, 0196, 117, 29699, 0, 3, 282, 422, 180, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0),
+(1012, 'Death', 0, 00, 0198, 255, 65535, 0, 3, 1250, 2000, 5000, 0, 0, 0000, 0, 0100, 5, 2, 1000, 0500, 0400, 099, 099, 099, 099, 099, 099, 099, 0000, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -6190,6 +6113,22 @@ INSERT INTO `npc` (`id`, `name`, `type`, `lookface`, `mapid`, `cellx`, `celly`, 
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `passway`
+--
+
+CREATE TABLE IF NOT EXISTS `passway` (
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `passway_idx` int(2) unsigned zerofill NOT NULL DEFAULT '00' COMMENT 'Idx as in the DMap',
+  `portal_mapid` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000' COMMENT 'MapId as in the table portal',
+  `portal_idx` int(2) unsigned zerofill NOT NULL DEFAULT '00' COMMENT 'Idx as in the table portal',
+  PRIMARY KEY (`id`),
+  KEY `mapid` (`mapid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=632 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `point_allot`
 --
 
@@ -6215,6 +6154,22 @@ INSERT INTO `point_allot` (`id`, `profession`, `path`, `force`, `speed`, `health
 (0004, 20, 1, 003, 002, 010, 000),
 (0005, 30, 0, 002, 010, 003, 000),
 (0006, 30, 1, 002, 000, 003, 010);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `portal`
+--
+
+CREATE TABLE IF NOT EXISTS `portal` (
+  `id` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `mapid` int(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `idx` int(2) unsigned zerofill NOT NULL DEFAULT '00',
+  `portal_x` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  `portal_y` smallint(4) unsigned zerofill NOT NULL DEFAULT '0000',
+  PRIMARY KEY (`id`),
+  KEY `mapid` (`mapid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=615 ;
 
 -- --------------------------------------------------------
 
@@ -6395,7 +6350,3 @@ CREATE TABLE IF NOT EXISTS `wanted` (
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

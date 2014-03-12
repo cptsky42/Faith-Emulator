@@ -155,12 +155,6 @@ public:
     uint8_t getMagic1() const { return mMagic1; }
     uint8_t getMagic2() const { return mMagic2; }
     uint8_t getMagic3() const { return mMagic3; }
-    uint8_t getBless() const { return mBless; }
-    uint8_t getEnchant() const { return mEnchant; }
-    uint32_t getRestrain() const { return mRestrain; }
-    bool isLocked() const { return mLocked; }
-    bool isSuspicious() const { return mSuspicious; }
-    uint8_t getColor() const { return mColor; }
 
 private:
     const uint32_t mUID;
@@ -176,12 +170,6 @@ private:
     uint8_t mMagic1; // Attr
     uint8_t mMagic2; // ???
     uint8_t mMagic3; // Plus
-    uint8_t mBless;
-    uint8_t mEnchant;
-    uint32_t mRestrain;
-    bool mLocked;
-    bool mSuspicious;
-    uint8_t mColor;
 };
 
 #endif // _FAITH_EMULATOR_ITEM_H_

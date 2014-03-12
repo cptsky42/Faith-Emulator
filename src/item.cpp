@@ -213,8 +213,7 @@ Item :: Item(uint32_t aUID, const Item::Info& aInfo)
     : mUID(aUID), mInfo(aInfo),
       mAmount(0), mAmountLimit(0),
       mIdent(0),
-      mGem1(0), mGem2(0), mMagic1(0), mMagic2(0), mBless(0), mEnchant(0), mRestrain(0),
-      mLocked(false), mSuspicious(false)
+      mGem1(0), mGem2(0), mMagic1(0), mMagic2(0), mMagic3(0)
 {
 
 }
