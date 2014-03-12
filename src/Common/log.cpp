@@ -11,10 +11,8 @@
 
 using namespace std;
 
-const char LogLevelName[] = { 'V', 'D', 'I', 'W', 'E', 'C' };
-
+const char LogLevelName[] = { 'V', 'D', 'I', 'W', 'E' };
 const size_t MAX_LOG_SIZE = 4096;
-
 
 /* static */
 Logger* Logger::sInstance = nullptr;
@@ -23,28 +21,38 @@ Logger* Logger::sInstance = nullptr;
 Logger&
 Logger :: getInstance()
 {
-    // TODO? Thread-safe
+    static volatile long protect = 0;
+
     if (sInstance == nullptr)
     {
-        sInstance = new Logger();
+        if (1 == atomic_inc(&protect))
+        {
+            // create the instance
+            sInstance = new Logger();
+        }
+        else
+        {
+            while (sInstance == nullptr)
+                QThread::yieldCurrentThread();
+        }
     }
     return *sInstance;
 }
 
 /* static */
 err_t
-Logger :: init(const char* aDestFolder, const char* aPrefix)
+Logger :: init(const char* aDestFolder, const char* aFile)
 {
     ASSERT_ERR(aDestFolder != nullptr && aDestFolder[0] != '\0', ERROR_INVALID_PARAMETER);
-    ASSERT_ERR(aPrefix != nullptr && aPrefix[0] != '\0', ERROR_INVALID_PARAMETER);
+    ASSERT_ERR(aFile != nullptr && aFile[0] != '\0', ERROR_INVALID_PARAMETER);
 
     err_t err = ERROR_SUCCESS;
 
     Logger& logger = getInstance();
-    if (logger.mDestFolder.empty() && logger.mPrefix.empty())
+    if (logger.mDestFolder.empty() && logger.mFile.empty())
     {
         logger.mDestFolder = aDestFolder;
-        logger.mPrefix = aPrefix;
+        logger.mFile = aFile;
 
         logger.start(QThread::LowestPriority);
     }
@@ -64,7 +72,7 @@ Logger :: willLog(LogLevel aLevel)
 {
     if (sInstance != nullptr)
     {
-        #ifdef DEBUG
+        #ifndef NDEBUG
         return aLevel >= LOG_LEVEL_DBG;
         #else
         return aLevel > LOG_LEVEL_DBG;
@@ -90,11 +98,9 @@ Logger :: log(LogLevel aLevel,
 }
 
 Logger :: Logger()
+    : mStream(NULL), mHasToShutdown(false)
 {
-    mStream = NULL;
-    mCurrentDate = dateToInt(getCurrentTime());
 
-    mHasToShutdown = false;
 }
 
 Logger :: ~Logger()
@@ -130,21 +136,6 @@ Logger :: ~Logger()
     sInstance = nullptr;
 }
 
-string
-Logger :: getDestination()
-{
-    string dest;
-
-    char buffer[16];
-    snprintf(buffer, sizeof(buffer), "%d", mCurrentDate);
-
-    dest += mDestFolder + mPrefix;
-    dest += buffer;
-    dest += ".log";
-
-    return dest;
-}
-
 void
 Logger :: log(LogLevel aLevel,
               const char* aFile, const char* aFunction, unsigned int aLine,
@@ -168,34 +159,21 @@ Logger :: log(LogLevel aLevel,
     mMutex.unlock();
 }
 
-bool
-Logger :: openLog(const char* aPath)
-{
-    ASSERT_ERR(aPath != nullptr, false);
-
-    err_t err = ERROR_SUCCESS;
-
-    if (mStream != nullptr)
-    {
-        fclose(mStream);
-    }
-
-    err = Finder::fileOpen(&mStream, aPath, "at");
-
-    return ERROR_SUCCESS == err;
-}
-
 void
 Logger :: run()
 {
-    string dest = getDestination();
-
-    if (!openLog(dest.c_str()))
+    string path = mDestFolder + mFile;
+    if ((mStream = fopen(path.c_str(), "at")) == nullptr)
     {
-        fprintf(stderr, "Failed to open the log file %s.", dest.c_str());
+        fprintf(stderr, "Failed to open the log file %s.", path.c_str());
         perror(NULL);
         return;
     }
+
+    // clean all strings...
+    path.clear();
+    mDestFolder.clear();
+    mFile.clear();
 
     while (true)
     {
@@ -229,20 +207,6 @@ Logger :: run()
              it != end; ++it)
         {
             LogData* data = *it;
-
-            int date = dateToInt(data->first);
-            if (date != mCurrentDate)
-            {
-                mCurrentDate = date;
-                dest = getDestination();
-
-                if (!openLog(dest.c_str()))
-                {
-                    fprintf(stderr, "Failed to open the log file %s.", dest.c_str());
-                    perror(NULL);
-                    break;
-                }
-            }
 
             char time[32];
             if (strftime(time, sizeof(time), "[%Y-%m-%d %H:%M:%S %Z]", &data->first) != 0)
@@ -279,7 +243,6 @@ Logger :: run()
         }
 
         fflush(mStream);
-
         yieldCurrentThread();
     }
 }

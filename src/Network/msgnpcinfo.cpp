@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -18,16 +18,6 @@ MsgNpcInfo :: MsgNpcInfo(const Npc& aNpc)
     create(aNpc);
 }
 
-MsgNpcInfo :: MsgNpcInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
-{
-    ASSERT(aLen >= sizeof(MsgInfo));
-
-    #if BYTE_ORDER == BIG_ENDIAN
-    swap(mBuf);
-    #endif
-}
-
 MsgNpcInfo :: ~MsgNpcInfo()
 {
 
@@ -44,7 +34,7 @@ MsgNpcInfo :: create(const Npc& aNpc)
     mInfo->UniqId = aNpc.getUID();
     mInfo->PosX = aNpc.getPosX();
     mInfo->PosY = aNpc.getPosY();
-    mInfo->Look = (int16_t)aNpc.getLook();
+    mInfo->Look = (uint16_t)aNpc.getLook();
     mInfo->Type = aNpc.getType();
     mInfo->Sort = aNpc.getSort();
     mInfo->Length = 0; // Unused by EoF

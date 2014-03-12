@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -117,23 +117,25 @@ MsgDialog :: process(Client* aClient)
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
 
-    // TODO finish implementation
-//    if (!player.isAlive())
-//    {
-//        player.sendSysMsg(STR_DIE);
-//        return;
-//    }
+    if (!player.isAlive())
+    {
+        player.sendSysMsg(STR_DIE);
+        return;
+    }
 
     char text[MAX_PARAMSIZE];
 
     StringPacker packer(mInfo->Buf);
     packer.getString(text, sizeof(text), 0);
 
+    fprintf(stderr, "MsgDialog(action=%u, idx=%u, data=%u, str='%s')\n",
+            mInfo->Action, mInfo->IdxTask, mInfo->Data, text);
+
     switch (mInfo->Action)
     {
     case ACTION_ANSWER:
         {
-        //player.processTask(info->IdxTask, text);
+            //player.processTask(info->IdxTask, text);
             break;
         }
     case ACTION_TASKID:

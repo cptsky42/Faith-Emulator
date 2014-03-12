@@ -1,11 +1,6 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
- *
- * Taken from :
- * ****** BARLab - Open Source ******
- * Copyright (C) 2012 BARLab
- * Copyright (C) 2012 Jean-Philippe Boivin
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
@@ -14,16 +9,15 @@
 #ifndef _FAITH_EMULATOR_COMMON_H_
 #define _FAITH_EMULATOR_COMMON_H_
 
-#include "def.h" // all defines by CMake
 #include "arch.h"
 #include "types.h"
 #include "endianness.h"
 #include "err.h"
-#include "unicode.h"
 #include "basefunc.h"
 #include "strres.h"
 
 #ifdef _WIN32
+#define NOMINMAX // want std::min() & std::max() defined...
 #include <windows.h>
 
 #ifdef _MSC_VER // Visual Studio will complain for linking...
@@ -31,8 +25,13 @@
 #endif
 
 #else
+#include <unistd.h> // sysctl, sysconf
 #include <sys/time.h> // for timeGetTime()
 #endif
+
+#ifdef __APPLE__
+#include <libkern/OSAtomic.h>
+#endif // atomics
 
 /*
  *****************************************************
@@ -74,6 +73,54 @@
 
 /*
  *****************************************************
+ * « TaskManager » functions
+ ****************************************************
+ */
+
+// Get the number of available CPU / cores...
+inline int getNumCPU()
+{
+    int numCPU = 1;
+
+    #if defined(TARGET_SYSTEM_WINDOWS)
+    // Windows... Can use Windows API...
+    SYSTEM_INFO sysinfo;
+    GetSystemInfo(&sysinfo);
+
+    numCPU = sysinfo.dwNumberOfProcessors;
+    #elif defined(TARGET_SYSTEM_MACOS_X) || defined(TARGET_SYSTEM_GNU_LINUX) || \
+          defined(TARGET_SYSTEM_AIX) || defined(TARGET_SYSTEM_SOLARIS)
+    // Linux, Solaris, AIX & Mac OS X (Tiger onwards)
+    numCPU = sysconf(_SC_NPROCESSORS_ONLN);
+    #else
+    // Probably Unix-like (FreeBSD, NetBSD, etc)
+    int mib[4];
+    size_t len = sizeof(numCPU);
+
+    /* set the mib for hw.ncpu */
+    mib[0] = CTL_HW;
+    mib[1] = HW_AVAILCPU;  // alternatively, try HW_NCPU;
+
+    /* get the number of CPUs from the system */
+    sysctl(mib, 2, &numCPU, &len, NULL, 0);
+
+    if (numCPU < 1) // HW_AVAILCPU might be incorrect
+    {
+         mib[1] = HW_NCPU;
+         sysctl(mib, 2, &numCPU, &len, NULL, 0);
+    }
+    #endif
+
+    if (numCPU < 1)
+    {
+        numCPU = 1;
+    }
+
+    return numCPU;
+}
+
+/*
+ *****************************************************
  * Cross-compiling definitions
  ****************************************************
  */
@@ -100,9 +147,28 @@ inline unsigned int timeGetTime()
 {
     struct timeval now;
     gettimeofday(&now, nullptr);
-    return now.tv_usec / 1000;
+    return (now.tv_sec * 1000) + (now.tv_usec / 1000);
 }
 #endif
 
+#if defined(__APPLE__)
+#   if defined(TARGET_INSTR_X86_64) || defined(TARGET_INSTR_PPC64)
+#       define atomic_inc(ptr) OSAtomicIncrement64Barrier(((volatile int64_t*)ptr))
+#   else
+#       define atomic_inc(ptr) OSAtomicIncrement32Barrier(((volatile int32_t*)ptr))
+#   endif
+#elif defined (_WIN32)
+#   define atomic_inc(ptr) InterlockedIncrement((ptr))
+#elif defined(__GNUC__)
+#   define atomic_inc(ptr) (__sync_fetch_and_add((ptr), 1) + 1)
+#else
+#   error "Need some more porting work for atomic_inc."
+#endif
+
+#ifndef _WIN32
+#define mssleep(ms) usleep(ms * 1000)
+#else
+#define mssleep(ms) Sleep(ms)
+#endif // _WIN32
 
 #endif // _FAITH_EMULATOR_COMMON_H_

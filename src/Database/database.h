@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -11,6 +11,9 @@
 
 #include "common.h"
 #include "env.h"
+#include "item.h"
+#include "monster.h"
+#include <map>
 #include <QtSql/QSqlDatabase>
 
 class QSqlQuery;
@@ -23,6 +26,9 @@ class Player;
  */
 class Database : public Environment::Global
 {
+    // !!! class is a singleton !!!
+    PROHIBIT_COPY(Database);
+
 public:
     /**
      * Get the Database singleton. If the object does not exist yet,
@@ -30,7 +36,7 @@ public:
      *
      * @returns A reference to the singleton
      */
-    static Database& getInstance();
+    static const Database& getInstance();
 
 public:
     /* destructor */
@@ -62,7 +68,7 @@ public:
      * @retval ERROR_NOT_FOUND if the account/password pair was not found
      * @returns Error code otherwise
      */
-    err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword);
+    err_t authenticate(Client& aClient, const char* aAccount, const char* aPassword) const;
 
     /**
      * Create a new player with the specified name and profession.
@@ -77,7 +83,7 @@ public:
      * @returns Error code otherwise
      */
     err_t createPlayer(Client& aClient, const char* aName,
-                       uint16_t aLook, uint16_t aProfession);
+                       uint16_t aLook, uint16_t aProfession) const;
 
     /**
      * Try to retreive the player information for the specified client.
@@ -89,7 +95,7 @@ public:
      * @retval ERROR_EXEC_FAILED if the SQL cmd failed
      * @returns Error code otherwise
      */
-    err_t getPlayerInfo(Client& aClient);
+    err_t getPlayerInfo(Client& aClient) const;
 
     /**
      * Try to save the player information for the specified client.
@@ -100,16 +106,36 @@ public:
      * @retval ERROR_EXEC_FAILED if the SQL cmd failed
      * @returns Error code otherwise
      */
-    err_t savePlayer(Client& aClient);
+    err_t savePlayer(Client& aClient) const;
 
     /**
-     * Load all NPCs in memory from the database.
+     * Get the required exp of the specified level.
+     *
+     * @param[out]    aOutExp     the required exp
+     * @param[in]     aLevel      the level
      *
      * @retval ERROR_SUCCESS on success
      * @retval ERROR_EXEC_FAILED if the SQL cmd failed
      * @returns Error code otherwise
      */
-    err_t loadAllNPCs();
+    err_t getRequiredExp(uint32_t aOutExp, uint8_t aLevel) const;
+
+    /**
+     * Get the allocated points of a specific level and profession.
+     *
+     * @param[out]    aOutForce    the allocated force
+     * @param[out]    aOutSpeed    the allocated speed
+     * @param[out]    aOutHealth   the allocated health
+     * @param[out]    aOutSoul     the allocated soul
+     * @param[in]     aLevel       the level
+     * @param[in]     aProfession  the profession
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t getPointAllot(uint16_t& aOutForce, uint16_t& aOutSpeed, uint16_t& aOutHealth, uint16_t aOutSoul,
+                        uint8_t aLevel, uint8_t aProfession) const;
 
     /**
      * Load all maps in memory from the database.
@@ -121,6 +147,22 @@ public:
     err_t loadAllMaps();
 
     /**
+     * Get the passway information based on the map Id and the passway Id.
+     *
+     * @param[out]   aOutMapId     the new map Id
+     * @param[out]   aOutPosX      the new X position
+     * @param[out]   aOutPosY      the new Y position
+     * @param[in]    aMapId        the passway's map Id
+     * @param[in]    aIndex        the passway's index
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t getPasswayInfo(uint32_t& aOutMapId, uint16_t& aOutPosX, uint16_t& aOutPosY,
+                         uint32_t aMapId, uint8_t aIndex) const;
+
+    /**
      * Load all items in memory from the database.
      *
      * @retval ERROR_SUCCESS on success
@@ -129,18 +171,80 @@ public:
      */
     err_t loadAllItems();
 
+    /**
+     * Get the item information based on the Id.
+     *
+     * @param[out]   aOutInfo      the object that will receive the info
+     * @param[in]    aId           the monster's Id
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_NOT_FOUND if the info is not found
+     * @returns Error code otherwise
+     */
+    err_t getItemInfo(const Item::Info** aOutInfo, uint32_t aId) const;
+
+    /**
+     * Load all NPCs in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllNPCs();
+
+    /**
+     * Load all the NPCs' tasks.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns Error code otherwise
+      */
+    err_t loadAllTasks();
+
+    /**
+     * Load all monsters in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllMonsters();
+
+    /**
+     * Load all generators in memory from the database.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the SQL cmd failed
+     * @returns Error code otherwise
+     */
+    err_t loadAllGenerators();
+
+    /**
+     * Get the monster information based on the Id.
+     *
+     * @param[out]   aOutInfo      the object that will receive the info
+     * @param[in]    aId           the monster's Id
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_NOT_FOUND if the info is not found
+     * @returns Error code otherwise
+     */
+    err_t getMonsterInfo(const Monster::Info** aOutInfo, uint32_t aId) const;
+
 private:
     /* constructor */
     Database();
 
     /** Get the SQL command from the SQL query. */
-    QString getSqlCommand(const QSqlQuery& aQuery);
+    QString getSqlCommand(const QSqlQuery& aQuery) const;
 
 private:
     static Database* sInstance; //!< static instance of the singleton
 
 private:
     QSqlDatabase mConnection; //!< SQL connection for the queries
+
+    std::map<uint32_t, Item::Info*> mAllItems; //!< all items info
+    std::map<uint32_t, Monster::Info*> mAllMonsters; //!< all monsters info
 };
 
 #endif // _FAITH_EMULATOR_DATABASE_H_

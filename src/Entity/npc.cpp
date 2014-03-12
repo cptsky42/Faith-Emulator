@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -14,7 +14,7 @@
 #include "msgnpcinfo.h"
 
 Npc :: Npc(uint32_t aUID, const char* aName,
-           uint8_t aType, int16_t aLook,
+           uint8_t aType, uint16_t aLook,
            uint32_t aMapId, uint16_t aPosX, uint16_t aPosY,
            uint8_t aBase, uint8_t aSort)
     : Entity(aUID)
@@ -50,8 +50,7 @@ Npc :: activateNpc(Client& aClient, int32_t aAction)
 
     bool result = false;
 
-    // TODO: isAlive()
-    if (isTaskNpc() && /* isAlive() && */ mTask != nullptr)
+    if (isTaskNpc() /*&& isAlive()*/ && mTask != nullptr)
     {
         const NpcTask& task = queryTask();
 

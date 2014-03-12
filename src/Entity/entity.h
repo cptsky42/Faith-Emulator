@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -6,12 +6,13 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_ENTITY_H
-#define _FAITH_EMULATOR_ENTITY_H
+#ifndef _FAITH_EMULATOR_ENTITY_H_
+#define _FAITH_EMULATOR_ENTITY_H_
 
 #include "common.h"
 #include <time.h>
 #include <map>
+#include <QMutex>
 
 class Player;
 class Msg;
@@ -114,12 +115,48 @@ public:
     /** Send the entity spawn msg. */
     virtual void sendShow(const Player& aPlayer) const = 0;
 
+    /**
+     * Update the broadcast set.
+     *
+     * @param[in]   aClearSet   (Optional) clear the set before updating
+     *                          Default is false.
+     */
     void updateBroadcastSet(bool aClearSet = false) const;
+
+    /**
+     * Clear the broadcast set.
+     */
     void clearBroadcastSet() const;
+
+    /**
+     * Add an entity to the broadcast set.
+     *
+     * @param[in]    aEntity    the entity to add
+     */
     void addEntityToBCSet(const Entity& aEntity) const;
+
+    /**
+     * Remove an entity from the broadcast set.
+     *
+     * @param[in]    aEntity    the entity to remove
+     */
     void removeEntityFromBCSet(const Entity& aEntity) const;
 
+    /**
+     * Broadcast a message to all entities of the broadcast set.
+     *
+     * @param[in]   aMsg           the message to broadcast
+     * @param[in]   aIncludeSelf   whether or not the message must be sent to self
+     */
     void broadcastRoomMsg(Msg* aMsg, bool aIncludeSelf) const;
+
+    /**
+     * Broadcast a message to all entities of the broadcast set.
+     *
+     * @param[in]   aMsg           the buffer ot the message to broadcast
+     * @param[in]   aLen           the length of the message to broadcast
+     * @param[in]   aIncludeSelf   whether or not the message must be sent to self
+     */
     void broadcastRoomMsg(uint8_t* aBuf, size_t aLen, bool aIncludeSelf) const;
 
     /** Called when the timer elapse. */
@@ -144,7 +181,7 @@ public:
     uint8_t getDirection() const { return mDirection; }
 
     /** Set the map UID of the entity. */
-    void setMapId(int32_t aMapId) { mMapId = aMapId; }
+    void setMapId(uint32_t aMapId) { mMapId = aMapId; }
     /** Set the position on the map of the entity. */
     void setPosition(uint16_t aPosX, uint16_t aPosY) { mPosX = aPosX; mPosY = aPosY; }
     /** Set the cardinal direction of the entity. */
@@ -165,7 +202,8 @@ protected:
     uint16_t mPosY; //!< Entity Y coord.
     uint8_t mDirection; //!< Entity cardinal direction
 
-    mutable std::map<uint32_t, const Entity*> mViewSet;
+    mutable std::map<uint32_t, const Entity*> mViewSet; //!< set including all entities on screen
+    mutable QMutex mViewSetMutex; //!< mutex for accessing the view set
 };
 
-#endif // _FAITH_EMULATOR_ENTITY_H
+#endif // _FAITH_EMULATOR_ENTITY_H_

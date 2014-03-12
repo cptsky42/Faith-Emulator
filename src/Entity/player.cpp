@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -62,6 +62,9 @@ Player :: Player(Client& aClient, uint32_t aUID)
     mMercenaryExp = 0;
     mMercenaryLevel = 0;
 
+    // no equipment...
+    for (uint8_t pos = 0; pos < Item::MAX_EQUIPMENT; ++pos)
+        mEquipment[pos] = nullptr;
 
     mMsgCount = 0;
     mFirstClientTick = 0;
@@ -69,18 +72,21 @@ Player :: Player(Client& aClient, uint32_t aUID)
     mLastRcvClientTick = 0;
     mFirstServerTick = 0;
     mLastServerTick = 0;
+
+    mLastCoolShow = 0;
 }
 
 Player :: ~Player()
 {
+    static const MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(mMapId);
 
+    if (map != nullptr)
+        map->leaveRoom(*this);
 }
 
-/// TODO real...
-#define MAX_EQUIPMENT 0
-
 int32_t
-Player :: getMinAtk()
+Player :: getMinAtk() const
 {
     double atk = 0.5;
     switch (mProfession)
@@ -99,17 +105,18 @@ Player :: getMinAtk()
             break;
     }
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // fDef += m_pEquipment[i]->GetMinAttack();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            atk += equip->getMinAtk();
     }
 
     return max(0.0, atk);
 }
 
 int32_t
-Player :: getMaxAtk()
+Player :: getMaxAtk() const
 {
     double atk = 0.5;
     switch (mProfession)
@@ -128,32 +135,34 @@ Player :: getMaxAtk()
             break;
     }
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // fDef += m_pEquipment[i]->GetMaxAttack();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            atk += equip->getMaxAtk();
     }
 
     return max(0.0, atk);
 }
 
 int32_t
-Player :: getDefense()
+Player :: getDefense() const
 {
     double def = 0.5;
     def += mHealth * 0.5;
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // fDef += m_pEquipment[i]->GetDefense();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            def += equip->getDefense();
     }
 
     return (int32_t)def;
 }
 
 int32_t
-Player :: getMAtk()
+Player :: getMAtk() const
 {
     double atk = 0.5;
     if (PROFESSION_MAGE == mProfession)
@@ -161,17 +170,18 @@ Player :: getMAtk()
         atk += mSoul * 0.5;
     }
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // fDef += m_pEquipment[i]->GetMaxMagicAttack();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            atk += equip->getMagicAtk();
     }
 
     return max(0.0, atk);
 }
 
 int32_t
-Player :: getMDef()
+Player :: getMDef() const
 {
     double def = 0.5;
     switch (mProfession)
@@ -188,20 +198,21 @@ Player :: getMDef()
             break;
     }
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // fDef += m_pEquipment[i]->GetMagicDefense();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            def += equip->getMagicDef();
     }
 
     return (int32_t)def;
 }
 
 int32_t
-Player :: getAdditionAtk()
+Player :: getAdditionAtk() const
 {
     int32_t atk = 0;
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
         // TODO get equipment
         //		CItem* pItem = m_pEquipment[i];
@@ -223,10 +234,10 @@ Player :: getAdditionAtk()
 }
 
 int32_t
-Player :: getAdditionDef()
+Player :: getAdditionDef() const
 {
     int32_t def = 0;
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
         // TODO get equipment
         //		CItem* pItem = m_pEquipment[i];
@@ -249,10 +260,10 @@ Player :: getAdditionDef()
 }
 
 int32_t
-Player :: getAdditionMAtk()
+Player :: getAdditionMAtk() const
 {
     int32_t atk = 0;
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
         // TODO get equipment
     //		CItem* pItem = m_pEquipment[i];
@@ -274,10 +285,10 @@ Player :: getAdditionMAtk()
 }
 
 int32_t
-Player :: getAdditionMDef()
+Player :: getAdditionMDef() const
 {
     int32_t def = 0;
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
         // TODO get equipment
         //		CItem* pItem = m_pEquipment[i];
@@ -300,21 +311,22 @@ Player :: getAdditionMDef()
 }
 
 uint8_t
-Player :: getDext()
+Player :: getDext() const
 {
     uint8_t dext = mDexterity;
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // nDex += m_pEquipment[i]->GetDodge();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            dext += equip->getDexterity();
     }
 
     return dext;
 }
 
 uint16_t
-Player :: getMaxLife()
+Player :: getMaxHP() const
 {
     int32_t life = 30 + ((mLevel - 1) * 3);
     switch (mProfession)
@@ -333,37 +345,39 @@ Player :: getMaxLife()
             break;
     }
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // nLife += m_pEquipment[i]->GetLife();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            life += equip->getLife();
     }
 
     return max(0, life);
 }
 
 uint16_t
-Player :: getMaxMana()
+Player :: getMaxMP() const
 {
     int32_t mana = (mSoul * 5) + ((mLevel - 1) * 3);
 
-    for (uint8_t pos = 0; pos < MAX_EQUIPMENT; ++pos)
+    for (uint8_t pos = 1; pos < Item::MAX_EQUIPMENT; ++pos)
     {
-        // TODO get equipment
-        // nMaxMana += m_pEquipment[i]->GetMana();
+        Item* equip = mEquipment[pos];
+        if (equip != nullptr)
+            mana += equip->getMana();
     }
 
     return max(0, mana);
 }
 
 uint8_t
-Player :: getMaxXP()
+Player :: getMaxXP() const
 {
     return 100;
 }
 
 uint8_t
-Player :: getMaxEnergy()
+Player :: getMaxEnergy() const
 {
     int32_t energy = 100;
     switch (mProfession)
@@ -386,7 +400,7 @@ Player :: getMaxEnergy()
 }
 
 uint16_t
-Player :: getMaxWeight()
+Player :: getMaxWeight() const
 {
     int32_t weight = 0;
     switch (mProfession)
@@ -409,7 +423,7 @@ Player :: getMaxWeight()
 void
 Player :: enterMap()
 {
-    const MapManager& mgr = MapManager::getInstance();
+    static const MapManager& mgr = MapManager::getInstance();
     GameMap* map = mgr.getMap(mMapId);
 
     if (map != nullptr)
@@ -417,8 +431,11 @@ Player :: enterMap()
         //    SendLight();
         //    int	nKeepSecs = 0;		// keep light
 
-        MsgAction msg(this, map->getLight(), MsgAction::ACTION_MAP_ARGB);
-        send(&msg);
+        Msg* msg = nullptr;
+
+        msg = new MsgAction(this, map->getLight(), MsgAction::ACTION_MAP_ARGB);
+        send(msg);
+        SAFE_DELETE(msg);
 
         map->enterRoom(*this);
         //		pMap->SendRegionInfo(this);
@@ -438,10 +455,61 @@ Player :: enterMap()
     }
 }
 
+void
+Player :: leaveMap()
+{
+    static const MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(mMapId);
+
+    if (map != nullptr)
+        map->leaveRoom(*this);
+
+    MsgAction msg(this, 0, MsgAction::ACTION_LEAVE_MAP);
+    broadcastRoomMsg(&msg, false);
+
+    clearBroadcastSet();
+}
+
+bool
+Player :: move(uint32_t aMapId, uint16_t aX, uint16_t aY)
+{
+    static const MapManager& mgr = MapManager::getInstance();
+    GameMap* map = mgr.getMap(aMapId);
+
+    if (map != nullptr)
+    {
+        leaveMap();
+
+        // TODO detach status STATUS_HIDDEN
+
+        // StandRestart()
+        // map->ChangeRegion()
+
+        mPrevMap = mMapId;
+        mPrevX = mPosX;
+        mPrevY = mPosY;
+
+        mMapId = aMapId;
+        mPosX = aX;
+        mPosY = aY;
+
+        mPose = POSE_STANDBY;
+        // IsInBattle = false, MagicIntone = false, Mining = false
+        // ProcessAfterMove()
+
+        MsgAction msg(this, mMapId, MsgAction::ACTION_FLY_MAP);
+        send(&msg);
+
+        enterMap();
+    }
+
+    return true;
+}
+
 bool
 Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
 {
-    const MapManager& mgr = MapManager::getInstance();
+    static const MapManager& mgr = MapManager::getInstance();
     GameMap* map = mgr.getMap(mMapId);
 
     if (map != nullptr)
@@ -449,11 +517,20 @@ Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
         if (!map->isValidPoint(aX, aY) || !map->isStandEnable(aX, aY))
         {
             sendSysMsg(STR_INVALID_COORDINATE);
-            //kickBack(); // TODO
+            kickBack();
             return false;
         }
 
-        // detach status STATUS_HIDDEN //TODO
+        // the maximum elevation difference (between the character's initial
+        // position and the check tile's position) is 210
+        if (map->getFloorAlt(aX, aY) - map->getFloorAlt(mPosX, mPosY) > 210)
+        {
+            // TODO ? Jail with wall jump hack ?
+            kickBack();
+            return false;
+        }
+
+        // TODO detach status STATUS_HIDDEN
 
         // StandRestart()
         // map->ChangeRegion()
@@ -464,7 +541,8 @@ Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
         mPosX = aX;
         mPosY = aY;
         mDirection = aDir;
-        // mAction = Action.StandBy; // TODO
+
+        mPose = POSE_STANDBY;
 
         updateBroadcastSet();
 
@@ -473,6 +551,15 @@ Player :: move(uint16_t aX, uint16_t aY, uint8_t aDir)
     }
 
     return true;
+}
+
+void
+Player :: kickBack()
+{
+    move(mPrevX, mPrevY, mDirection);
+
+    MsgAction msg(this, mMapId, MsgAction::ACTION_FLY_MAP);
+    broadcastRoomMsg(&msg, true);
 }
 
 void

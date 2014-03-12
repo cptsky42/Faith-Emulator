@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -60,4 +60,3 @@ ItemTask :: execute(Client& aClient, int32_t aParam) const
 
     return err;
 }
-

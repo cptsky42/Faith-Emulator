@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -14,6 +14,9 @@
 
 class Player;
 
+/**
+ * Message used to validate the client connection.
+ */
 class MsgTick : public Msg
 {
 public:

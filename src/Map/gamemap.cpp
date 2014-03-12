@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -15,7 +15,7 @@
 using namespace std;
 
 GameMap :: GameMap(uint32_t aUID, Info** aInfo, MapData& aData)
-    : mUID(aUID), mInfo(*aInfo), mData(aData)
+    : mUID(aUID), mInfo(*aInfo), mData(aData), mPlayerCount(0)
 {
     ASSERT(aInfo != nullptr && *aInfo != nullptr);
     *aInfo = nullptr;
@@ -45,12 +45,16 @@ GameMap :: sendMapInfo(const Player& aPlayer) const
 {
     ASSERT(&aPlayer != nullptr);
 
+    mEntitiesMutex.lock();
+
     // the player must be on the map...
     if (mEntities.end() != mEntities.find(aPlayer.getUID()))
     {
         MsgMapInfo msg(*this);
         aPlayer.send(&msg);
     }
+
+    mEntitiesMutex.unlock();
 }
 
 void
@@ -58,10 +62,11 @@ GameMap :: sendBlockInfo(const Player& aPlayer) const
 {
     ASSERT(&aPlayer != nullptr);
 
+    mEntitiesMutex.lock();
+
     // the player must be on the map...
     if (mEntities.end() != mEntities.find(aPlayer.getUID()))
     {
-        // TODO: thread-safe
         for (map<uint32_t, Entity*>::const_iterator
                 it = mEntities.begin(), end = mEntities.end();
              it != end; ++it)
@@ -79,6 +84,8 @@ GameMap :: sendBlockInfo(const Player& aPlayer) const
             }
         }
     }
+
+    mEntitiesMutex.unlock();
 }
 
 void
@@ -86,11 +93,12 @@ GameMap :: updateBroadcastSet(const Entity& aEntity) const
 {
     ASSERT(&aEntity != nullptr);
 
+    mEntitiesMutex.lock();
+
     // the entity must be on the map...
     if (mEntities.end() != mEntities.find(aEntity.getUID()))
     {
         // TODO: items
-        // TODO: thread-safe
         for (map<uint32_t, Entity*>::const_iterator
                 it = mEntities.begin(), end = mEntities.end();
              it != end; ++it)
@@ -107,33 +115,58 @@ GameMap :: updateBroadcastSet(const Entity& aEntity) const
                 aEntity.addEntityToBCSet(entity);
                 entity.addEntityToBCSet(aEntity);
             }
-
-            // TODO remove others
+            else
+            {
+                // try to remove the entity from the set...
+                aEntity.removeEntityFromBCSet(entity);
+                entity.removeEntityFromBCSet(aEntity);
+            }
         }
     }
+
+    mEntitiesMutex.unlock();
 }
 
 void
 GameMap :: enterRoom(Entity& aEntity)
 {
-    // activate the map...
-    if (mEntities.size() == 0)
+    mEntitiesMutex.lock();
+
+    map<uint32_t, Entity*>::iterator it = mEntities.find(aEntity.getUID());
+    if (mEntities.end() == it)
     {
-        mData.unpack();
+        // activate the map...
+        if (aEntity.isPlayer())
+        {
+            if (mPlayerCount == 0)
+                mData.unpack(this);
+            ++mPlayerCount;
+        }
+
+        mEntities[aEntity.getUID()] = &aEntity;
     }
 
-    //TODO
-    mEntities[aEntity.getUID()] = &aEntity;
+    mEntitiesMutex.unlock();
 }
 
 void
 GameMap :: leaveRoom(Entity& aEntity)
 {
-    // TODO
+    mEntitiesMutex.lock();
 
-    // desactivate the map...
-    if (mEntities.size() == 0)
+    map<uint32_t, Entity*>::iterator it = mEntities.find(aEntity.getUID());
+    if (mEntities.end() != it)
     {
-        mData.pack();
+        mEntities.erase(it);
+
+        // desactivate the map...
+        if (aEntity.isPlayer())
+        {
+            --mPlayerCount;
+            if (mPlayerCount == 0)
+                mData.pack(this);
+        }
     }
+
+    mEntitiesMutex.unlock();
 }

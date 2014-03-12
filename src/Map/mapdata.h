@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -12,6 +12,8 @@
 #include "common.h"
 #include "mapbase.h"
 #include <vector>
+#include <set>
+#include <QMutex>
 
 class BinaryReader;
 
@@ -20,6 +22,9 @@ class BinaryReader;
  */
 class MapData
 {
+    // !!! class has pointer data members !!!
+    PROHIBIT_COPY(MapData);
+
 public:
     /**
      * Load a DMap as a MapData object containing cells and passages.
@@ -37,16 +42,33 @@ public:
     ~MapData();
 
 public:
-    err_t pack();
-    err_t unpack();
+    /**
+     * Compress the map data in memory.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns An error code otherwise
+     */
+    err_t pack(void* aCaller = nullptr);
+
+    /**
+     * Decompress the map data in memory.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns An error code otherwise
+     */
+    err_t unpack(void* aCaller = nullptr);
 
 public:
+    /** Get the width of the map. */
     uint16_t getWidth() const { return mWidth; }
+    /** Get the height of the map. */
     uint16_t getHeight() const { return mHeight; }
 
+    /** Get the cell information of a specific position. */
     const Cell& getCell(uint16_t aPosX, uint16_t aPosY) const
     { return mCells[pos2idx(aPosX, aPosY)]; }
 
+    /** Get the passage ID of the given coords. */
     int getPassage(uint16_t aPosX, uint16_t aPosY) const;
 
 private:
@@ -97,6 +119,12 @@ private:
     /** Convert a position to a y-coord. */
     inline size_t idx2y(size_t aIdx) const { return (aIdx / mHeight); }
 
+public:
+    /** MUST NOT BE USED ! Suspend the automatic packing ! */
+    void suspendPacking() { mIsPacking = false; }
+    /** MUST NOT BE USED ! Resume the automatic packing ! */
+    void resumePacking() { mIsPacking = true; }
+
 private:
     uint16_t mWidth;  //!< the width (number of cell) of the map
     uint16_t mHeight; //!< the height (number of cell) of the map
@@ -104,8 +132,11 @@ private:
     Cell* mCells; //!< all the cells of the map
     std::vector<Passage*> mPassages; //!< all the passages of the map
 
+    bool mIsPacking; //!< determine whether the MapData must handle the automatic packing
+    std::set<void*> mRefs; //!< the pointers of active map using the data
     uint8_t* mPckData; //!< the packed data of the map (cells)
     size_t mPckLen; //!< the size of the packed data
+    QMutex mPckMutex; //!< the mutex to pack / unpack the data...
 };
 
 #endif // _FAITH_EMULATOR_MAP_DATA_H_

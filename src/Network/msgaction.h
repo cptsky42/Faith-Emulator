@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -31,7 +31,8 @@ public:
         /** Change the direction of an entity */
         ACTION_CHG_DIR = 1,
         actionPosition         = 2,
-        actionEmotion			=3,
+        /** Change the emotion of an entity */
+        ACTION_EMOTION = 3,
         actionBroadcastPos		=4,
         actionDivorce			=5,
         actionSelfUnfreeze		=6,
@@ -51,15 +52,19 @@ public:
         /** Get the friends (client request). The next step is the weapon skills. */
         ACTION_GET_GOOD_FRIEND = 16,
         actionForward			=17,
-        actionLeaveMap			=18,		// ∑˛ŒÒ∆˜->øÕªß∂À,idPlayer
-        actionJump				=19,
+        /** Signal to the client that the entity leaved the map. */
+        ACTION_LEAVE_MAP = 18,
+        /** Signal to both sides that an entity jumped. */
+        ACTION_JUMP = 19,
         actionRun				=20,
         actionEquip				=21,
         actionUnequip			=22,
         /** Signal to the client that the player gained a level */
         ACTION_UP_LEVEL = 23,
-        actionXpCLear			=24,
-        actionReborn			=25,
+        /** Signal to the client that the XP is done. */
+        ACTION_XP_CLEAR = 24,
+        /** Signal to both sides that the entity will reborn. */
+        ACTION_REBORN = 25,
         /** Delete the current role. */
         ACTION_DELETE_ROLE = 26,
         /** Get the weapon skills (client request). The next step is the magics. */
@@ -70,14 +75,16 @@ public:
         ACTION_SET_PKMODE = 29,
         /** Get the legion attributes. */
         ACTION_GET_SYN_ATTR = 30,
-        actionGhost				=31,
+        /** Signal to the client to transform in a ghost. */
+        ACTION_GHOST = 31,
         /** Synchronize the position (the client will send its coords) as answer */
         ACTION_SYNCRHO = 32, // Unknown action[0032], data=[54788624]
         actionQueryFriendInfo	=33,
         actionQueryLeaveWord	=34,
         /** Change the face of the entity */
         ACTION_CHANGE_FACE = 35,
-        actionMine				=36, // action 290 ?
+        /** Signal to both sides that the entity is mining. */
+        ACTION_MINE = 36, // action 290 ?
         actionTeamMemeberPos	=37,
         actionQueryPlayer		=38,
         actionAbortMagic		=39,
@@ -153,19 +160,6 @@ public:
         actionBurstXp							=95,		// XP±¨∑¢£¨‘ –Ì π”√XPººƒ‹
         actionChangeToRandomPos					=96,       // ÀÊª˙“∆∂Ø
         actionDisappear							=97
-    };
-
-    /** List of all PK modes. */
-    enum PkMode
-    {
-        /** Can attack any player and monster. */
-        PKMODE_FREE = 0,
-        /** Can only attack monsters. */
-        PKMODE_SAFE = 1,
-        /** Can attack any monster and enemies. */
-        PKMODE_TEAM = 2,
-        /** Can attack any monster and PKers. */
-        PKMODE_ARRESTMENT = 3
     };
 
 public:

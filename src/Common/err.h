@@ -1,11 +1,6 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
- *
- * Taken from :
- * ****** BARLab - Open Source ******
- * Copyright (C) 2012 BARLab
- * Copyright (C) 2012 Jean-Philippe Boivin
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
@@ -14,7 +9,6 @@
 #ifndef _FAITH_EMULATOR_ERROR_H_
 #define _FAITH_EMULATOR_ERROR_H_
 
-#include "def.h"
 #include "types.h"
 #include <assert.h>
 #include <errno.h>
@@ -137,7 +131,7 @@ const err_t ERROR_UNKNOWN = 0x7FFFFFFF;
  *****************************************************
  */
 
-#ifdef DEBUG
+#ifndef NDEBUG
 
 // Assert an expression and might abort
 #define ASSERT(exp)                          \
@@ -152,12 +146,12 @@ const err_t ERROR_UNKNOWN = 0x7FFFFFFF;
 // Assert an expression and return if false
 #define ASSERT(exp)                          \
     if (!(exp))                              \
-    return
+        abort()
 
 // Assert an expression and return the error if false
 #define ASSERT_ERR(exp, err)                 \
     if (!(exp))                              \
-    return err
+        return err
 
 #endif // DEBUG
 

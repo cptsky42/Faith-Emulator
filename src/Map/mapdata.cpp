@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -30,11 +30,9 @@ MapData :: load(MapData** aOutData, const char* aPath)
     if (Finder::fileExists(aPath))
     {
         BinaryReader reader(aPath);
-        DOIF(err, reader.lock());
 
         DOIF(err, data->loadMapData(reader));
 
-        reader.unlock();
         reader.close();
     }
     else
@@ -56,7 +54,7 @@ MapData :: load(MapData** aOutData, const char* aPath)
 
 MapData :: MapData()
     : mWidth(0), mHeight(0), mCells(nullptr),
-      mPckData(nullptr), mPckLen(0)
+      mIsPacking(true), mPckData(nullptr), mPckLen(0)
 {
 
 }
@@ -142,8 +140,8 @@ MapData :: loadMapData(BinaryReader& aReader)
     }
 
     DOIF(err, loadPassageData(aReader));
-    if (version == 1003)
-        DOIF(err, loadRegionData(aReader));
+//    if (version == 1003)
+//        DOIF(err, loadRegionData(aReader));
     DOIF(err, loadLayerData(aReader));
 
     //The rest are LAYER_SCENE, but useless for a server. I'll not implement the rest as it would only
@@ -216,8 +214,7 @@ MapData :: loadRegionData(BinaryReader& aReader)
 
     if (IS_SUCCESS(err))
     {
-        LOG(ERROR, "Regions are not supported yet.");
-        err = ERROR_INVALID_FUNCTION;
+        LOG(WARN, "Regions are not supported yet.");
     }
 
     return err;
@@ -261,15 +258,23 @@ MapData :: loadLayerData(BinaryReader& aReader)
                 DOIF(err, aReader.readUInt32(startX));
                 DOIF(err, aReader.readUInt32(startY));
 
+                #ifndef _WIN32 // convert path separator...
+                if (IS_SUCCESS(err))
+                {
+                    for (size_t x = 0, len = strlen(fileName); x < len; ++x)
+                    {
+                        if (fileName[x] == '\\')
+                            fileName[x] = '/';
+                    }
+                }
+                #endif // _WIN32
+
                 LOG(VRB, "Found a 2D map terrain object at (%u, %u). Loading scene file '%s'",
                     startX, startY, fileName);
-
-                // TODO: Normalize path to / instead of Windows...
 
                 if (Finder::fileExists(fileName))
                 {
                     BinaryReader reader(fileName);
-                    DOIF(err, reader.lock());
 
                     DOIF(err, reader.readInt32(count));
                     LOG(VRB, "Found %d parts.", count);
@@ -309,7 +314,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                                 if (posX < UINT16_MAX && posX < UINT16_MAX)
                                 {
                                     Cell& cell = mCells[pos2idx((uint16_t)posX, (uint16_t)posY)];
-                                    cell.Accessible = mask != FALSE;
+                                    cell.Accessible = mask != false;
                                     cell.Altitude = altitude;
                                 }
                                 else
@@ -321,7 +326,6 @@ MapData :: loadLayerData(BinaryReader& aReader)
                         }
                     }
 
-                    reader.unlock();
                     reader.close();
                 }
                 else
@@ -368,11 +372,16 @@ MapData :: loadLayerData(BinaryReader& aReader)
 }
 
 err_t
-MapData :: pack()
+MapData :: pack(void* aCaller)
 {
     err_t err = ERROR_SUCCESS;
 
-    if (mPckData == nullptr)
+    mPckMutex.lock();
+
+    if (aCaller != nullptr)
+        mRefs.erase(aCaller);
+
+    if (mIsPacking && mPckData == nullptr && mRefs.size() == 0)
     {
         ASSERT(mCells != nullptr);
 
@@ -386,7 +395,7 @@ MapData :: pack()
             {
                 const Cell& cell = mCells[pos2idx(x, y)];
 
-                *(ptr++) = cell.Accessible ? TRUE : FALSE;
+                *(ptr++) = cell.Accessible ? true : false;
                 *(ptr++) = cell.Altitude & INT16_C(0xFF);
                 *(ptr++) = (cell.Altitude >> 8) & INT16_C(0xFF);
             }
@@ -415,15 +424,21 @@ MapData :: pack()
         }
     }
 
+    mPckMutex.unlock();
     return err;
 }
 
 err_t
-MapData :: unpack()
+MapData :: unpack(void* aCaller)
 {
     err_t err = ERROR_SUCCESS;
 
-    if (mPckData != nullptr)
+    mPckMutex.lock();
+
+    if (aCaller != nullptr)
+        mRefs.insert(aCaller);
+
+    if (mIsPacking && mPckData != nullptr)
     {
         ASSERT(mCells == nullptr);
 
@@ -441,8 +456,8 @@ MapData :: unpack()
             for (uint16_t x = 0; ERROR_SUCCESS == err && x < mWidth; ++x)
             {
                 Cell& cell = mCells[pos2idx(x, y)];
-                cell.Accessible = *(ptr++) != FALSE;
-                cell.Altitude = (int16_t)(*(ptr++) | (*(ptr++) << 8));
+                cell.Accessible = *(ptr++) != false;
+                cell.Altitude = (int16_t)((*(ptr++) << 8) | *(ptr++));
             }
         }
 
@@ -458,5 +473,26 @@ MapData :: unpack()
         }
     }
 
+    mPckMutex.unlock();
     return err;
+}
+
+int
+MapData :: getPassage(uint16_t aPosX, uint16_t aPosY) const
+{
+    int passageId = -1;
+
+    for (vector<Passage*>::const_iterator
+            it = mPassages.begin(), end = mPassages.end();
+         it != end; ++it)
+    {
+        const Passage& passage = **it;
+        if (passage.PosX == aPosX && passage.PosY == aPosY)
+        {
+            passageId = passage.Index;
+            break;
+        }
+    }
+
+    return passageId;
 }

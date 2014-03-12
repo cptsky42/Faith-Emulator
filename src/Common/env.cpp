@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -10,6 +10,7 @@
 #include "common.h"
 #include <stdlib.h>
 #include <algorithm>
+#include <QThread>
 
 using namespace std;
 
@@ -20,11 +21,21 @@ Environment* Environment::sInstance = nullptr;
 Environment&
 Environment :: getInstance()
 {
-    // TODO? Thread-safe
+    static volatile long protect = 0;
+
     if (sInstance == nullptr)
     {
-        sInstance = new Environment();
-        ASSERT(sInstance != nullptr);
+        if (1 == atomic_inc(&protect))
+        {
+            // create the instance
+            sInstance = new Environment();
+            ASSERT(sInstance != nullptr);
+        }
+        else
+        {
+            while (sInstance == nullptr)
+                QThread::yieldCurrentThread();
+        }
     }
     return *sInstance;
 }
@@ -83,4 +94,3 @@ Environment :: unregisterObj(Global* aObj)
         }
     }
 }
-

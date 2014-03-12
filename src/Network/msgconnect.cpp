@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,6 +8,7 @@
 
 #include "msgconnect.h"
 #include "client.h"
+#include "tqcipher.h"
 #include "player.h"
 #include "database.h"
 #include "world.h"
@@ -69,9 +70,10 @@ MsgConnect :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
+    static const Database& db = Database::getInstance(); // singleton
+
     Client& client = *aClient;
     Client::Status status = client.getStatus();
-    Database& db = Database::getInstance();
 
     // set the account UID
     client.setAccountID(mInfo->AccountUID);
@@ -86,10 +88,8 @@ MsgConnect :: process(Client* aClient)
         }
         case Client::NORMAL: // Sent to the MsgServer
         {
-            // TODO: if online, disconnect
-
-            TqCipher& cipher = client.getCipher();
-            cipher.generateKey(mInfo->Data, mInfo->AccountUID);
+            TqCipher* cipher = (TqCipher*)&client.getCipher();
+            cipher->generateKey(mInfo->Data, mInfo->AccountUID);
 
             if (!IS_SUCCESS(db.getPlayerInfo(client)))
             {
@@ -141,7 +141,7 @@ MsgConnect :: process(Client* aClient)
                 SAFE_DELETE(msg);
 
                 player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
-                                  player.getMaxLife(), player.getMaxMana(), player.getMaxEnergy(), player.getMaxWeight());
+                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
                 player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
                                   player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
                                   player.getMDef(), player.getDext());

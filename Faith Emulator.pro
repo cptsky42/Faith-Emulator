@@ -17,8 +17,19 @@ QT_VERSION = $$split(QT_VERSION, ".")
 QT_VER_MAJ = $$member(QT_VERSION, 0)
 QT_VER_MIN = $$member(QT_VERSION, 1)
 
-lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 7) {
+if(lessThan(QT_VER_MAJ, 4)) {
    error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
+}
+
+if(equals(QT_VER_MAJ, 4)) {
+   if(lessThan(QT_VER_MIN, 7)) {
+      error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
+   }
+}
+
+# Qt5 and onwards are more modular... Must link extra libraries...
+if(greaterThan(QT_VER_MAJ, 4)) {
+    QT += concurrent
 }
 
 OBJECTS_DIR = tmp
@@ -27,12 +38,29 @@ RCC_DIR = tmp
 UI_DIR = tmp
 
 SOURCES += \
-    src/server.cpp \
-    src/program.cpp \
+    src/basefunc.cpp \
     src/client.cpp \
-    src/Network/Sockets/tcpserver.cpp \
+    src/generator.cpp \
+    src/inifile.cpp \
+    src/item.cpp \
+    src/program.cpp \
+    src/server.cpp \
+    src/world.cpp \
+    src/Common/env.cpp \
+    src/Common/log.cpp \
+    src/Database/database.cpp \
+    src/Entity/advancedentity.cpp \
+    src/Entity/entity.cpp \
+    src/Entity/monster.cpp \
+    src/Entity/npc.cpp \
+    src/Entity/player.cpp \
+    src/IO/binaryreader.cpp \
+    src/IO/finder.cpp \
+    src/Map/gamemap.cpp \
+    src/Map/mapdata.cpp \
+    src/Map/mapmanager.cpp \
     src/Network/Sockets/networkclient.cpp \
-    src/Security/Cryptography/tqcipher.cpp \
+    src/Network/Sockets/tcpserver.cpp \
     src/Network/msg.cpp \
     src/Network/msgaccount.cpp \
     src/Network/msgconnect.cpp \
@@ -41,24 +69,21 @@ SOURCES += \
     src/Network/msgaction.cpp \
     src/Network/msguserinfo.cpp \
     src/Network/msguserattrib.cpp \
-    src/Database/database.cpp \
     src/Network/msgiteminfo.cpp \
-    src/Security/Cryptography/rc5.cpp \
-    src/Entity/entity.cpp \
-    src/Entity/player.cpp \
+    src/Network/msgmapinfo.cpp \
     src/Network/msgwalk.cpp \
-    src/Map/mapmanager.cpp \
-    src/Map/gamemap.cpp \
-    src/IO/binaryreader.cpp \
-    src/IO/finder.cpp \
     src/Network/msgplayer.cpp \
     src/Network/msgnpcinfo.cpp \
-    src/Entity/npc.cpp \
-    src/Entity/advancedentity.cpp \
-    src/Entity/monster.cpp \
-    src/world.cpp \
-    src/Common/env.cpp \
-    src/item.cpp \
+    src/Network/msgnpc.cpp \
+    src/Network/msgdialog.cpp \
+    src/Network/msgregister.cpp \
+    src/Network/msgallot.cpp \
+    src/Network/msgtick.cpp \
+    src/Script/itemtask.cpp \
+    src/Script/npctask.cpp \
+    src/Script/script.cpp \
+    src/Security/Cryptography/rc5.cpp \
+    src/Security/Cryptography/tqcipher.cpp \
     src/third_party/lua-5.2.2/src/lzio.c \
     src/third_party/lua-5.2.2/src/lvm.c \
     src/third_party/lua-5.2.2/src/lundump.c \
@@ -91,39 +116,39 @@ SOURCES += \
     src/third_party/lua-5.2.2/src/lbaselib.c \
     src/third_party/lua-5.2.2/src/lauxlib.c \
     src/third_party/lua-5.2.2/src/lapi.c \
-    src/Script/script.cpp \
-    src/Script/npctask.cpp \
-    src/Network/msgnpc.cpp \
-    src/Network/msgdialog.cpp \
-    src/Map/mapdata.cpp \
-    src/Common/log.cpp \
-    src/inifile.cpp \
-    src/Network/msgregister.cpp \
-    src/basefunc.cpp \
-    src/Script/itemtask.cpp \
-    src/Network/msgallot.cpp \
-    src/Network/msgtick.cpp \
-    src/third_party/minilzo-2.06/minilzo.c \
-    src/Network/msgmapinfo.cpp
+    src/third_party/minilzo-2.06/minilzo.c
 
 HEADERS += \
-    src/server.h \
+    src/basefunc.h \
     src/client.h \
-    src/world.h \
+    src/generator.h \
+    src/inifile.h \
     src/item.h \
+    src/server.h \
     src/strres.h \
+    src/timer.h \
+    src/world.h \
+    src/Common/arch.h \
+    src/Common/common.h \
+    src/Common/endianness.h \
+    src/Common/env.h \
+    src/Common/err.h \
+    src/Common/log.h \
+    src/Common/types.h \
     src/Database/database.h \
-    src/Entity/entity.h \
-    src/Entity/player.h \
-    src/Entity/npc.h \
     src/Entity/advancedentity.h \
+    src/Entity/entity.h \
     src/Entity/monster.h \
+    src/Entity/npc.h \
+    src/Entity/player.h \
     src/IO/binaryreader.h \
     src/IO/finder.h \
-    src/Map/mapmanager.h \
     src/Map/gamemap.h \
-    src/Network/Sockets/tcpserver.h \
+    src/Map/mapbase.h \
+    src/Map/mapdata.h \
+    src/Map/mapmanager.h \
     src/Network/Sockets/networkclient.h \
+    src/Network/Sockets/tcpserver.h \
     src/Network/msg.h \
     src/Network/msgaccount.h \
     src/Network/networkdef.h \
@@ -140,10 +165,16 @@ HEADERS += \
     src/Network/msgnpcinfo.h \
     src/Network/msgnpc.h \
     src/Network/msgdialog.h \
-    src/Script/script.h \
+    src/Network/msgregister.h \
+    src/Network/msgallot.h \
+    src/Network/msgtick.h \
+    src/Network/msgmapinfo.h \
+    src/Script/itemtask.h \
     src/Script/npctask.h \
-    src/Security/Cryptography/tqcipher.h \
+    src/Script/script.h \
+    src/Security/Cryptography/icipher.h \
     src/Security/Cryptography/rc5.h \
+    src/Security/Cryptography/tqcipher.h \
     src/third_party/lua-5.2.2/src/lzio.h \
     src/third_party/lua-5.2.2/src/lvm.h \
     src/third_party/lua-5.2.2/src/lundump.h \
@@ -169,27 +200,9 @@ HEADERS += \
     src/third_party/lua-5.2.2/src/lcode.h \
     src/third_party/lua-5.2.2/src/lauxlib.h \
     src/third_party/lua-5.2.2/src/lapi.h \
-    src/Map/mapdata.h \
-    src/Map/mapbase.h \
-    src/Common/env.h \
-    src/Common/log.h \
-    src/Common/unicode.h \
-    src/Common/types.h \
-    src/Common/err.h \
-    src/Common/def.h \
-    src/Common/arch.h \
-    src/Common/common.h \
-    src/Common/endianness.h \
-    src/inifile.h \
-    src/Network/msgregister.h \
-    src/basefunc.h \
-    src/Script/itemtask.h \
-    src/Network/msgallot.h \
-    src/Network/msgtick.h \
     src/third_party/minilzo-2.06/minilzo.h \
     src/third_party/minilzo-2.06/lzodefs.h \
-    src/third_party/minilzo-2.06/lzoconf.h \
-    src/Network/msgmapinfo.h
+    src/third_party/minilzo-2.06/lzoconf.h
 
 INCLUDEPATH += \
     src \
@@ -207,6 +220,8 @@ INCLUDEPATH += \
 
 OTHER_FILES += \
     data/settings.cfg
+#    LICENSE \
+#    README
 
 # WIN32 stuff
 win32 {

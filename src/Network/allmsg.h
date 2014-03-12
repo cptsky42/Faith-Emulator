@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -15,6 +15,7 @@
 #include "msgconnect.h"
 #include "msgdialog.h"
 #include "msgiteminfo.h"
+#include "msgmapinfo.h"
 #include "msgnpc.h"
 #include "msgnpcinfo.h"
 #include "msgplayer.h"

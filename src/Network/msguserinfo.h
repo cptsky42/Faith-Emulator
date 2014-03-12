@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -85,20 +85,6 @@ public:
      * @param[in]   aPlayer     a reference to the player object
      */
     MsgUserInfo(const Player& aPlayer);
-
-    /**
-     * Create a message object from the specified buffer.
-     * The buffer will be took by the object and the memory
-     * freed when the object will be destroyed.
-     *
-     * If the server is on a Be architecture, all the integers
-     * are swapped.
-     *
-     * @param[in,out] aBuf        a pointer to the buffer to take
-     *                            the pointer will be set to null
-     * @param[in]     aLen        the length in bytes of the buffer
-     */
-    MsgUserInfo(uint8_t** aBuf, size_t aLen);
 
     /* destructor */
     virtual ~MsgUserInfo();

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,6 +8,7 @@
 
 #include "client.h"
 #include "networkclient.h"
+#include "tqcipher.h"
 #include "msg.h"
 #include "player.h"
 #include "database.h"
@@ -15,19 +16,18 @@
 #include <stdlib.h>
 
 Client :: Client(NetworkClient* aSocket)
+    : mSocket(aSocket), mCipher(nullptr),
+      mAccountID(-1), mAccLvl(0), mFlags(0),
+      mPlayer(nullptr)
 {
     ASSERT(aSocket != nullptr);
 
-    mSocket = aSocket;
-    mCipher.generateIV(0x0705FD1F, 0x1B7A313F);
+    TqCipher* cipher = new TqCipher();
+    cipher->generateIV(0x0705FD1F, 0x1B7A313F);
+
+    mCipher = cipher;
 
     mStatus = Client::NOT_AUTHENTICATED;
-
-    mAccountID = -1;
-    mAccLvl = 0;
-    mFlags = 0;
-
-    mPlayer = nullptr;
 }
 
 Client :: ~Client()
@@ -41,12 +41,13 @@ Client :: ~Client()
 
         SAFE_DELETE(mPlayer);
     }
+
+    SAFE_DELETE(mCipher);
 }
 
 void
 Client :: save()
 {
-    // TODO
     printf("Calling save for %p ... %s\n",
            this, mPlayer != nullptr ? mPlayer->getName() : "");
 
@@ -55,7 +56,7 @@ Client :: save()
 
     if (mPlayer != nullptr)
     {
-        Database& db = Database::getInstance();
+        static const Database& db = Database::getInstance(); // singleton
 
         do
         {
@@ -72,7 +73,7 @@ Client :: save()
 
         if (!IS_SUCCESS(err))
         {
-            LOG(CRIT, "Failed to save player %s for %p.",
+            LOG(ERROR, "Failed to save player %s for %p.",
                 mPlayer->getName(), this);
         }
     }
@@ -86,7 +87,7 @@ Client :: send(Msg* aMsg)
     uint8_t* data = new uint8_t[aMsg->getLength()];
     memcpy(data, aMsg->getBuffer(), aMsg->getLength());
 
-    mCipher.encrypt(data, aMsg->getLength());
+    mCipher->encrypt(data, aMsg->getLength());
     mSocket->send(data, aMsg->getLength());
 
     SAFE_DELETE_ARRAY(data);
@@ -100,7 +101,7 @@ Client :: send(uint8_t* aBuf, size_t aLen)
     uint8_t* data = new uint8_t[aLen];
     memcpy(data, aBuf, aLen);
 
-    mCipher.encrypt(data, aLen);
+    mCipher->encrypt(data, aLen);
     mSocket->send(data, aLen);
 
     SAFE_DELETE_ARRAY(data);
@@ -109,6 +110,6 @@ Client :: send(uint8_t* aBuf, size_t aLen)
 void
 Client :: disconnect()
 {
-    // TODO
     mSocket->disconnect();
 }
+

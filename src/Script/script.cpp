@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -18,10 +18,20 @@ Script::State* Script::State::sState = nullptr;
 lua_State&
 Script::State :: getState()
 {
-    // TODO? Thread-safe
+    static volatile long protect = 0;
+
     if (sState == nullptr)
     {
-        sState = new State();
+        if (1 == atomic_inc(&protect))
+        {
+            // create the instance
+            sState = new State();
+        }
+        else
+        {
+            while (sState == nullptr)
+                QThread::yieldCurrentThread();
+        }
     }
     return *(sState->mState);
 }

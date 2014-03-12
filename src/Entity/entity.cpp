@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -49,16 +49,32 @@ Entity :: updateBroadcastSet(bool aClearSet) const
 void
 Entity :: clearBroadcastSet() const
 {
-    // TODO thread-safe
-    for (map<uint32_t, const Entity*>::const_iterator
-            it = mViewSet.begin(), end = mViewSet.end();
-         it != end; ++it)
+    mViewSetMutex.lock();
+
+    map<uint32_t, const Entity*>::iterator it;
+    while (!mViewSet.empty())
     {
+        it = mViewSet.begin();
+
+        // remove the current entity from the other screen
         const Entity& entity = *it->second;
         entity.removeEntityFromBCSet(*this);
-        removeEntityFromBCSet(entity);
+
+        // remove the entity from this current set
+        mViewSet.erase(it);
+
+        // remove the entity from the current screen
+        if (isPlayer())
+        {
+            Player* player = (Player*)this;
+
+            MsgAction msg(&entity, 0, MsgAction::ACTION_LEAVE_MAP);
+            player->send(&msg);
+        }
     }
     mViewSet.clear();
+
+    mViewSetMutex.unlock();
 
     // TODO map items
 }
@@ -69,17 +85,20 @@ Entity :: addEntityToBCSet(const Entity& aEntity) const
     ASSERT(&aEntity != nullptr);
     ASSERT(&aEntity != this);
 
-    // TODO thread-safe
+    mViewSetMutex.lock();
+
     if (mViewSet.end() == mViewSet.find(aEntity.getUID()))
     {
         mViewSet[aEntity.getUID()] = &aEntity;
 
         if (isPlayer())
         {
-            Player* player = (Player*)this; // TODO: safe cast ?
+            Player* player = (Player*)this;
             aEntity.sendShow(*player);
         }
     }
+
+    mViewSetMutex.unlock();
 }
 
 void
@@ -88,21 +107,24 @@ Entity :: removeEntityFromBCSet(const Entity& aEntity) const
     ASSERT(&aEntity != nullptr);
     ASSERT(&aEntity != this);
 
-    if (isPlayer())
-    {
-        Player* player = (Player*)this; // TODO: safe cast ?
+    mViewSetMutex.lock();
 
-        MsgAction msg(&aEntity, 0, MsgAction::actionDisappear);
-        player->send(&msg);
-    }
-
-    // TODO thread-safe
     map<uint32_t, const Entity*>::iterator it =
             mViewSet.find(aEntity.getUID());
     if (mViewSet.end() != it)
     {
         mViewSet.erase(it);
+
+        if (isPlayer())
+        {
+            Player* player = (Player*)this;
+
+            MsgAction msg(&aEntity, 0, MsgAction::ACTION_LEAVE_MAP);
+            player->send(&msg);
+        }
     }
+
+    mViewSetMutex.unlock();
 }
 
 void
@@ -112,11 +134,12 @@ Entity :: broadcastRoomMsg(Msg* aMsg, bool aIncludeSelf) const
 
     if (aIncludeSelf && isPlayer())
     {
-        Player* player = (Player*)this; // TODO: safe cast ?
+        Player* player = (Player*)this;
         player->send(aMsg);
     }
 
-    // TODO thread safe
+    mViewSetMutex.lock();
+
     for (map<uint32_t, const Entity*>::const_iterator
             it = mViewSet.begin(), end = mViewSet.end();
          it != end; ++it)
@@ -124,10 +147,12 @@ Entity :: broadcastRoomMsg(Msg* aMsg, bool aIncludeSelf) const
         const Entity& entity = *it->second;
         if (entity.isPlayer())
         {
-            const Player* player = (const Player*)&entity; // TODO: safe cast ?
+            const Player* player = (const Player*)&entity;
             player->send(aMsg);
         }
     }
+
+    mViewSetMutex.unlock();
 }
 
 void
@@ -137,11 +162,12 @@ Entity :: broadcastRoomMsg(uint8_t* aBuf, size_t aLen, bool aIncludeSelf) const
 
     if (aIncludeSelf && isPlayer())
     {
-        Player* player = (Player*)this; // TODO: safe cast ?
+        Player* player = (Player*)this;
         player->send(aBuf, aLen);
     }
 
-    // TODO thread safe
+    mViewSetMutex.lock();
+
     for (map<uint32_t, const Entity*>::const_iterator
             it = mViewSet.begin(), end = mViewSet.end();
          it != end; ++it)
@@ -149,8 +175,10 @@ Entity :: broadcastRoomMsg(uint8_t* aBuf, size_t aLen, bool aIncludeSelf) const
         const Entity& entity = *it->second;
         if (entity.isPlayer())
         {
-            const Player* player = (const Player*)&entity; // TODO: safe cast ?
+            const Player* player = (const Player*)&entity;
             player->send(aBuf, aLen);
         }
     }
+
+    mViewSetMutex.unlock();
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -38,9 +38,9 @@ MsgAccount :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
-    Client& client = *aClient;
-    Database& db = Database::getInstance();
+    static const Database& db = Database::getInstance(); // singleton
 
+    Client& client = *aClient;
     client.setAccount(mInfo->Account);
 
     uint8_t seed[RC5::KEY_SIZE] =
@@ -57,7 +57,7 @@ MsgAccount :: process(Client* aClient)
             fprintf(stdout, "Connection of %s on %s...\n",
                     mInfo->Account, mInfo->Server);
 
-            int32_t token = random(INT32_MAX);
+            int32_t token = random(10000, INT32_MAX);
 
             MsgConnect msg(client.getAccountID(), token, Server::getServerIP());
             client.send(&msg);
@@ -66,8 +66,6 @@ MsgAccount :: process(Client* aClient)
         {
             MsgConnect msg(MsgConnect::INVALID_UID, 0, MsgConnect::ERROR_INVALID_ACC);
             client.send(&msg);
-
-            // TODO: Bruteforce protection
         }
     }
     else

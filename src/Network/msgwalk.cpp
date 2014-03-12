@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -94,17 +94,17 @@ MsgWalk :: process(Client* aClient)
         }
     }
 
-    // TODO: Implement
-    //if (!Player.IsAlive() && !Player.IsGhost())
-    //{
-    //    Player.SendSysMsg(Client.GetStr("STR_DIE"));
-    //    return;
-    //}
+    if (!player.isAlive() && !player.isGhost())
+    {
+        player.sendSysMsg(STR_DIE);
+        return;
+    }
 
+    player.send(this); // send back...
     if (player.move(newX, newY, dir))
     {
         // broadcast the message to everyone
-        player.broadcastRoomMsg(this, true);
+        player.broadcastRoomMsg(this, false);
     }
 }
 

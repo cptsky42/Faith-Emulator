@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -9,7 +9,6 @@
 #ifndef _FAITH_EMULATOR_LOG_H_
 #define _FAITH_EMULATOR_LOG_H_
 
-#include "def.h"
 #include "env.h"
 #include <stdio.h>
 #include <time.h>
@@ -39,9 +38,7 @@ enum LogLevel
     /** Warning */
     LOG_LEVEL_WARN = 3,
     /** Error */
-    LOG_LEVEL_ERROR = 4,
-    /** Critical error */
-    LOG_LEVEL_CRIT = 5
+    LOG_LEVEL_ERROR = 4
 };
 
 /**
@@ -50,9 +47,7 @@ enum LogLevel
 class Logger : public Environment::Global, private QThread
 {
 public:
-    static err_t init(const char* aDestFolder, const char* aPrefix);
-    static err_t init(const std::string& aDestFolder, const std::string& aPrefix)
-    { return init(aDestFolder.c_str(), aPrefix.c_str()); }
+    static err_t init(const char* aDestFolder, const char* aFile);
 
     static bool willLog(LogLevel aLevel);
 
@@ -73,8 +68,6 @@ private:
              const char* aFile, const char* aFunction, unsigned int aLine,
              const char* aFormat, va_list& aArgs);
 
-    bool openLog(const char* aPath);
-
     virtual void run();
 
     /* constructor */
@@ -87,28 +80,16 @@ private:
         return *gmtime(&now);
     }
 
-    static inline int dateToInt(const tm& aDate)
-    {
-        return ((aDate.tm_year + 1900) * 10000) +
-                ((aDate.tm_mon + 1) * 100) +
-                (aDate.tm_mday);
-    }
-
     static Logger& getInstance();
-
-private:
-    std::string getDestination();
 
 private:
     static Logger* sInstance;
 
 private:
     std::string mDestFolder;
-    std::string mPrefix;
+    std::string mFile;
 
     FILE* mStream;
-    int mCurrentDate;
-
     std::vector<LogData*> mQueue;
 
     QMutex mMutex;

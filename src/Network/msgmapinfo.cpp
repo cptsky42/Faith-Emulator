@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -13,16 +13,6 @@ MsgMapInfo :: MsgMapInfo(const GameMap& aMap)
     : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
     create(aMap);
-}
-
-MsgMapInfo :: MsgMapInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
-{
-    ASSERT(aLen >= sizeof(MsgInfo));
-
-    #if BYTE_ORDER == BIG_ENDIAN
-    swap(mBuf);
-    #endif
 }
 
 MsgMapInfo :: ~MsgMapInfo()

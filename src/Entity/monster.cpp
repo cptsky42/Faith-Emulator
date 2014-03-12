@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -7,39 +7,32 @@
  */
 
 #include "monster.h"
+#include "world.h"
+#include "generator.h"
 #include "player.h"
 #include "msgplayer.h"
 
-Monster :: Monster(uint32_t aUID, Monster::Info& aInfo)
-    : AdvancedEntity(aUID)
+Monster :: Monster(uint32_t aUID, const Monster::Info& aInfo, Generator* aOwner)
+    : AdvancedEntity(aUID), mInfo(aInfo), mOwner(aOwner)
 {
-    mId = aInfo.Id;
-    mName = aInfo.Name;
-    mType = aInfo.Type;
-    mLook = aInfo.Look;
+    if (mOwner != nullptr)
+        ++mOwner->mAmount;
 
-    mCurHP = aInfo.Life;
-    mMaxHP = aInfo.Life;
-    mEscapeLife = aInfo.EscapeLife;
+    mName = aInfo.Name;
+    mLook = aInfo.Look;
 
     mLevel = aInfo.Level;
 
-    mMinAtk = aInfo.MinAtk;
-    mMaxAtk = aInfo.MaxAtk;
-    mDefense = aInfo.Defense;
-    mDexterity = aInfo.Dexterity;
-    mDodge = aInfo.Dodge;
+    mCurHP = aInfo.Life;
+    mMaxHP = aInfo.Life;
 
-    mViewRange = aInfo.ViewRange;
-    mAtkSpeed = aInfo.AtkSpeed;
-    mMoveSpeed = aInfo.MoveSpeed;
-
-    mDefy = aInfo.Defy;
+    mPose = AdvancedEntity::POSE_STANDBY;
 }
 
 Monster :: ~Monster()
 {
-
+    static World& world = World::getInstance();
+    world.recycleMonsterUID(mUID);
 }
 
 void
@@ -48,3 +41,7 @@ Monster :: sendShow(const Player& aPlayer) const
     MsgPlayer msg(*this);
     aPlayer.send(&msg);
 }
+
+
+// TODO die method and decrement mAmount & mGenAmount
+// if mGenAmount < mAmount => error & mGenAmount = mAmount

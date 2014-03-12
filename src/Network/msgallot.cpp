@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -50,3 +50,4 @@ MsgAllot :: process(Client* aClient)
 
     player.allot(mInfo->Force, mInfo->Health, mInfo->Dexterity, mInfo->Soul);
 }
+

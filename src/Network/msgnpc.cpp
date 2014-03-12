@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -57,18 +57,17 @@ MsgNpc :: process(Client* aClient)
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
 
-    // TODO finish implementation
-//    if (!player.isAlive())
-//    {
-//        player.sendSysMsg(STR_DIE);
-//        return;
-//    }
+    if (!player.isAlive())
+    {
+        player.sendSysMsg(STR_DIE);
+        return;
+    }
 
     switch (mInfo->Event)
     {
     case EVENT_BEACTIVED:
         {
-            World& world = World::getInstance();
+            static const World& world = World::getInstance(); // singleton
             Npc* npc = nullptr;
             if (world.queryNpc(&npc, mInfo->Id) &&
                 player.getMapId() == npc->getMapId())
