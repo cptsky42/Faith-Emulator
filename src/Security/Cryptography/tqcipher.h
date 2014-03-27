@@ -66,7 +66,7 @@ public:
      * @param[in,out] aBuf          the buffer that will be encrypted
      * @param[in]     aLen          the number of octets to encrypt
      */
-    void encrypt(uint8_t* aBuf, size_t aLen);
+    virtual void encrypt(uint8_t* aBuf, size_t aLen);
 
     /**
      * Decrypt n octet(s) with the cipher.
@@ -75,7 +75,7 @@ public:
      * @param[in,out] aBuf          the buffer that will be decrypted
      * @param[in]     aLen          the number of octets to decrypt
      */
-    void decrypt(uint8_t* aBuf, size_t aLen);
+    virtual void decrypt(uint8_t* aBuf, size_t aLen);
 
 public:
     /**
