@@ -66,15 +66,7 @@ public:
      *
      * @param[in]  aMsg     the message to send
      */
-    void send(Msg* aMsg);
-
-    /**
-     * Send a message to the client.
-     *
-     * @param[in]   aBuf    the message to send
-     * @param[in]   aLen    the length of the message
-     */
-    void send(uint8_t* aBuf, size_t aLen);
+    void send(const Msg* aMsg) const;
 
     /**
      * Disconnect the client from the server.

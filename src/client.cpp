@@ -80,7 +80,7 @@ Client :: save()
 }
 
 void
-Client :: send(Msg* aMsg)
+Client :: send(const Msg* aMsg) const
 {
     ASSERT(aMsg != nullptr);
 
@@ -89,20 +89,6 @@ Client :: send(Msg* aMsg)
 
     mCipher->encrypt(data, aMsg->getLength());
     mSocket->send(data, aMsg->getLength());
-
-    SAFE_DELETE_ARRAY(data);
-}
-
-void
-Client :: send(uint8_t* aBuf, size_t aLen)
-{
-    ASSERT(aBuf != nullptr);
-
-    uint8_t* data = new uint8_t[aLen];
-    memcpy(data, aBuf, aLen);
-
-    mCipher->encrypt(data, aLen);
-    mSocket->send(data, aLen);
 
     SAFE_DELETE_ARRAY(data);
 }

@@ -16,6 +16,8 @@
 #include <string>
 #include <deque>
 
+class Team;
+
 /**
  * Base class of all players.
  */
@@ -173,16 +175,7 @@ public:
      *
      * @param[in]  aMsg     the message to send
      */
-    inline void send(Msg* aMsg) const { mClient.send(aMsg); }
-
-    /**
-     * Send a message to the client.
-     * The TQ seal will be appended at the end.
-     *
-     * @param[in]   aBuf    the message to send
-     * @param[in]   aLen    the length of the message
-     */
-    inline void send(uint8_t* aBuf, size_t aLen) const { mClient.send(aBuf, aLen); }
+    inline void send(const Msg* aMsg) const { mClient.send(aMsg); }
 
     /**
      * Disconnect the client from the server.
@@ -288,6 +281,9 @@ public:
     { ASSERT(aPos < Item::MAX_EQUIPMENT); return mEquipment[aPos]; }
 
 public:
+    Team* getTeam() const { return mTeam; }
+
+public:
     /** Get the tick of the latest cool effect */
     time_t getLastCoolShow() const { return mLastCoolShow; }
 
@@ -331,6 +327,7 @@ private:
 
     Item* mEquipment[Item::MAX_EQUIPMENT]; //!< the equipment of the player
 
+    Team* mTeam; //!< the team of the player
 
     // MsgTick protection
     uint32_t mMsgCount; //!< the last msg count

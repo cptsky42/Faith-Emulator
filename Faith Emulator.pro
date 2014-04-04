@@ -4,7 +4,7 @@ QT -= gui
 
 TARGET = "Faith Emulator"
 TEMPLATE = app
-CONFIG   += console
+CONFIG += console
 
 macx {
 CONFIG -= app_bundle
@@ -18,12 +18,12 @@ QT_VER_MAJ = $$member(QT_VERSION, 0)
 QT_VER_MIN = $$member(QT_VERSION, 1)
 
 if(lessThan(QT_VER_MAJ, 4)) {
-   error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
+   error(Faith Emulator requires Qt 4.5 or newer but Qt $$[QT_VERSION] was detected.)
 }
 
 if(equals(QT_VER_MAJ, 4)) {
-   if(lessThan(QT_VER_MIN, 7)) {
-      error(Faith Emulator requires Qt 4.7 or newer but Qt $$[QT_VERSION] was detected.)
+   if(lessThan(QT_VER_MIN, 5)) {
+      error(Faith Emulator requires Qt 4.5 or newer but Qt $$[QT_VERSION] was detected.)
    }
 }
 
@@ -45,6 +45,7 @@ SOURCES += \
     src/item.cpp \
     src/program.cpp \
     src/server.cpp \
+    src/team.cpp \
     src/world.cpp \
     src/Common/env.cpp \
     src/Common/log.cpp \
@@ -63,22 +64,24 @@ SOURCES += \
     src/Network/Sockets/tcpserver.cpp \
     src/Network/msg.cpp \
     src/Network/msgaccount.cpp \
-    src/Network/msgconnect.cpp \
-    src/Network/msgtalk.cpp \
-    src/Network/stringpacker.cpp \
     src/Network/msgaction.cpp \
-    src/Network/msguserinfo.cpp \
-    src/Network/msguserattrib.cpp \
+    src/Network/msgallot.cpp \
+    src/Network/msgconnect.cpp \
+    src/Network/msgdialog.cpp \
     src/Network/msgiteminfo.cpp \
     src/Network/msgmapinfo.cpp \
-    src/Network/msgwalk.cpp \
-    src/Network/msgplayer.cpp \
-    src/Network/msgnpcinfo.cpp \
     src/Network/msgnpc.cpp \
-    src/Network/msgdialog.cpp \
+    src/Network/msgnpcinfo.cpp \
+    src/Network/msgplayer.cpp \
     src/Network/msgregister.cpp \
-    src/Network/msgallot.cpp \
+    src/Network/msgtalk.cpp \
+    src/Network/msgteam.cpp \
+    src/Network/msgteammember.cpp \
     src/Network/msgtick.cpp \
+    src/Network/msguserattrib.cpp \
+    src/Network/msguserinfo.cpp \
+    src/Network/msgwalk.cpp \
+    src/Network/stringpacker.cpp \
     src/Script/itemtask.cpp \
     src/Script/npctask.cpp \
     src/Script/script.cpp \
@@ -124,8 +127,10 @@ HEADERS += \
     src/generator.h \
     src/inifile.h \
     src/item.h \
+    src/mstimer.h \
     src/server.h \
     src/strres.h \
+    src/team.h \
     src/timer.h \
     src/world.h \
     src/Common/arch.h \
@@ -149,26 +154,28 @@ HEADERS += \
     src/Map/mapmanager.h \
     src/Network/Sockets/networkclient.h \
     src/Network/Sockets/tcpserver.h \
+    src/Network/allmsg.h \
     src/Network/msg.h \
     src/Network/msgaccount.h \
-    src/Network/networkdef.h \
-    src/Network/msgconnect.h \
-    src/Network/allmsg.h \
-    src/Network/msgtalk.h \
-    src/Network/stringpacker.h \
     src/Network/msgaction.h \
-    src/Network/msguserinfo.h \
-    src/Network/msguserattrib.h \
-    src/Network/msgiteminfo.h \
-    src/Network/msgwalk.h \
-    src/Network/msgplayer.h \
-    src/Network/msgnpcinfo.h \
-    src/Network/msgnpc.h \
-    src/Network/msgdialog.h \
-    src/Network/msgregister.h \
     src/Network/msgallot.h \
-    src/Network/msgtick.h \
+    src/Network/msgconnect.h \
+    src/Network/msgdialog.h \
+    src/Network/msgiteminfo.h \
     src/Network/msgmapinfo.h \
+    src/Network/msgnpc.h \
+    src/Network/msgnpcinfo.h \
+    src/Network/msgplayer.h \
+    src/Network/msgregister.h \
+    src/Network/msgtalk.h \
+    src/Network/msgteam.h \
+    src/Network/msgteammember.h \
+    src/Network/msgtick.h \
+    src/Network/msguserattrib.h \
+    src/Network/msguserinfo.h \
+    src/Network/msgwalk.h \
+    src/Network/networkdef.h \
+    src/Network/stringpacker.h \
     src/Script/itemtask.h \
     src/Script/npctask.h \
     src/Script/script.h \
