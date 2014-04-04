@@ -472,7 +472,7 @@ Player :: move(uint32_t aMapId, uint16_t aX, uint16_t aY)
         // IsInBattle = false, MagicIntone = false, Mining = false
         // ProcessAfterMove()
 
-        MsgAction msg(this, mMapId, MsgAction::ACTION_FLY_MAP);
+        MsgAction msg(this, mMapId, MsgAction::ACTION_ENTER_MAP);
         send(&msg);
 
         enterMap();
