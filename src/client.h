@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -6,11 +6,11 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_CLIENT_H
-#define _FAITH_EMULATOR_CLIENT_H
+#ifndef _FAITH_EMULATOR_CLIENT_H_
+#define _FAITH_EMULATOR_CLIENT_H_
 
 #include "common.h"
-#include "tqcipher.h"
+#include "icipher.h"
 #include <string>
 
 class Database;
@@ -19,6 +19,9 @@ class Msg;
 class Player;
 class NpcTask;
 
+/**
+ * Assossiated client to a NetworkClient.
+ */
 class Client
 {
     friend class Database; // the database can manipulate the data
@@ -27,6 +30,7 @@ class Client
     PROHIBIT_COPY(Client);
 
 public:
+    /** The status of the client. */
     enum Status
     {
         /** The client is still not authenticated */
@@ -46,17 +50,32 @@ public:
     };
 
 public:
+    /* constructor */
     Client(NetworkClient* aSocket);
+
+    /* destructor */
     ~Client();
 
-    void send(Msg* aMsg);
-    void send(uint8_t* aBuf, size_t aLen);
+    /**
+     * Save the player.
+     */
+    void save();
 
-    void disconnect() {  /* TODO... */ }
+    /**
+     * Send a message to the client.
+     *
+     * @param[in]  aMsg     the message to send
+     */
+    void send(const Msg* aMsg) const;
+
+    /**
+     * Disconnect the client from the server.
+     */
+    void disconnect();
 
 public:
     /** Get a reference to the client cipher */
-    TqCipher& getCipher() { return mCipher; }
+    ICipher& getCipher() const { return *mCipher; }
 
     /** Get the account name of the client. */
     const char* getAccount() const { return mAccount.c_str(); }
@@ -68,15 +87,19 @@ public:
     /** Get the player object linked to this client */
     Player* getPlayer() const { return mPlayer; }
 
+    /** Set the account name of the client. */
     void setAccount(const std::string& aAccount) { mAccount = aAccount; }
+    /** Set the account ID of the client. */
     void setAccountID(int32_t aAccountID) { mAccountID = aAccountID; }
+    /** Set the client status. */
     void setStatus(Status aStatus) { mStatus = aStatus; }
 
+    /** Set the current Npc task. */
     void setCurTask(const NpcTask& aTask) { mCurTask = &aTask; }
 
 private:
     NetworkClient* mSocket; //!< the TCP/IP socket wrapper of the client
-    TqCipher mCipher; //!< the cipher of the client
+    ICipher* mCipher; //!< the cipher of the client
 
     Status mStatus; //!< the status of the account
 
@@ -91,4 +114,4 @@ private:
     const NpcTask* mCurTask; //!< the current NPC task
 };
 
-#endif // _FAITH_EMULATOR_CLIENT_H
+#endif // _FAITH_EMULATOR_CLIENT_H_

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -36,7 +36,7 @@ public:
         USER_ATTRIB_SOUL = 14,
         USER_ATTRIB_HEALTH = 15,
         USER_ATTRIB_FORCE = 16,
-        USER_ATTRIB_SPEED = 17,
+        USER_ATTRIB_DEXTERITY = 17,
 
         USER_ATTRIB_HAIR = 27,
         USER_ATTRIB_XP = 28
@@ -66,20 +66,6 @@ public:
 public:
     MsgUserAttrib(Entity* aEntity, int32_t aData, UserAttrType aType);
 
-    /**
-     * Create a message object from the specified buffer.
-     * The buffer will be took by the object and the memory
-     * freed when the object will be destroyed.
-     *
-     * If the server is on a Be architecture, all the integers
-     * are swapped.
-     *
-     * @param[in,out] aBuf        a pointer to the buffer to take
-     *                            the pointer will be set to null
-     * @param[in]     aLen        the length in bytes of the buffer
-     */
-    MsgUserAttrib(uint8_t** aBuf, size_t aLen);
-
     /* destructor */
     virtual ~MsgUserAttrib();
 
@@ -88,7 +74,7 @@ private:
     void create(Entity* aEntity, int32_t aData, UserAttrType aType);
 
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

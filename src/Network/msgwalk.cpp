@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -67,43 +67,49 @@ MsgWalk :: process(Client* aClient)
 
     switch (dir)
     {
-    case 0: { newY += 1; break; }
-    case 1: { newX -= 1; newY += 1; break; }
-    case 2: { newX -= 1; break; }
-    case 3: { newX -= 1; newY -= 1; break; }
-    case 4: { newY -= 1; break; }
-    case 5: { newX += 1; newY -= 1; break; }
-    case 6: { newX += 1; break; }
-    case 7: { newX += 1; newY += 1; break; }
+        case 0: { newY += 1; break; }
+        case 1: { newX -= 1; newY += 1; break; }
+        case 2: { newX -= 1; break; }
+        case 3: { newX -= 1; newY -= 1; break; }
+        case 4: { newY -= 1; break; }
+        case 5: { newX += 1; newY -= 1; break; }
+        case 6: { newX += 1; break; }
+        case 7: { newX += 1; newY += 1; break; }
     }
 
-    // TODO: Implement
-    //if (!Player.IsAlive() && !Player.IsGhost())
-    //{
-    //    Player.SendSysMsg(Client.GetStr("STR_DIE"));
-    //    return;
-    //}
-
-    MapManager& mgr = MapManager::getInstance();
-    GameMap* map = mgr.getMap(player.getMapId());
-    if (map != nullptr)
+    // running... double the step
+    if (mInfo->Mode >= 20 && mInfo->Mode <= 27)
     {
-        if (map->getFloorAccess(player.getPosX(), player.getPosY()))
+        dir = mInfo->Mode - 20;
+        switch (dir)
         {
-            player.sendSysMsg(STR_INVALID_COORDINATE);
-            //player.kickBack(); // TODO
-            return;
+            case 0: { newY += 1; break; }
+            case 1: { newX -= 1; newY += 1; break; }
+            case 2: { newX -= 1; break; }
+            case 3: { newX -= 1; newY -= 1; break; }
+            case 4: { newY -= 1; break; }
+            case 5: { newX += 1; newY -= 1; break; }
+            case 6: { newX += 1; break; }
+            case 7: { newX += 1; newY += 1; break; }
         }
     }
 
-    player.move(newX, newY, dir);
+    if (!player.isAlive() && !player.isGhost())
+    {
+        player.sendSysMsg(STR_DIE);
+        return;
+    }
 
-    client.send(this);
-    //  Player.Screen.Move(Buffer);
+    player.send(this); // send back...
+    if (player.move(newX, newY, dir))
+    {
+        // broadcast the message to everyone
+        player.broadcastRoomMsg(this, false);
+    }
 }
 
 void
-MsgWalk :: swap(uint8_t* aBuf)
+MsgWalk :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

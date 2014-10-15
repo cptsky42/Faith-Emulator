@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -16,6 +16,9 @@
 class Client;
 struct lua_State;
 
+/**
+ * A Lua script.
+ */
 class Script
 {
 public:
@@ -28,29 +31,62 @@ public:
     static lua_State* getState() { return &State::getState(); }
 
 public:
+    /**
+     * Register the shared functions of the scripts.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns Error code otherwise
+     */
+    static err_t registerFunctions();
+
+public:
     /* destructor */
     virtual ~Script();
 
     /**
-     * Execute the function of the script for the specified client
-     * and parameter.
+     * Execute the script for the specified client and parameter.
      *
-     * @param aClient[in]   the client
-     * @param aParam[in]    the param
+     * @param[in]  aClient   the caller
+     * @param[in]  aParam    the parameter
      *
-     * @return
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the Lua script failed
+     * @returns Error code otherwise
      */
     virtual err_t execute(Client& aClient, int32_t aParam) const = 0;
 
 public:
-    int32_t getUID() const { return mUID; }
+    /** Get the unique ID of the script. */
+    uint32_t getUID() const { return mUID; }
+
+protected:
+    // Getters / Setters Lua methods
+    static int getName(lua_State* aState);
+    static int getLook(lua_State* aState);
+    static int getHair(lua_State* aState);
+    static int getMoney(lua_State* aState);
+    static int getExp(lua_State* aState);
+    static int getForce(lua_State* aState);
+    static int getHealth(lua_State* aState);
+    static int getDexterity(lua_State* aState);
+    static int getSoul(lua_State* aState);
+    static int getAddPoints(lua_State* aState);
+    static int getCurHP(lua_State* aState);
+    static int getMaxHP(lua_State* aState);
+    static int getCurMP(lua_State* aState);
+    static int getMaxMP(lua_State* aState);
+    static int getPkPoints(lua_State* aState);
+    static int getLevel(lua_State* aState);
+    static int getProfession(lua_State* aState);
 
 protected:
     /* constructor */
-    Script(int32_t aUID, const char* aPath);
+    Script(uint32_t aUID, const char* aPath);
 
 protected:
-    const int32_t mUID; //!< The unique ID of the script owner.
+    const uint32_t mUID; //!< The unique ID of the script owner.
+
+
 
 private:
     /**
@@ -59,6 +95,9 @@ private:
      */
     class State : public Environment::Global
     {
+        // !!! class is a singleton !!!
+        PROHIBIT_COPY(State);
+
     public:
         /**
          * Get the Lua VM singleton. If the object does not exist yet,

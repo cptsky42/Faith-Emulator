@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,22 +8,24 @@
 
 #include "log.h"
 #include "server.h"
+
 #include "client.h"
+#include "player.h"
+
 #include "networkclient.h"
 #include "msg.h"
+
 #include "mapmanager.h"
 #include "database.h"
-#include "npctask.h"
-#include <QSettings>
-#include <QString>
+#include "world.h"
 
-#include "mapdata.h"
+#include "script.h"
+#include "npctask.h"
+#include "itemtask.h"
+
+#include "inifile.h"
 
 using namespace std;
-
-/* static */
-const uint16_t Server::ACCSERVER_PORT = 9958;
-const uint16_t Server::MSGSERVER_PORT = 5816;
 
 /* static */
 Server* Server::sInstance = nullptr;
@@ -32,10 +34,20 @@ Server* Server::sInstance = nullptr;
 Server&
 Server :: getInstance()
 {
-    // TODO? Thread-safe
+    static volatile long protect = 0;
+
     if (sInstance == nullptr)
     {
-        sInstance = new Server();
+        if (1 == atomic_inc(&protect))
+        {
+            // create the instance
+            sInstance = new Server();
+        }
+        else
+        {
+            while (sInstance == nullptr)
+                QThread::yieldCurrentThread();
+        }
     }
     return *sInstance;
 }
@@ -44,51 +56,63 @@ Server :: Server()
 {
     err_t err = ERROR_SUCCESS;
 
-    DOIF(err, Logger::init("./", "xyserv"));
+    // init the logger...
+    DOIF(err, Logger::init("./", "xyserv.log"));
 
-    QSettings settings("./settings.cfg", QSettings::IniFormat);
-    QString name = settings.value("FAITH_EMULATOR/NAME", "Faith").toString(); // TODO
-    mServerIP = settings.value("FAITH_EMULATOR/SERVER_IP", "127.0.0.1").toString().toStdString();
+    // parse the config file...
+    IniFile settings;
+    DOIF(err, settings.open("./settings.cfg"));
 
-    QString sql_host = settings.value("FAITH_EMULATOR/SQL_HOST", "localhost").toString();
-    QString sql_db = settings.value("FAITH_EMULATOR/SQL_DB", "xyserver").toString();
-    QString sql_user = settings.value("FAITH_EMULATOR/SQL_USER", "root").toString();
-    QString sql_pwd = settings.value("FAITH_EMULATOR/SQL_PWD", "").toString();
+    mServerName = settings.readString("FAITH_EMULATOR/NAME", "Faith");
+    mServerIP = settings.readString("FAITH_EMULATOR/SERVER_IP", "127.0.0.1");
 
-    MapManager& mgr = MapManager::getInstance();
-    //DOIF(err, mgr.loadData());
+    string sql_host = settings.readString("FAITH_EMULATOR/SQL_HOST", "localhost");
+    string sql_db = settings.readString("FAITH_EMULATOR/SQL_DB", "xyserver");
+    string sql_user = settings.readString("FAITH_EMULATOR/SQL_USER", "root");
+    string sql_pwd = settings.readString("FAITH_EMULATOR/SQL_PWD", "");
 
-    Database& db = Database::getInstance();
-    if (!db.connect(qPrintable(sql_host), qPrintable(sql_db),
-                    qPrintable(sql_user), qPrintable(sql_pwd)))
+    // try to connect to the database...
+    Database& db = const_cast<Database&>(Database::getInstance());
+    if (!db.connect(sql_host.c_str(), sql_db.c_str(),
+                    sql_user.c_str(), sql_pwd.c_str()))
     {
+        fprintf(stderr, "Failed to connect to the database...\n");
         LOG(ERROR, "Failed to connect to the database...");
-        // failed to connect
+        err = ERROR_INVALID_PASSWORD;
     }
 
     // load Lua VM
-    NpcTask::registerFunctions(); // TODO: Only one call for all ?
+    DOIF(err, Script::registerFunctions()); // register shared Lua functions
+    DOIF(err, NpcTask::registerFunctions()); // register NPC's Lua functions
+    DOIF(err, ItemTask::registerFunctions()); // register item's Lua functions
+
+    // load DMap files
+    MapManager& mgr = MapManager::getInstance();
+    DOIF(err, mgr.loadData());
 
     // load database
-    //DOIF(err, db.loadAllMaps());
-    //DOIF(err, db.loadAllItems());
-    //DOIF(err, db.loadAllNPCs());
+    DOIF(err, db.loadAllMaps());
+    DOIF(err, db.loadAllItems());
+    DOIF(err, db.loadAllNPCs());
+    DOIF(err, db.loadAllTasks());
+    DOIF(err, db.loadAllMonsters());
+    DOIF(err, db.loadAllGenerators());
 
     fprintf(stdout, "\n");
 
-    mAccServer.listen(ACCSERVER_PORT);
+    mAccServer.listen(Server::ACCSERVER_PORT);
     mAccServer.onConnect = &Server::connectionHandler;
     mAccServer.onReceive = &Server::receiveHandler;
     mAccServer.onDisconnect = &Server::disconnectionHandler;
     mAccServer.accept();
-    fprintf(stdout, "AccServer listening on port %u...\n", ACCSERVER_PORT);
+    fprintf(stdout, "AccServer listening on port %u...\n", Server::ACCSERVER_PORT);
 
-    mMsgServer.listen(MSGSERVER_PORT);
+    mMsgServer.listen(Server::MSGSERVER_PORT);
     mMsgServer.onConnect = &Server::connectionHandler;
     mMsgServer.onReceive = &Server::receiveHandler;
     mMsgServer.onDisconnect = &Server::disconnectionHandler;
     mMsgServer.accept();
-    fprintf(stdout, "MsgServer listening on port %u...\n", MSGSERVER_PORT);
+    fprintf(stdout, "MsgServer listening on port %u...\n", Server::MSGSERVER_PORT);
 
     fprintf(stdout, "Waiting for connections...\n");
 
@@ -109,8 +133,27 @@ Server :: connectionHandler(NetworkClient* aClient)
     {
         uint16_t port = ((TcpServer*)aClient->getServer())->getPort();
 
-        Client* client = new Client(aClient);
-        client->setStatus(port == MSGSERVER_PORT ? Client::NORMAL : Client::NOT_AUTHENTICATED);
+        Client* client = nullptr;
+        switch (port)
+        {
+            case Server::ACCSERVER_PORT:
+                {
+                    client = new Client(aClient);
+                    client->setStatus(Client::NOT_AUTHENTICATED);
+
+                    break;
+                }
+            case Server::MSGSERVER_PORT:
+                {
+                    client = new Client(aClient);
+                    client->setStatus(Client::NORMAL);
+
+                    break;
+                }
+            default:
+                ASSERT(false); // received an unknown request
+                break;
+        }
 
         aClient->setOwner(client);
     }
@@ -141,6 +184,7 @@ Server :: receiveHandler(NetworkClient* aClient, uint8_t* aBuf, size_t aLen)
             size = ((Msg::Header*)(received + i))->Length;
             #endif
 
+            ASSERT(size <= 1024); // invalid msg size...
             if (size < aLen)
             {
                 uint8_t* packet = new uint8_t[size];
@@ -188,7 +232,16 @@ Server :: disconnectionHandler(NetworkClient* aClient)
     {
         // TODO? clean this line and add some checks
         Client* client = (Client*)aClient->getOwner();
-        //client->save();
+        client->save();
+
+        Player* player = client->getPlayer();
+        if (player != nullptr)
+        {
+            World& world = World::getInstance();
+
+            world.removePlayer(*player);
+            player->leaveMap();
+        }
 
         SAFE_DELETE(client);
     }

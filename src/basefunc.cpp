@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,29 +8,63 @@
 
 #include "common.h"
 #include "basefunc.h"
+#include <ctype.h>
 #include <math.h>
+
+uint8_t char2int(char aInput)
+{
+    if (aInput >= '0' && aInput <= '9') return aInput - '0';
+    else if (aInput >= 'A' && aInput <= 'F') return aInput - 'A' + 0x0A;
+    else if (aInput >= 'a' && aInput <= 'f') return aInput - 'a' + 0x0A;
+    else return 0x00;
+}
+
+bool hex2bin(const char* aHexStr, uint8_t* aOutBytes, size_t& aOutLen)
+{
+    bool success = true;
+    size_t len = strlen(aHexStr);
+
+    aOutLen = (len / 2) + (len % 2);
+    for (int64_t i = len - 1, j = aOutLen - 1; i >= 0; i -= 2, --j)
+    {
+        if (isxdigit(aHexStr[i]) == 0 ||
+            (i > 0 && isxdigit(aHexStr[i - 1]) == 0))
+            success = false;
+
+        if (success)
+        {
+            uint8_t result = i != 0 ? char2int(aHexStr[i]) + (char2int(aHexStr[i - 1]) * 0x10) : char2int(aHexStr[i]);
+            aOutBytes[j] = result;
+        }
+    }
+
+    return success;
+}
 
 int random(int aMax, bool aReset)
 {
+    // in the original source, the seed is initialized to 3721 instead of random...
     static unsigned long seed = timeGetTime();
 
     if (aReset)
-    {
         seed = timeGetTime();
-    }
 
-    unsigned long x = UINT_MAX;
+    const unsigned long x = UINT_MAX;
     double i;
-    unsigned long final;
 
     seed *= 134775813;
     seed += 1;
     seed = seed % x;
 
     i = ((double)seed) / (double)x;
-    final = (unsigned long)(aMax * i);
 
-    return (int)final;
+    return (int)(aMax * i);
+}
+
+int random(int aMin, int aMax, bool aReset)
+{
+    aMax += 1; // include aMax in the range...
+    return aMin + (int)(((double)random(aMax, aReset) / (double)aMax) * (double)(aMax - aMin));
 }
 
 double randomRate(double aRange)
@@ -39,18 +73,10 @@ double randomRate(double aRange)
 
     int rand = random(999, false) + 1;
     double a = sin(rand * PI / 1000.0);
-    double b;
 
-    if (rand >= 90)
-    {
-        b = (1.0 + aRange) - sqrt(sqrt(a)) * aRange;
-    }
-    else
-    {
-        b = (1.0 - aRange) + sqrt(sqrt(a)) * aRange;
-    }
-
-    return b;
+    return (rand >= 90) ?
+                (1.0 + aRange) - sqrt(sqrt(a)) * aRange :
+                (1.0 - aRange) + sqrt(sqrt(a)) * aRange;
 }
 
 bool isValidString(const char* aStr)

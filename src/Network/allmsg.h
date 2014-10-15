@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -10,19 +10,22 @@
 #define _FAITH_EMULATOR_ALL_MSG_H_
 
 #include "msgaccount.h"
-#include "msgconnect.h"
-#include "msgregister.h"
-#include "msgtalk.h"
 #include "msgaction.h"
-#include "msgplayer.h"
-#include "msguserinfo.h"
-#include "msguserattrib.h"
+#include "msgallot.h"
+#include "msgconnect.h"
+#include "msgdialog.h"
 #include "msgiteminfo.h"
-#include "msgwalk.h"
 #include "msgloginaccountex.h"
 #include "msgloginreplyex.h"
-#include "msgnpcinfo.h"
-#include "msgdialog.h"
+#include "msgmapinfo.h"
 #include "msgnpc.h"
+#include "msgnpcinfo.h"
+#include "msgplayer.h"
+#include "msgregister.h"
+#include "msgtalk.h"
+#include "msgtick.h"
+#include "msguserattrib.h"
+#include "msguserinfo.h"
+#include "msgwalk.h"
 
 #endif // _FAITH_EMULATOR_ALL_MSG_H_

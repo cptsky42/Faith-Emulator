@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -6,8 +6,8 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_SERVER_H
-#define _FAITH_EMULATOR_SERVER_H
+#ifndef _FAITH_EMULATOR_SERVER_H_
+#define _FAITH_EMULATOR_SERVER_H_
 
 #include "common.h"
 #include "env.h"
@@ -22,11 +22,14 @@ class NetworkClient;
  */
 class Server : public Environment::Global
 {
+    // !!! class is a singleton !!!
+    PROHIBIT_COPY(Server);
+
 public:
     /** The account server port. */
-    static const uint16_t ACCSERVER_PORT;
+    static const uint16_t ACCSERVER_PORT = 9958;
     /** The game server port. */
-    static const uint16_t MSGSERVER_PORT;
+    static const uint16_t MSGSERVER_PORT = 5816;
 
 public:
     /**
@@ -37,12 +40,10 @@ public:
      */
     static Server& getInstance();
 
-    /**
-     * Get the IPv4 address of the MsgServer.
-     *
-     * @returns The IPv4 address of the MsgServer.
-     */
+    /** Get the IPv4 address of the MsgServer. */
     static const char* getServerIP() { return getInstance().mServerIP.c_str(); }
+    /** Get the name of the MsgServer. */
+    static const char* getServerName() { return getInstance().mServerName.c_str(); }
 
 public:
     /* destructor */
@@ -82,7 +83,9 @@ private:
 private:
     TcpServer mAccServer; //!< TCP/IP server for the AccServer
     TcpServer mMsgServer; //!< TCP/IP server for the MsgServer
+
+    std::string mServerName; //!< name of the MsgServer
     std::string mServerIP; //!< IPv4 address for the MsgServer
 };
 
-#endif // _FAITH_EMULATOR_SERVER_H
+#endif // _FAITH_EMULATOR_SERVER_H_

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -12,9 +12,14 @@
 #include "common.h"
 #include "mapbase.h"
 #include "mapdata.h"
+#include <math.h>
+#include <map>
+#include <algorithm>
+#include <QMutex>
 
 class Client;
 class Entity;
+class Player;
 
 /**
  * A game map object which is linked to a MapData object.
@@ -23,6 +28,10 @@ class Entity;
 class GameMap
 {
     friend class MapManager;
+    friend class Generator; // generator must control the MapData...
+
+    // !!! class has a unique ID !!!
+    PROHIBIT_COPY(GameMap);
 
 public:
     /**
@@ -75,13 +84,15 @@ public:
         /** The type (bitfield) of the map. */
         uint32_t Type;
         /** The owner UID of the map. */
-        int32_t OwnerUID;
+        uint32_t OwnerUID;
+        /** The weather of the map. */
+        uint32_t Weather;
         /** The main portal X-coord. It is used for reborn. */
         uint16_t PortalX;
         /** The main portal Y-coord. It is used for reborn. */
         uint16_t PortalY;
         /** The reborn map UID. */
-        int32_t RebornMap;
+        uint32_t RebornMap;
         /** The reborn portal UID. Zero corresponds to the main portal. */
         int32_t RebornPortal;
         /** The light in ARGB code. */
@@ -90,11 +101,20 @@ public:
 
 public:
     /** The unique ID of the prison map. */
-    static const int32_t PRISON_MAP_UID = 10000; // TODO
+    static const uint32_t PRISON_MAP_UID = 10000; // TODO
     /** The unique ID of the newbie map. */
-    static const int32_t NEWBIE_MAP_UID = 10001; // TODO
+    static const uint32_t NEWBIE_MAP_UID = 10001; // TODO
     /** The first valid unique ID for dynamic maps. */
-    static const int32_t DYNAMIC_MAP_UID = 1000000;
+    static const uint32_t DYNAMIC_MAP_UID = 1000000;
+
+public:
+    /**
+     * Get the distance between two points.
+     *
+     * @returns the distance between the two points
+     */
+    static inline int distance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+    { return std::max(abs((int)x1 - (int)x2), abs((int)y1 - (int)y2)); }
 
 public:
     /* destructor */
@@ -102,38 +122,41 @@ public:
 
 public:
     /** Get the map's UID. */
-    int32_t getUID() const { return mUID; }
+    uint32_t getUID() const { return mUID; }
     /** Get the map's owner's UID. */
-    int32_t getOwnerUID() const { return mInfo->OwnerUID; }
+    uint32_t getOwnerUID() const { return mInfo->OwnerUID; }
 
     /** Get the map's width in term of cells count. */
-    uint16_t getWidth() const { ASSERT(&mData != nullptr); return mData.getWidth(); }
+    uint16_t getWidth() const { return mData.getWidth(); }
     /** Get the map's height in term of cells count. */
-    uint16_t getHeight() const { ASSERT(&mData != nullptr); return mData.getHeight(); }
+    uint16_t getHeight() const { return mData.getHeight(); }
 
     /** Determine whether or not the cell is accessible. */
     bool getFloorAccess(uint16_t aPosX, uint16_t aPosY) const;
     /** Determine whether or nor the cell altitude is accessible. */
     int16_t getFloorAlt(uint16_t aPosX, uint16_t aPosY) const;
 
-    /** Get the map's document ID which corresponds to the UID of the MapData. */
-    uint16_t getDocID() { return mInfo->DocID; }
-    /** Get the map's light in ARGB code. */
-    uint32_t getLight() { return mInfo->Light; }
+    /** Get the passage ID of the given coords. */
+    int getPassage(uint16_t aPosX, uint16_t aPosY) const { return mData.getPassage(aPosX, aPosY); }
 
-    //	int		GetWidthOfBlock()				{ return (m_pMapData->GetMapWidth()-1) / CELLS_PER_BLOCK + 1; }
-    //	int		GetHeightOfBlock()				{ return (m_pMapData->GetMapHeight()-1) / CELLS_PER_BLOCK + 1; }
+    /** Get the map's document ID which corresponds to the UID of the MapData. */
+    uint16_t getDocID() const { return mInfo->DocID; }
+    /** Get the map's type flags. */
+    uint32_t getType() const { return mInfo->Type; }
+    /** Get the map's light in ARGB code. */
+    uint32_t getLight() const { return mInfo->Light; }
 
     //	OBJID	GetSynID()						{ if(GetOwnerType() == OWNER_SYN) return GetOwnerID(); return ID_NONE; }
     //	DWORD	GetStatus()						{ return m_nStatus; }
     //	DWORD	GetType()						{ return m_pData->GetInt(GAMEMAPDATA_TYPE); }
-    //	POINT	GetPortal()						{ POINT pos; pos.x=m_pData->GetInt(GAMEMAPDATA_PORTAL0_X); pos.y=m_pData->GetInt(GAMEMAPDATA_PORTAL0_Y); return pos;}
 
 public:
     /** Determine whether or not the cell is valid for laying an item. */
     bool isLayItemEnable(uint16_t aPosX, uint16_t aPosY) const { return getFloorAccess(aPosX, aPosY); }
     /** Determine whether or not the coords are in the map' zone's limits. */
     bool isValidPoint(uint16_t aPosX, uint16_t aPosY) const { return (aPosX < getWidth() && aPosY < getHeight()); }
+    /** Determine whether or not the cell is valid a player. */
+    bool isStandEnable(uint16_t aPosX, uint16_t aPosY) const { return getFloorAccess(aPosX, aPosY); }
     /** Determine whether or not it is a newbie map. */
     bool isNewbieMap() const { return NEWBIE_MAP_UID == mUID; }
     /** Determine whether or not it is a dynamic map. */
@@ -160,48 +183,69 @@ public:
     bool isWingDisabled() const { return (mInfo->Type & TYPE_WING_DISABLE) != 0; }
     /** Determine whether or not the map is a mine map. */
     bool isMineField() const { return (mInfo->Type & TYPE_MINE_FIELD) != 0; }
-    /** Determine whether or not the map is a game map. */
-    bool isPkGameMap() const { return (mInfo->Type & TYPE_PK_GAME) != 0; }
     /** Determine whether or not the map is a family map. */
     bool isFamilyMap() const { return (mInfo->Type & TYPE_FAMILY) != 0; }
     /** Determine whether or not booths are enabled. */
     bool isBoothEnabled() const { return (mInfo->Type & TYPE_BOOTH_ENABLE) != 0; }
     /** Determine whether or not the a war is active on the map. */
-    bool isWarTime() const { return false; /* (getStatus() & STATUS_WAR) != 0 */ } // TODO
-
+    bool isWarTime() const { return false; /* TODO (getStatus() & STATUS_WAR) != 0 */ }
 
 public:
-//	int		Distance(int x1, int y1, int x2, int y2)	{ return __max(abs(x1-x2), abs(y1-y2)); }
-    void sendMapInfo(Client* aClient) const;
+    /** Determine whether a player is on the map or not. */
+    bool isActive() const { return mPlayerCount > 0; }
+
+public:
+    /**
+     * Send the map information to the player.
+     *
+     * @param[in]    aPlayer   the player to send the messages to
+     */
+    void sendMapInfo(const Player& aPlayer) const;
+
+    /**
+     * Send the block information to the player.
+     *
+     * @param[in]    aPlayer   the player to send the messages to
+     */
+    void sendBlockInfo(const Player& aPlayer) const;
+
+    /**
+     * Update the broadcast set of the entity.
+     *
+     * @param[in]    aEntity    the entity to udate the broadcast set
+     */
+    void updateBroadcastSet(const Entity& aEntity) const;
 
     /**
      * Add a new entity on the map.
      *
      * @param[in]   aEntity     the entity to add
      */
-    void enterRoom(Entity& aEntity) const;
+    void enterRoom(Entity& aEntity);
 
     /**
      * Remove an entity from the map.
      *
      * @param[in]   aEntity     the entity to remove
      */
-    void leaveRoom(Entity& aEntity) const;
+    void leaveRoom(Entity& aEntity);
 
 private:
     /* constructor */
-    GameMap(int32_t aUID, Info** aInfo, MapData& aData);
+    GameMap(uint32_t aUID, Info** aInfo, MapData& aData);
 
 private:
-    const int32_t mUID; //!< The map's unique ID.
+    const uint32_t mUID; //!< The map's unique ID.
     Info* mInfo; //!< The map's information.
-    const MapData& mData; //!< The map's data.
+    MapData& mData; //!< The map's data.
+
+    std::map<uint32_t, Entity*> mEntities; //!< the entities on the map
+    uint64_t mPlayerCount; //!< the number of players on the map
+    mutable QMutex mEntitiesMutex; //!< mutex to access the entities map
 };
 
 #endif // _FAITH_EMULATOR_GAMEMAP_H_
 
-//class CGameMap : public CGameObj
-//{
 //	bool	QueryObjInPos(int nPosX, int nPosY, OBJID idObjType, void** ppObj);
 //	bool	QueryObj(int nCenterX, int nCenterY, OBJID idObjType, OBJID idObj, void** ppObj);
 //	IRole*	QueryRole(int nCenterX, int nCenterY, OBJID idObj);
@@ -209,27 +253,14 @@ private:
 ////	IMapData*	QueryMapData()							{ CHECKF(m_pMapData); return m_pMapData; }
 //	CWeatherRegion*	QueryWeatherRegion(OBJID id)		{ CHECKF(m_setWeather && id != ID_NONE); return m_setWeather->GetObj(id);}
 
-//public: // block
-//	CGameBlock&	QueryBlock(int nPosX, int nPosY)		{ return m_setBlock[Block(nPosX)][Block(nPosY)]; }
-//	IMapThing*	QueryThingByIndex(int x, int y, int z)	{ return BlockByIndex(x,y).QuerySet()->GetObjByIndex(z); }
-//	CGameBlock&	BlockByIndex(int x, int y)				{ return m_setBlock[x][y]; }		// call by FOR_9_xxx
-//protected:
-//	IRegionSet*	QueryRegionSet()						{ CHECKF(m_setRegion); return m_setRegion; }
-
 //public: // block info
 //	virtual void	SendBlockInfo(IRole* pRole);		// ²»°üº¬×Ô¼º
 //	virtual void	BroadcastBlockMsg(IMapThing* pThing, CNetMsg* pMsg, bool bSendSelf = false);
 //	virtual void	BroadcastBlockMsg(int nPosX, int nPosY, CNetMsg* pMsg);
 
-//public: // role
-//	void	MoveTo(IRole* pRole, int nNewPosX, int nNewPosY, BOOL bLeaveBlock=false, BOOL bEnterBlock=false);		// ÓÐ¿ÉÄÜÒÆ¶¯µ½ÏàÁÚµÄBLOCK
-//	void	IncRole(int x, int y)		{ m_pMapData->IncRole(x, y); }
-//	void	DecRole(int x, int y)		{ m_pMapData->DecRole(x, y); }		// normal use LeaveRoom or MoveTo but dead
-
 //public: // region info
 //	void	SendRegionInfo(CUser* pUser);
 //	void	ClearRegionInfo(CUser* pUser);
-//	void	ChangeRegion(CUser* pUser, int nNewPosX, int nNewPosY);
 
 //public: // region -----------------------------
 //	CRegionData*	QueryRegion(int nRegionType, int x, int y);
@@ -245,9 +276,3 @@ private:
 //	bool	SetStatus(int nStatus, bool flag);				// return false: no change
 //	void	SetSynID(OBJID idSyn, bool bWithAllNpc);				// true: set all syna npc syn id, yet.
 //	void	SetUserID(OBJID idUser, bool bWithAllNpc);				// true: set all syna npc syn id, yet.
-//	bool	EraseMap();
-//	void	SetResLev(int nData, bool bUpdate)			{ m_pData->SetInt(GAMEMAPDATA_RESOURCE_LEV, nData); if(bUpdate) m_pData->Update(); }
-//	void	SetPortal0X(int nData, bool bUpdate)		{ m_pData->SetInt(GAMEMAPDATA_PORTAL0_X, nData); if(bUpdate) m_pData->Update(); }
-//	void	SetPortal0Y(int nData, bool bUpdate)		{ m_pData->SetInt(GAMEMAPDATA_PORTAL0_Y, nData); if(bUpdate) m_pData->Update(); }
-//	bool	AddTerrainObj(OBJID idOwner, int x, int y, OBJID idTerrainObj);
-//	bool	DelTerrainObj(OBJID idOwner);

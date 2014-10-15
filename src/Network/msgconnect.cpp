@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,12 +8,15 @@
 
 #include "msgconnect.h"
 #include "client.h"
+#include "tqcipher.h"
 #include "player.h"
 #include "database.h"
+#include "world.h"
 #include "msgtalk.h"
 #include "msguserinfo.h"
 #include "msguserattrib.h"
 #include "msgiteminfo.h"
+#include "msgtick.h"
 
 /* static */
 const char MsgConnect::ERROR_SERVER_DOWN[] = "\xB7\xFE\xCE\xF1\xC6\xF7\xCE\xB4\xC6\xF4\xB6\xAF";
@@ -67,9 +70,10 @@ MsgConnect :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
+    static const Database& db = Database::getInstance(); // singleton
+
     Client& client = *aClient;
     Client::Status status = client.getStatus();
-    Database& db = Database::getInstance();
 
     // set the account UID
     client.setAccountID(mInfo->AccountUID);
@@ -84,11 +88,8 @@ MsgConnect :: process(Client* aClient)
         }
         case Client::NORMAL: // Sent to the MsgServer
         {
-            // TODO: load character from DB()
-            // TODO: if online, disconnect
-
-            TqCipher& cipher = client.getCipher();
-            cipher.generateKey(mInfo->Data, mInfo->AccountUID);
+            TqCipher* cipher = (TqCipher*)&client.getCipher();
+            cipher->generateKey(mInfo->Data, mInfo->AccountUID);
 
             if (!IS_SUCCESS(db.getPlayerInfo(client)))
             {
@@ -106,6 +107,17 @@ MsgConnect :: process(Client* aClient)
             else
             {
                 Player& player = *client.getPlayer();
+                Player* other = nullptr;
+                World& world = World::getInstance();
+
+                // TODO: valid sequence with client ? to avoid rollback..
+                if (world.queryPlayer(&other, player.getUID()))
+                {
+                    world.removePlayer(*other);
+                    other->disconnect();
+                }
+
+                world.addPlayer(player);
 
                 msg = new MsgTalk(STR_SYSTEM_NAME, STR_ALLUSERS_NAME, STR_REPLY_OK, MsgTalk::CHANNEL_ENTRANCE);
                 client.send(msg);
@@ -116,7 +128,7 @@ MsgConnect :: process(Client* aClient)
                 SAFE_DELETE(msg);
 
                 // HACK !
-                msg = new MsgUserAttrib(&player, 100, MsgUserAttrib::USER_ATTRIB_ENERGY);
+                msg = new MsgUserAttrib(&player, player.getMaxEnergy(), MsgUserAttrib::USER_ATTRIB_ENERGY);
                 client.send(msg);
                 SAFE_DELETE(msg);
 
@@ -127,6 +139,12 @@ MsgConnect :: process(Client* aClient)
                 msg = new MsgTalk("SYSTEM", "ALLUSERS", STR_BUILD_INFO, MsgTalk::CHANNEL_TALK);
                 client.send(msg);
                 SAFE_DELETE(msg);
+
+                player.sendSysMsg("MaxHP: %u, MaxMP: %u, MaxEnergy: %u, MaxWeight: %u",
+                                  player.getMaxHP(), player.getMaxMP(), player.getMaxEnergy(), player.getMaxWeight());
+                player.sendSysMsg("MinAtk: %d, MaxAtk: %d, Def: %d, MAtk: %d, MDef: %d, Dext: %u",
+                                  player.getMinAtk(), player.getMaxAtk(), player.getDefense(), player.getMAtk(),
+                                  player.getMDef(), player.getDext());
             }
 
             break;
@@ -138,7 +156,7 @@ MsgConnect :: process(Client* aClient)
 }
 
 void
-MsgConnect :: swap(uint8_t* aBuf)
+MsgConnect :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

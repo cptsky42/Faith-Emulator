@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -11,7 +11,7 @@
 #include "player.h"
 #include <string.h>
 
-MsgUserInfo :: MsgUserInfo(Player& aPlayer)
+MsgUserInfo :: MsgUserInfo(const Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
           strlen(aPlayer.getName()) + 1 +
           strlen(aPlayer.getMate()) + 1),
@@ -20,24 +20,13 @@ MsgUserInfo :: MsgUserInfo(Player& aPlayer)
     create(aPlayer);
 }
 
-MsgUserInfo :: MsgUserInfo(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
-{
-    ASSERT(aLen >= sizeof(MsgInfo));
-
-    #if BYTE_ORDER == BIG_ENDIAN
-    swap(mBuf);
-    #endif
-}
-
-
 MsgUserInfo :: ~MsgUserInfo()
 {
 
 }
 
 void
-MsgUserInfo :: create(Player& aPlayer)
+MsgUserInfo :: create(const Player& aPlayer)
 {
     ASSERT(&aPlayer != nullptr);
     ASSERT(aPlayer.getName() != nullptr && aPlayer.getName()[0] != '\0');
@@ -60,7 +49,7 @@ MsgUserInfo :: create(Player& aPlayer)
         mInfo->MercenaryLevel = aPlayer.getMercenaryLevel();
         mInfo->Force = aPlayer.getForce();
         mInfo->Health = aPlayer.getHealth();
-        mInfo->Speed = aPlayer.getSpeed();
+        mInfo->Dexterity = aPlayer.getDexterity();
         mInfo->Soul = aPlayer.getSoul();
         mInfo->AddPoints = aPlayer.getAddPoints();
         mInfo->CurHP = aPlayer.getCurHP();
@@ -87,7 +76,7 @@ MsgUserInfo :: create(Player& aPlayer)
 }
 
 void
-MsgUserInfo :: swap(uint8_t* aBuf)
+MsgUserInfo :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 
@@ -102,7 +91,7 @@ MsgUserInfo :: swap(uint8_t* aBuf)
     info->MercenaryLevel = bswap16(info->MercenaryLevel);
     info->Force = bswap16(info->Force);
     info->Health = bswap16(info->Health);
-    info->Speed = bswap16(info->Speed);
+    info->Dexterity = bswap16(info->Dexterity);
     info->Soul = bswap16(info->Soul);
     info->AddPoints = bswap16(info->AddPoints);
     info->CurHP = bswap16(info->CurHP);

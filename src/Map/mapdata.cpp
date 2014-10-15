@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -10,6 +10,8 @@
 #include "mapdata.h"
 #include "finder.h"
 #include "binaryreader.h"
+#include "minilzo.h"
+#include <stdlib.h>
 
 using namespace std;
 
@@ -29,11 +31,9 @@ MapData :: load(MapData** aOutData, const char* aPath)
     if (Finder::fileExists(aPath))
     {
         BinaryReader reader(aPath);
-        DOIF(err, reader.lock());
 
         DOIF(err, data->loadMapData(reader));
 
-        reader.unlock();
         reader.close();
     }
     else
@@ -54,7 +54,8 @@ MapData :: load(MapData** aOutData, const char* aPath)
 }
 
 MapData :: MapData()
-    : mWidth(0), mHeight(0), mCells(nullptr)
+    : mWidth(0), mHeight(0), mCells(nullptr),
+      mIsPacking(true), mPckData(nullptr), mPckLen(0)
 {
 
 }
@@ -70,6 +71,9 @@ MapData :: ~MapData()
         Passage* passage = *it;
         SAFE_DELETE(passage);
     }
+
+    free(mPckData);
+    mPckData = nullptr;
 }
 
 
@@ -124,7 +128,7 @@ MapData :: loadMapData(BinaryReader& aReader)
                                    ((altitude + 2) * (x + 1 + terrain)));
 
             Cell& cell = mCells[pos2idx(x, y)];
-            cell.Accessible = mask != FALSE;
+            cell.Accessible = mask != 1;
             cell.Altitude = altitude;
         }
         DOIF(err, aReader.readUInt32(tmp));
@@ -137,8 +141,8 @@ MapData :: loadMapData(BinaryReader& aReader)
     }
 
     DOIF(err, loadPassageData(aReader));
-    if (version == 1003)
-        DOIF(err, loadRegionData(aReader));
+//    if (version == 1003)
+//        DOIF(err, loadRegionData(aReader));
     DOIF(err, loadLayerData(aReader));
 
     //The rest are LAYER_SCENE, but useless for a server. I'll not implement the rest as it would only
@@ -211,8 +215,7 @@ MapData :: loadRegionData(BinaryReader& aReader)
 
     if (IS_SUCCESS(err))
     {
-        LOG(ERROR, "Regions are not supported yet.");
-        err = ERROR_INVALID_FUNCTION;
+        LOG(WARN, "Regions are not supported yet.");
     }
 
     return err;
@@ -256,15 +259,23 @@ MapData :: loadLayerData(BinaryReader& aReader)
                 DOIF(err, aReader.readUInt32(startX));
                 DOIF(err, aReader.readUInt32(startY));
 
+                #ifndef _WIN32 // convert path separator...
+                if (IS_SUCCESS(err))
+                {
+                    for (size_t x = 0, len = strlen(fileName); x < len; ++x)
+                    {
+                        if (fileName[x] == '\\')
+                            fileName[x] = '/';
+                    }
+                }
+                #endif // _WIN32
+
                 LOG(VRB, "Found a 2D map terrain object at (%u, %u). Loading scene file '%s'",
                     startX, startY, fileName);
-
-                // TODO: Normalize path to / instead of Windows...
 
                 if (Finder::fileExists(fileName))
                 {
                     BinaryReader reader(fileName);
-                    DOIF(err, reader.lock());
 
                     DOIF(err, reader.readInt32(count));
                     LOG(VRB, "Found %d parts.", count);
@@ -304,7 +315,7 @@ MapData :: loadLayerData(BinaryReader& aReader)
                                 if (posX < UINT16_MAX && posX < UINT16_MAX)
                                 {
                                     Cell& cell = mCells[pos2idx((uint16_t)posX, (uint16_t)posY)];
-                                    cell.Accessible = mask != FALSE;
+                                    cell.Accessible = mask != false;
                                     cell.Altitude = altitude;
                                 }
                                 else
@@ -316,7 +327,6 @@ MapData :: loadLayerData(BinaryReader& aReader)
                         }
                     }
 
-                    reader.unlock();
                     reader.close();
                 }
                 else
@@ -360,4 +370,130 @@ MapData :: loadLayerData(BinaryReader& aReader)
     }
 
     return err;
+}
+
+err_t
+MapData :: pack(void* aCaller)
+{
+    err_t err = ERROR_SUCCESS;
+
+    mPckMutex.lock();
+
+    if (aCaller != nullptr)
+        mRefs.erase(aCaller);
+
+    if (mIsPacking && mPckData == nullptr && mRefs.size() == 0)
+    {
+        ASSERT(mCells != nullptr);
+
+        size_t len = mWidth * mHeight * (sizeof(uint8_t) + sizeof(int16_t));
+        uint8_t* buf = new uint8_t[len];
+        uint8_t* ptr = buf;
+
+        for (uint16_t y = 0; ERROR_SUCCESS == err && y < mHeight; ++y)
+        {
+            for (uint16_t x = 0; ERROR_SUCCESS == err && x < mWidth; ++x)
+            {
+                const Cell& cell = mCells[pos2idx(x, y)];
+
+                *(ptr++) = cell.Accessible ? true : false;
+                *(ptr++) = cell.Altitude & INT16_C(0xFF);
+                *(ptr++) = (cell.Altitude >> 8) & INT16_C(0xFF);
+            }
+        }
+
+        mPckData = (uint8_t*)malloc(len * 1.06f); // LZO might expand to 106%...
+
+        void* wrkmem = malloc(LZO1X_1_MEM_COMPRESS);
+        lzo_uint newlen = 0;
+
+        lzo1x_1_compress(buf, len, mPckData, &newlen, wrkmem);
+        free(wrkmem);
+
+        mPckData = (uint8_t*)realloc(mPckData, newlen);
+        mPckLen = newlen;
+
+        SAFE_DELETE_ARRAY(buf);
+        if (IS_SUCCESS(err))
+        {
+            SAFE_DELETE_ARRAY(mCells);
+        }
+        else
+        {
+            free(mPckData);
+            mPckData = nullptr;
+        }
+    }
+
+    mPckMutex.unlock();
+    return err;
+}
+
+err_t
+MapData :: unpack(void* aCaller)
+{
+    err_t err = ERROR_SUCCESS;
+
+    mPckMutex.lock();
+
+    if (aCaller != nullptr)
+        mRefs.insert(aCaller);
+
+    if (mIsPacking && mPckData != nullptr)
+    {
+        ASSERT(mCells == nullptr);
+
+        mCells = new Cell[mWidth * mHeight];
+
+        size_t len = mWidth * mHeight * (sizeof(uint8_t) + sizeof(int16_t));
+        uint8_t* buf = new uint8_t[len];
+        uint8_t* ptr = buf;
+
+        lzo_uint newlen = 0;
+        lzo1x_decompress(mPckData, mPckLen, buf, &newlen, nullptr);
+
+        for (uint16_t y = 0; ERROR_SUCCESS == err && y < mHeight; ++y)
+        {
+            for (uint16_t x = 0; ERROR_SUCCESS == err && x < mWidth; ++x)
+            {
+                Cell& cell = mCells[pos2idx(x, y)];
+                cell.Accessible = *(ptr++) != false;
+                cell.Altitude = (int16_t)((*(ptr++) << 8) | *(ptr++));
+            }
+        }
+
+        SAFE_DELETE_ARRAY(buf);
+        if (IS_SUCCESS(err))
+        {
+            free(mPckData);
+            mPckData = nullptr;
+        }
+        else
+        {
+            SAFE_DELETE_ARRAY(mCells);
+        }
+    }
+
+    mPckMutex.unlock();
+    return err;
+}
+
+int
+MapData :: getPassage(uint16_t aPosX, uint16_t aPosY) const
+{
+    int passageId = -1;
+
+    for (vector<Passage*>::const_iterator
+            it = mPassages.begin(), end = mPassages.end();
+         it != end; ++it)
+    {
+        const Passage& passage = **it;
+        if (passage.PosX == aPosX && passage.PosY == aPosY)
+        {
+            passageId = passage.Index;
+            break;
+        }
+    }
+
+    return passageId;
 }

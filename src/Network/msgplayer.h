@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -103,40 +103,25 @@ public:
      *
      * @param[in]   aPlayer     a reference to the player object
      */
-    MsgPlayer(Player& aPlayer);
+    MsgPlayer(const Player& aPlayer);
 
     /**
      * Create a new MsgPlayer packet for the specified monster.
      *
      * @param[in]   aMonster     a reference to the monster object
      */
-    MsgPlayer(Monster& aMonster); //TODO...
-
-
-    /**
-     * Create a message object from the specified buffer.
-     * The buffer will be took by the object and the memory
-     * freed when the object will be destroyed.
-     *
-     * If the server is on a Be architecture, all the integers
-     * are swapped.
-     *
-     * @param[in,out] aBuf        a pointer to the buffer to take
-     *                            the pointer will be set to null
-     * @param[in]     aLen        the length in bytes of the buffer
-     */
-    MsgPlayer(uint8_t** aBuf, size_t aLen);
+    MsgPlayer(const Monster& aMonster);
 
     /* destructor */
     virtual ~MsgPlayer();
 
 private:
     /* internal filling of the packet */
-    void create(Player& aPlayer);
-    void create(Monster& aMonster);
+    void create(const Player& aPlayer);
+    void create(const Monster& aMonster);
 
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

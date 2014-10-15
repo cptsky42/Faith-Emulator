@@ -1,11 +1,6 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
- *
- * Taken from :
- * ****** BARLab - Open Source ******
- * Copyright (C) 2012 BARLab
- * Copyright (C) 2012 Jean-Philippe Boivin
  *
  * Please read the WARNING, DISCLAIMER and PATENTS
  * sections in the LICENSE file.
@@ -15,11 +10,11 @@
 #define _FAITH_EMULATOR_ENDIAN_H_
 
 #include "types.h"
-#include "def.h"
 
-#ifdef HAVE_ENDIAN_H
-#include <endian.h>
-#endif // HAVE_ENDIAN_H
+// Clang defines __has_builtin
+#ifndef __has_builtin
+#define __has_builtin(x) 0
+#endif // __has_builtin
 
 /*
  *****************************************************
@@ -112,8 +107,10 @@
  */
 inline int16_t bswap16(int16_t x)
 {
-    #if ((__GNUC__ * 100) + __GNUC_MINOR__) >= 480
-    return __builtin_bswap16(x); // GCC 4.8+
+    // GCC 4.8+ or Clang
+    #if (defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 480)) || \
+        (defined(__clang__) && __has_builtin(__builtin_bswap16))
+    return __builtin_bswap16(x);
     #else
     return ((((uint16_t)(x) & 0xFF00) >> 8) | \
             (((uint16_t)(x) & 0x00FF) << 8));
@@ -143,8 +140,10 @@ inline uint16_t bswap16(uint16_t x)
  */
 inline int32_t bswap32(int32_t x)
 {
-    #if defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 430)
-    return __builtin_bswap32(x); // GCC 4.3+
+    // GCC 4.3+ or Clang
+    #if (defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 430)) || \
+        (defined(__clang__) && __has_builtin(__builtin_bswap32))
+    return __builtin_bswap32(x);
     #else
     return ((((uint32_t)(x) & 0xFF000000) >> 24) |                 \
             (((uint32_t)(x) & 0x00FF0000) >> 8) |                  \
@@ -176,8 +175,10 @@ inline uint32_t bswap32(uint32_t x)
  */
 inline int64_t bswap64(int64_t x)
 {
-    #if defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 430)
-    return __builtin_bswap64(x); // GCC 4.3+
+    // GCC 4.3+ or Clang
+    #if (defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 430)) || \
+        (defined(__clang__) && __has_builtin(__builtin_bswap64))
+    return __builtin_bswap64(x);
     #else
     return (((uint64_t)(x) << 56) |                         \
             (((uint64_t)(x) << 40) & 0xFF000000000000ULL) | \
@@ -201,44 +202,6 @@ inline int64_t bswap64(int64_t x)
 inline uint64_t bswap64(uint64_t x)
 {
     return (uint64_t)bswap64((int64_t)x);
-}
-
-/*
- *****************************************************
- * Determine endian at runtime
- ****************************************************
- */
-
-/**
- * Determine whether the current program is running under a big endian
- * architecture. It is determined at runtime.
- *
- * @retval TRUE if the processor is running under a big endian architecture.
- * @returns FALSE otherwise
- */
-inline bool isBigEndian()
-{
-    int32_t dword = 0x11223344;
-    int8_t* ptr = (int8_t*)&dword;
-
-    return ptr[0] == 0x11 && ptr[1] == 0x22 &&
-            ptr[2] == 0x33 && ptr[3] == 0x44;
-}
-
-/**
- * Determine whether or not, the current program is running under a
- * little endian architecture. It is determined at runtime.
- *
- * @retval TRUE if the processor is running under a little endian architecture.
- * @returns FALSE otherwise
- */
-inline bool isLittleEndian()
-{
-    int32_t dword = 0x11223344;
-    int8_t* ptr = (int8_t*)&dword;
-
-    return ptr[0] == 0x44 && ptr[1] == 0x33 &&
-            ptr[2] == 0x22 && ptr[3] == 0x11;
 }
 
 #endif // _FAITH_EMULATOR_ENDIAN_H

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,11 +8,10 @@
 
 #include "msgtalk.h"
 #include "stringpacker.h"
-#include "msgaction.h"
-#include "msguserattrib.h"
-#include "msgiteminfo.h"
+#include "allmsg.h"
 #include "client.h"
 #include "player.h"
+#include "world.h"
 #include <string.h>
 
 MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
@@ -24,7 +23,19 @@ MsgTalk :: MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords
           (aWords != nullptr ? strlen(aWords) : 0) + 1),
       mInfo((MsgInfo*)mBuf)
 {
-    create(aSpeaker, aHearer, "", aWords, aChannel, aColor); // HACK !
+    create(aSpeaker, aHearer, "", aWords, aChannel, aColor);
+}
+
+MsgTalk :: MsgTalk(const Player& aSpeaker, const Player& aHearer, const char* aWords,
+                   Channel aChannel, uint32_t aColor)
+    : Msg(sizeof(MsgInfo) +
+          (aSpeaker.getName() != nullptr ? strlen(aSpeaker.getName()) : 0)  + 1 +
+          (aHearer.getName() != nullptr ? strlen(aHearer.getName()) : 0)  + 1 +
+          /* (aEmotion != nullptr ? strlen(aEmotion) : 0) */ + 1 +
+          (aWords != nullptr ? strlen(aWords) : 0) + 1),
+      mInfo((MsgInfo*)mBuf)
+{
+    create(aSpeaker, aHearer, "", aWords, aChannel, aColor);
 }
 
 MsgTalk :: MsgTalk(uint8_t** aBuf, size_t aLen)
@@ -36,7 +47,6 @@ MsgTalk :: MsgTalk(uint8_t** aBuf, size_t aLen)
     swap(mBuf);
     #endif
 }
-
 
 MsgTalk :: ~MsgTalk()
 {
@@ -79,6 +89,42 @@ MsgTalk :: create(const char* aSpeaker, const char* aHearer, const char* aEmotio
 }
 
 void
+MsgTalk :: create(const Player& aSpeaker, const Player& aHearer, const char* aEmotion,
+                  const char* aWords, Channel aChannel, uint32_t aColor)
+{
+    ASSERT(&aSpeaker != nullptr && &aHearer != nullptr);
+    ASSERT(aSpeaker.getName() != nullptr && aSpeaker.getName()[0] != '\0');
+    ASSERT(aHearer.getName() != nullptr && aHearer.getName()[0] != '\0');
+    ASSERT(aEmotion != nullptr);
+    ASSERT(aWords != nullptr && aWords[0] != '\0');
+
+    if (strlen(aSpeaker.getName()) < MAX_NAMESIZE &&
+        strlen(aHearer.getName()) < MAX_NAMESIZE &&
+        strlen(aEmotion) < MAX_NAMESIZE &&
+        strlen(aWords) < MAX_WORDSSIZE)
+    {
+        mInfo->Header.Length = mLen;
+        mInfo->Header.Type = MSG_TALK;
+
+        mInfo->Color = aColor;
+        mInfo->Channel = (uint16_t)aChannel;
+        mInfo->Style = (int16_t)STYLE_NORMAL;
+        mInfo->Timestamp = timeGetTime();
+
+        StringPacker packer(mInfo->Buf);
+        packer.addString(aSpeaker.getName());
+        packer.addString(aHearer.getName());
+        packer.addString(aEmotion);
+        packer.addString(aWords);
+    }
+    else
+    {
+        LOG(ERROR, "Invalid length: hearer=%zu, speaker=%zu, emotion=%zu, words=%zu",
+            strlen(aHearer.getName()), strlen(aSpeaker.getName()), strlen(aEmotion), strlen(aWords));
+    }
+}
+
+void
 MsgTalk :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
@@ -95,54 +141,96 @@ MsgTalk :: process(Client* aClient)
     packer.getString(hearer, sizeof(hearer), 1);
     packer.getString(words, sizeof(words), 3);
 
-    // commands
-    if (words[0] == '/')
-    {
-        if (true) // TODO: Real substring check
-        {
-            int mapId, x, y;
-            int type;
-            int param;
-            if (sscanf(words, "/mm %d %d %d", &mapId, &x, &y) == 3)
-            {
-                player.setMapId(mapId);
-                player.setPosition(x, y);
+    ASSERT(strlen(words) < MAX_WORDSSIZE);
 
-                MsgAction msg(&player, player.getMapId(), MsgAction::ACTION_ENTER_MAP);
-                client.send(&msg);
-            }
-            else if (sscanf(words, "/action %d %d", &type, &param))
-            {
-                MsgAction msg(&player, param, (MsgAction::Action)type);
-                client.send(&msg);
-            }
-            else if (sscanf(words, "/item %d %d", &type, &param))
-            {
-                int data[2];
-                data[0] = type;
-                data[1] = param;
-                MsgItemInfo msg(data, MsgItemInfo::ACTION_ADD_ITEM);
-                client.send(&msg);
-            }
-            else
-            {
-                player.sendSysMsg("Invalid syntax: /mm {map} {x} {y}");
-            }
-        }
+    if (strncmp(player.getName(), speaker, MAX_NAMESIZE) != 0)
+    {
+        //if (!player.isGM())
+        // TODO: Cheat not same speaker...
         return;
     }
 
-    // TODO...
+    // TODO isTalkEnable
+//    if (!player.isTalkEnable())
+//    {
+//        player.sendSysMsg(STR_CAN_NOT_TALK);
+//        return;
+//    }
+
+    // TODO isGM / isPM
+//    if (player.isGM()) // log GM msgs
+//    {
+//        LOG(INFO, "--TALK-- %s said '%s' to %s.",
+//            speaker, words, hearer);
+//    }
+
+    // commands
+    if (words[0] == '/')
+    {
+        char cmd[MAX_WORDSSIZE] = "NO_CMD";
+        char param[MAX_WORDSSIZE] = "";
+        sscanf(words, "/%s %s", cmd, param);
+
+        if (strncmp(cmd, "break", MAX_WORDSSIZE) == 0)
+        {
+            client.disconnect();
+        }
+        else if (strncmp(cmd, "mm", MAX_WORDSSIZE) == 0)
+        {
+            int mapId, x, y;
+            if (sscanf(param, "%d %d %d", &mapId, &x, &y) == 3)
+            {
+                player.move((uint32_t)mapId, (uint16_t)x, (uint16_t)y);
+            }
+            else
+                player.sendSysMsg("USAGE: /mm id x y");
+        }
+        else if (strncmp(cmd, "money", MAX_WORDSSIZE) == 0)
+        {
+            unsigned int money;
+            if (sscanf(param, "%u", &money) == 1)
+            {
+
+            }
+            else
+                player.sendSysMsg("USAGE: /money amount");
+        }
+        #ifndef NDEBUG
+
+        #endif // not NDEBUG
+        else
+        {
+            player.sendSysMsg("Unknown command '%s'.", cmd);
+        }
+
+        return;
+    }
+
+    if (player.isGhost() && mInfo->Channel != MsgTalk::CHANNEL_TEAM)
+    {
+        mInfo->Channel = MsgTalk::CHANNEL_GHOST;
+        player.broadcastRoomMsg(this, false);
+        return;
+    }
+
+    static const World& world = World::getInstance();
     switch (mInfo->Channel)
     {
-    default:
-        fprintf(stdout, "%s said %s to %s\n", speaker, words, hearer);
-        break;
+        case MsgTalk::CHANNEL_PRIVATE:
+            {
+                Player* target = nullptr;
+                if (world.queryPlayer(&target, hearer))
+                    target->send(this);
+            }
+        default:
+            fprintf(stdout, "%s said %s to %s on %u\n",
+                    speaker, words, hearer, mInfo->Channel);
+            break;
     }
 }
 
 void
-MsgTalk :: swap(uint8_t* aBuf)
+MsgTalk :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

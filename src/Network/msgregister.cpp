@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -32,8 +32,9 @@ MsgRegister :: process(Client* aClient)
 {
     ASSERT(aClient != nullptr);
 
+    static const Database& db = Database::getInstance(); // singleton
+
     Client& client = *aClient;
-    Database& db = Database::getInstance();
 
     if (isValidString(mInfo->Account))
     {
@@ -88,7 +89,7 @@ MsgRegister :: process(Client* aClient)
 }
 
 void
-MsgRegister :: swap(uint8_t* aBuf)
+MsgRegister :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

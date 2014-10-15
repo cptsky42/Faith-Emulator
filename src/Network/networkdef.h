@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -11,9 +11,14 @@
 
 #include "common.h"
 
+/** Maximum length of a name, including the NUL character. */
 const size_t MAX_NAMESIZE = 16;
+/** Maximum length of an extended name, including the NUL character. */
 const size_t MAX_NAMESIZE_CLI = 32;
+
+/** Maximum length of a message, including the NUL character. */
 const size_t MAX_WORDSSIZE = 255;
+/** Maximum length of a parameter, including the NUL character. */
 const size_t MAX_PARAMSIZE = 255;
 
 const uint16_t MSG_NONE = 0;

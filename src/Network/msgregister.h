@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -71,8 +71,7 @@ public:
 
 private:
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
-
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -8,15 +8,13 @@
 
 #include "advancedentity.h"
 
-AdvancedEntity :: AdvancedEntity(int32_t aUID)
-    : Entity(aUID)
+AdvancedEntity :: AdvancedEntity(uint32_t aUID)
+    : Entity(aUID),
+      mLevel(1),
+      mCurHP(0), mMaxHP(0),
+      mPose(AdvancedEntity::POSE_STANDBY)
 {
-    mName = "Unknown";
 
-    mLevel = 1;
-
-    mCurHP = 0;
-    mMaxHP = 0;
 }
 
 AdvancedEntity :: ~AdvancedEntity()

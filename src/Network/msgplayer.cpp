@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -12,7 +12,7 @@
 #include "monster.h"
 #include <string.h>
 
-MsgPlayer :: MsgPlayer(Player& aPlayer)
+MsgPlayer :: MsgPlayer(const Player& aPlayer)
     : Msg(sizeof(MsgInfo) +
           strlen(aPlayer.getName()) + 1)
 {
@@ -20,22 +20,12 @@ MsgPlayer :: MsgPlayer(Player& aPlayer)
     create(aPlayer);
 }
 
-MsgPlayer :: MsgPlayer(Monster& aMonster)
+MsgPlayer :: MsgPlayer(const Monster& aMonster)
     : Msg(sizeof(MsgInfo) +
           strlen(aMonster.getName()) + 1),
       mInfo((MsgInfo*)mBuf)
 {
     create(aMonster);
-}
-
-MsgPlayer :: MsgPlayer(uint8_t** aBuf, size_t aLen)
-    : Msg(aBuf, aLen), mInfo((MsgInfo*)mBuf)
-{
-    ASSERT(aLen >= sizeof(MsgInfo));
-
-    #if BYTE_ORDER == BIG_ENDIAN
-    swap(mBuf);
-    #endif
 }
 
 MsgPlayer :: ~MsgPlayer()
@@ -44,7 +34,7 @@ MsgPlayer :: ~MsgPlayer()
 }
 
 void
-MsgPlayer :: create(Player& aPlayer)
+MsgPlayer :: create(const Player& aPlayer)
 {
     ASSERT(&aPlayer != nullptr);
     ASSERT(aPlayer.getName() != nullptr && aPlayer.getName()[0] != '\0');
@@ -86,7 +76,7 @@ MsgPlayer :: create(Player& aPlayer)
 }
 
 void
-MsgPlayer :: create(Monster& aMonster)
+MsgPlayer :: create(const Monster& aMonster)
 {
     ASSERT(&aMonster != nullptr);
     ASSERT(aMonster.getName() != nullptr && aMonster.getName()[0] != '\0');
@@ -131,7 +121,7 @@ MsgPlayer :: create(Monster& aMonster)
 }
 
 void
-MsgPlayer :: swap(uint8_t* aBuf)
+MsgPlayer :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

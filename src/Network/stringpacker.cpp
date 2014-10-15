@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -40,7 +40,7 @@ StringPacker :: addString(const char* aStr)
 }
 
 bool
-StringPacker :: getString(char* aOutBuf, size_t aLen, uint8_t aIndex)
+StringPacker :: getString(char* aOutBuf, size_t aLen, uint8_t aIndex) const
 {
     ASSERT(aOutBuf != nullptr);
     ASSERT(aLen > 0);

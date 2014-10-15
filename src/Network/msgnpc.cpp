@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -15,7 +15,7 @@
 
 using namespace std;
 
-MsgNpc :: MsgNpc(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
+MsgNpc :: MsgNpc(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
     : Msg(sizeof(MsgInfo)), mInfo((MsgInfo*)mBuf)
 {
     create(aId, aData, aType, aEvent);
@@ -37,7 +37,7 @@ MsgNpc :: ~MsgNpc()
 }
 
 void
-MsgNpc :: create(int32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
+MsgNpc :: create(uint32_t aId, uint32_t aData, uint16_t aType, Event aEvent)
 {
     mInfo->Header.Length = mLen;
     mInfo->Header.Type = MSG_NPC;
@@ -57,18 +57,17 @@ MsgNpc :: process(Client* aClient)
     Client& client = *aClient;
     Player& player = *aClient->getPlayer();
 
-    // TODO finish implementation
-//    if (!player.isAlive())
-//    {
-//        player.sendSysMsg(STR_DIE);
-//        return;
-//    }
+    if (!player.isAlive())
+    {
+        player.sendSysMsg(STR_DIE);
+        return;
+    }
 
     switch (mInfo->Event)
     {
     case EVENT_BEACTIVED:
         {
-            World& world = World::getInstance();
+            static const World& world = World::getInstance(); // singleton
             Npc* npc = nullptr;
             if (world.queryNpc(&npc, mInfo->Id) &&
                 player.getMapId() == npc->getMapId())
@@ -138,7 +137,7 @@ MsgNpc :: process(Client* aClient)
 }
 
 void
-MsgNpc :: swap(uint8_t* aBuf)
+MsgNpc :: swap(uint8_t* aBuf) const
 {
     ASSERT(aBuf != nullptr);
 

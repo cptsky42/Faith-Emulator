@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -52,6 +52,10 @@ public:
      * Print the msg in the standard output stream.
      */
     static void dump(const uint8_t* aBuf, size_t aLen);
+
+    /**
+     * Print the msg in the standard output stream.
+     */
     static void dump(Msg* aMsg);
 
 public:
@@ -70,10 +74,10 @@ public:
 
 public:
     /** Get a pointer of the buffer. It may not be the internal one. */
-    const uint8_t* getBuffer();
+    const uint8_t* getBuffer() const;
 
     /** Get the length in bytes of the message. */
-    size_t getLength() { return mLen; }
+    size_t getLength() const { return mLen; }
 
 protected:
     /**
@@ -103,14 +107,14 @@ protected:
      *
      * @param[in]     aBuf        a pointer to the buffer to swap
      */
-    virtual void swap(uint8_t* aBuf) { aBuf = nullptr; }
+    virtual void swap(uint8_t* aBuf) const { aBuf = nullptr; }
 
 protected:
     uint8_t* mBuf; //!< the internal buffer
     size_t mLen; //!< the length in bytes of the buffer
 
     #if BYTE_ORDER == BIG_ENDIAN
-    uint8_t* mData; //!< the swapped copy of the buffer
+    mutable uint8_t* mData; //!< the swapped copy of the buffer
     #endif
 };
 

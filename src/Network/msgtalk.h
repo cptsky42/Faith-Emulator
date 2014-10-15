@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -11,6 +11,8 @@
 
 #include "common.h"
 #include "msg.h"
+
+class Player;
 
 class MsgTalk : public Msg
 {
@@ -99,6 +101,9 @@ public:
     MsgTalk(const char* aSpeaker, const char* aHearer, const char* aWords,
             Channel aChannel, uint32_t aColor = COLOR_WHITE);
 
+    MsgTalk(const Player& aSpeaker, const Player& aHearer, const char* aWords,
+            Channel aChannel, uint32_t aColor = COLOR_WHITE);
+
     /**
      * Create a message object from the specified buffer.
      * The buffer will be took by the object and the memory
@@ -128,9 +133,11 @@ private:
     /* internal filling of the packet */
     void create(const char* aSpeaker, const char* aHearer, const char* aEmotion,
                 const char* aWords, Channel aChannel, uint32_t aColor);
+    void create(const Player& aSpeaker, const Player& aHearer, const char* aEmotion,
+                const char* aWords, Channel aChannel, uint32_t aColor);
 
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

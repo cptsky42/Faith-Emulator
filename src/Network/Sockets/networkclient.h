@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -42,14 +42,19 @@ public:
       */
     void send(uint8_t* aBuf, size_t aLen);
 
+    /**
+     * Disconnect the client from the server.
+     */
+    void disconnect();
+
 public:
     /** Get the owner pointer. It may used by some programs. */
-    const void* getOwner() { return mOwner; }
+    const void* getOwner() const { return mOwner; }
     /** Set the owner pointer. It may used by some programs. */
     void setOwner(void* aOwner) { mOwner = aOwner; }
 
     /** Get the server's pointer. It may be used by some programs. */
-    const TcpServer* getServer() { return &mServer; }
+    const TcpServer* getServer() const { return &mServer; }
 
 private:
     /**

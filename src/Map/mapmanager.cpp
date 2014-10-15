@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -11,9 +11,10 @@
 #include "gamemap.h"
 #include "mapdata.h"
 #include "finder.h"
+#include "inifile.h"
 #include <stdio.h>
-#include <QSettings>
-#include <QStringList>
+#include <QtConcurrentRun>
+#include <QThread>
 
 using namespace std;
 
@@ -24,10 +25,20 @@ MapManager* MapManager::sInstance = nullptr;
 MapManager&
 MapManager :: getInstance()
 {
-    // TODO? Thread-safe
+    static volatile long protect = 0;
+
     if (sInstance == nullptr)
     {
-        sInstance = new MapManager();
+        if (1 == atomic_inc(&protect))
+        {
+            // create the instance
+            sInstance = new MapManager();
+        }
+        else
+        {
+            while (sInstance == nullptr)
+                QThread::yieldCurrentThread();
+        }
     }
     return *sInstance;
 }
@@ -39,7 +50,7 @@ MapManager :: MapManager()
 
 MapManager :: ~MapManager()
 {
-    for (map<int32_t, GameMap*>::iterator
+    for (map<uint32_t, GameMap*>::iterator
             it = mGameMaps.begin(), end = mGameMaps.end();
          it != end; ++it)
     {
@@ -70,59 +81,44 @@ MapManager :: loadData()
     const char* path = "./GameMap.ini";
     if (Finder::fileExists(path))
     {
-        QSettings gamemap(path, QSettings::IniFormat);
-        QStringList groups = gamemap.childGroups();
+        IniFile gamemap;
+        err = gamemap.open(path);
 
-        for (QStringList::const_iterator
-                it = groups.begin(), end = groups.end();
+        vector<string> sections;
+        gamemap.getSections(sections);
+
+        int numCPU = getNumCPU();
+        LOG(INFO, "Detected %d core(s). Spawning %d workers for loading maps...",
+            numCPU, numCPU);
+
+        map< string, vector<uint16_t> > maps;
+        for (vector<string>::const_iterator
+                it = sections.begin(), end = sections.end();
              ERROR_SUCCESS == err && it != end; ++it)
         {
-            const QString& group = *it;
+            const string& section = *it;
             unsigned int mapId = 0;
 
-            if (sscanf(qPrintable(group), "Map%u", &mapId) == 1)
+            if (sscanf(section.c_str(), "Map%u", &mapId) == 1)
             {
                 if (mMaps.find((uint16_t)mapId) == mMaps.end())
                 {
-                    string dataPath = gamemap.value(group + "/File", "N/A").toString().toStdString();
+                    string dataPath = gamemap.readString(section + "/File", "N/A");
                     if (dataPath != "N/A")
                     {
-                        map<string, MapData*>::const_iterator data_it;
-                        if ((data_it = mData.find(dataPath)) == mData.end())
+                        map< string, vector<uint16_t> >::iterator maps_it;
+                        if ((maps_it = maps.find(dataPath)) == maps.end())
                         {
-                            MapData* data = nullptr;
-                            err = MapData::load(&data, dataPath.c_str());
-
-                            if (IS_SUCCESS(err))
-                            {
-                                ASSERT_ERR(data != nullptr, ERROR_INVALID_POINTER);
-
-                                LOG(INFO, "Loaded map data at '%s' for id=%u.",
-                                    dataPath.c_str(), mapId);
-
-                                mData[dataPath] = data;
-                                mMaps[(uint16_t)mapId] = data;
-                                data = nullptr;
-                            }
-                            else if (ERROR_FILE_NOT_FOUND == err)
-                            {
-                                LOG(ERROR, "Could not find all files for loading the map data file '%s'. Ignoring error.",
-                                    dataPath.c_str());
-                                err = ERROR_SUCCESS;
-                            }
-                            SAFE_DELETE(data);
+                            vector<uint16_t> mapIds; mapIds.push_back((uint16_t)mapId);
+                            maps.insert(maps_it, pair< string, vector<uint16_t> >(dataPath, mapIds));
                         }
                         else
-                        {
-                            LOG(INFO, "Found already loaded map data for id=%u.",
-                                mapId);
-                            mMaps[(uint16_t)mapId] = data_it->second;
-                        }
+                            maps_it->second.push_back((uint16_t)mapId);
                     }
                     else
                     {
                         LOG(WARN, "Could not find the key 'File' under the group '%s'. Skipping",
-                            qPrintable(group));
+                            section.c_str());
                     }
                 }
                 else
@@ -134,8 +130,22 @@ MapManager :: loadData()
             else
             {
                 LOG(WARN, "Found an invalid group (%s) at root. Skipping.",
-                    qPrintable(group));
+                    section.c_str());
             }
+        }
+
+        vector< QFuture<err_t> > errors;
+        for (int i = 0; ERROR_SUCCESS == err && i < numCPU; ++i)
+        {
+            QFuture<err_t> error = QtConcurrent::run(MapManager::loadData, &maps);
+            errors.push_back(error);
+        }
+
+        for (vector< QFuture<err_t> >::const_iterator
+                it = errors.begin(), end = errors.end();
+             ERROR_SUCCESS == err && it != end; ++it)
+        {
+            err = (*it).result();
         }
     }
     else
@@ -147,8 +157,98 @@ MapManager :: loadData()
     return err;
 }
 
+/* static */
 err_t
-MapManager :: createMap(int32_t aUID, GameMap::Info** aInfo)
+MapManager :: loadData(map< string, vector<uint16_t> >* aWork)
+{
+    ASSERT_ERR(aWork != nullptr, ERROR_INVALID_POINTER);
+
+    MapManager& mgr = MapManager::getInstance();
+
+    err_t err = ERROR_SUCCESS;
+
+    LOG(INFO, "Worker %u starting.", QThread::currentThreadId());
+
+    while (IS_SUCCESS(err))
+    {
+        mgr.mWorkMutex.lock();
+
+        if (aWork->empty())
+        {
+            mgr.mWorkMutex.unlock();
+            break;
+        }
+
+        map< string, vector<uint16_t> >::iterator work_it = aWork->begin();
+        ASSERT(work_it != aWork->end());
+
+        string dataPath(work_it->first);
+        vector<uint16_t> mapIds; mapIds.swap(work_it->second); // swap O(1)
+        aWork->erase(work_it);
+
+        mgr.mWorkMutex.unlock();
+
+        MapData* data = nullptr;
+        DOIF(err, MapData::load(&data, dataPath.c_str()));
+
+        if (IS_SUCCESS(err))
+        {
+            ASSERT_ERR(data != nullptr, ERROR_INVALID_POINTER);
+
+            LOG(INFO, "Loaded map data at '%s'.",
+                dataPath.c_str());
+
+            LOG(DBG, "Compressing map data of '%s'...",
+                dataPath.c_str());
+            err = data->pack();
+
+            if (IS_SUCCESS(err))
+            {
+                LOG(INFO, "Compressed map data of '%s'...",
+                    dataPath.c_str());
+
+                mgr.mDataMutex.lock();
+
+                mgr.mData[dataPath] = data;
+                for (vector<uint16_t>::const_iterator
+                        it = mapIds.begin(), end = mapIds.end();
+                     it != end; ++it)
+                {
+                    uint16_t mapId = *it;
+                    LOG(INFO, "Found already loaded map data for id=%u. Using %s.",
+                        mapId, dataPath.c_str());
+
+                    mgr.mMaps[(uint16_t)mapId] = data;
+                }
+                data = nullptr;
+
+                mgr.mDataMutex.unlock();
+            }
+            else
+            {
+                LOG(ERROR, "Could not compress the map data file '%s'. Ignoring error.",
+                    dataPath.c_str());
+                err = ERROR_SUCCESS;
+            }
+        }
+        else if (ERROR_FILE_NOT_FOUND == err)
+        {
+            LOG(WARN, "Could not find all files for loading the map data file '%s'. Ignoring error.",
+                dataPath.c_str());
+            err = ERROR_SUCCESS;
+        }
+        SAFE_DELETE(data);
+
+        QThread::yieldCurrentThread();
+    }
+
+    LOG(INFO, "Worker %u done. (err=%d)", QThread::currentThreadId(), err);
+
+    return err;
+}
+
+err_t
+MapManager :: createMap(uint32_t aUID, GameMap::Info** aInfo)
 {
     ASSERT_ERR(aInfo != nullptr && *aInfo != nullptr, ERROR_INVALID_POINTER);
 
@@ -184,15 +284,49 @@ MapManager :: createMap(int32_t aUID, GameMap::Info** aInfo)
 }
 
 GameMap*
-MapManager :: getMap(int32_t aUID)
+MapManager :: getMap(uint32_t aUID) const
 {
     GameMap* gameMap = nullptr;
 
-    map<int32_t, GameMap*>::iterator it;
-    if ((it = mGameMaps.find(aUID)) == mGameMaps.end())
+    map<uint32_t, GameMap*>::const_iterator it;
+    if ((it = mGameMaps.find(aUID)) != mGameMaps.end())
     {
         gameMap = it->second;
     }
 
     return gameMap;
+}
+
+void
+MapManager :: packAll()
+{
+    mDataMutex.lock();
+
+    for (map<string, MapData*>::iterator
+            it = mData.begin(), end = mData.end();
+         it != end; ++it)
+    {
+        MapData* map = it->second;
+        map->resumePacking();
+        map->pack(nullptr);
+    }
+
+    mDataMutex.unlock();
+}
+
+void
+MapManager :: unpackAll()
+{
+    mDataMutex.lock();
+
+    for (map<string, MapData*>::iterator
+            it = mData.begin(), end = mData.end();
+         it != end; ++it)
+    {
+        MapData* map = it->second;
+        map->unpack(nullptr);
+        map->suspendPacking();
+    }
+
+    mDataMutex.unlock();
 }

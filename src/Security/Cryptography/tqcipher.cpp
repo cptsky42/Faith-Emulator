@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -10,15 +10,12 @@
 #include <string.h> // memset
 
 TqCipher :: TqCipher()
+    : mEnCounter(0), mDeCounter(0),
+      mUseKey(false)
 {
-    mEnCounter = 0;
-    mDeCounter = 0;
-
     // security purpose only...
     memset(mIV, 0, sizeof(mIV));
     memset(mKey, 0, sizeof(mKey));
-
-    mUseKey = false;
 }
 
 TqCipher :: ~TqCipher()
@@ -29,19 +26,21 @@ TqCipher :: ~TqCipher()
 void
 TqCipher :: generateIV(int32_t aP, int32_t aG)
 {
-    uint8_t* p = (uint8_t*)&aP;
-    uint8_t* g = (uint8_t*)&aG;
-
     #if BYTE_ORDER == BIG_ENDIAN
     aP = bswap32(aP);
     aG = bswap32(aG);
     #endif
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
-    for (size_t i = 0, len = middle; i < len; ++i)
+    uint8_t* p = (uint8_t*)&aP;
+    uint8_t* g = (uint8_t*)&aG;
+
+    uint8_t* key1 = mIV;
+    uint8_t* key2 = key1 + (TqCipher::IV_SIZE / 2);
+
+    for (size_t i = 0, len = (TqCipher::IV_SIZE / 2); i < len; ++i)
     {
-        mIV[i] = p[0];
-        mIV[i + middle] = g[0];
+        key1[i] = p[0];
+        key2[i] = g[0];
         p[0] = (uint8_t)(((uint8_t)(p[0] << p[2]) + p[1]) * p[0] + p[3]);
         g[0] = (uint8_t)((g[0] * g[2] - g[1]) * g[0] - g[3]);
     }
@@ -61,11 +60,15 @@ TqCipher :: generateKey(int32_t aA, int32_t aB)
     uint8_t* ptr1 = (uint8_t*)&val1;
     uint8_t* ptr2 = (uint8_t*)&val2;
 
-    size_t middle = TqCipher::IV_SIZE  / 2;
-    for (size_t i = 0, len = middle; i < len; ++i)
+    uint8_t* iv1 = mIV;
+    uint8_t* iv2 = iv1 + (TqCipher::IV_SIZE / 2);
+    uint8_t* key1 = mKey;
+    uint8_t* key2 = key1 + (TqCipher::KEY_SIZE / 2);
+
+    for (size_t i = 0, len = (TqCipher::KEY_SIZE / 2); i < len; ++i)
     {
-        mKey[i] = (uint8_t)(mIV[i] ^ ptr1[i % 4]);
-        mKey[i + middle] = (uint8_t)(mIV[i + middle] ^ ptr2[i % 4]);
+        key1[i] = (uint8_t)(iv1[i] ^ ptr1[i % 4]);
+        key2[i] = (uint8_t)(iv2[i] ^ ptr2[i % 4]);
     }
 
     mEnCounter = 0;

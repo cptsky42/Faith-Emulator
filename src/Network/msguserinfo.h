@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -47,13 +47,13 @@ public:
         uint16_t MercenaryLevel;
         /** Unknown bytes (padding ?) */
         uint8_t Padding2[14];
-        /** The Force of the player */
+        /** The force of the player */
         uint16_t Force;
-        /** The Speed of the player */
-        uint16_t Speed;
-        /** The Health of the player */
+        /** The dexterity of the player */
+        uint16_t Dexterity;
+        /** The health of the player */
         uint16_t Health;
-        /** The Soul of the player */
+        /** The soul of the player */
         uint16_t Soul;
         /** The additional points of the player */
         uint16_t AddPoints;
@@ -84,31 +84,17 @@ public:
      *
      * @param[in]   aPlayer     a reference to the player object
      */
-    MsgUserInfo(Player& aPlayer);
-
-    /**
-     * Create a message object from the specified buffer.
-     * The buffer will be took by the object and the memory
-     * freed when the object will be destroyed.
-     *
-     * If the server is on a Be architecture, all the integers
-     * are swapped.
-     *
-     * @param[in,out] aBuf        a pointer to the buffer to take
-     *                            the pointer will be set to null
-     * @param[in]     aLen        the length in bytes of the buffer
-     */
-    MsgUserInfo(uint8_t** aBuf, size_t aLen);
+    MsgUserInfo(const Player& aPlayer);
 
     /* destructor */
     virtual ~MsgUserInfo();
 
 private:
     /* internal filling of the packet */
-    void create(Player& aPlayer);
+    void create(const Player& aPlayer);
 
     /* internal swapping of the integers for neutral-endian support */
-    virtual void swap(uint8_t* aBuf);
+    virtual void swap(uint8_t* aBuf) const;
 
 private:
     MsgInfo* mInfo; //!< the casted internal reference to the buffer

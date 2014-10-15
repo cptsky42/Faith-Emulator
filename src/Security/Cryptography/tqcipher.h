@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -6,19 +6,22 @@
  * sections in the LICENSE file.
  */
 
-#ifndef _FAITH_EMULATOR_TQCIPHER_H
-#define _FAITH_EMULATOR_TQCIPHER_H
+#ifndef _FAITH_EMULATOR_TQ_CIPHER_H_
+#define _FAITH_EMULATOR_TQ_CIPHER_H_
 
 #include "common.h"
+#include "icipher.h"
 
 /**
  * TQ Digital's cipher used by the AccServer & the MsgServer of the
- * game Era of Faith. It uses a 4096-bit key, based from two 32-bit integer,
- * with two 16-bit incremental counter. The cipher is barely a XOR cipher.
+ * game Era of Faith.
+ *
+ * It uses a 4096-bit key, based from two 32-bit integer, with two 16-bit
+ * incremental counter. The cipher is barely a XOR cipher.
  *
  * The following implementation has a memory footprint of 1 KiO.
  */
-class TqCipher
+class TqCipher : public ICipher
 {
 public:
     /** The initialization vector size in bytes. It is used as the primary key. */
@@ -63,7 +66,7 @@ public:
      * @param[in,out] aBuf          the buffer that will be encrypted
      * @param[in]     aLen          the number of octets to encrypt
      */
-    void encrypt(uint8_t* aBuf, size_t aLen);
+    virtual void encrypt(uint8_t* aBuf, size_t aLen);
 
     /**
      * Decrypt n octet(s) with the cipher.
@@ -72,12 +75,17 @@ public:
      * @param[in,out] aBuf          the buffer that will be decrypted
      * @param[in]     aLen          the number of octets to decrypt
      */
-    void decrypt(uint8_t* aBuf, size_t aLen);
+    virtual void decrypt(uint8_t* aBuf, size_t aLen);
 
+public:
     /**
      * Reset both counters.
      */
     void resetCounters();
+
+public:
+    /** Get the algorithm used by the cipher. */
+    virtual ICipher::Algorithm getAlgorithm() const { return ICipher::TQ_CIPHER; }
 
 private:
     uint16_t mEnCounter; //!< Internal encryption counter.
@@ -89,4 +97,4 @@ private:
     bool mUseKey; //!< Determine if the cipher must use the alt. key
 };
 
-#endif // _FAITH_EMULATOR_TQCIPHER_H
+#endif // _FAITH_EMULATOR_TQ_CIPHER_H_

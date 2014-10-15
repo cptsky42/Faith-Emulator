@@ -1,4 +1,4 @@
-/**
+/*
  * ****** Faith Emulator - Closed Source ******
  * Copyright (C) 2012 - 2013 Jean-Philippe Boivin
  *
@@ -16,15 +16,43 @@
 class Client;
 struct lua_State;
 
+/**
+ * Process a Lua script and execute the processTask when executed.
+ * It is used by NPC's tasks.
+ */
 class NpcTask : public Script
 {
 public:
+    /**
+     * Register the specific functions of the NPC's tasks.
+     *
+     * @retval ERROR_SUCCESS on success
+     * @returns Error code otherwise
+     */
     static err_t registerFunctions();
 
 public:
-    NpcTask(int32_t aUID, const char* aPath);
+    /**
+     * Create a new task to be used by a NPC.
+     *
+     * @param[in]  aUID    the unique ID of the script
+     * @param[in]  aPath   the path of the Lua script
+     */
+    NpcTask(uint32_t aUID, const char* aPath);
+
+    /* destructor */
     virtual ~NpcTask();
 
+    /**
+     * Execute the script for the specified client and parameter.
+     *
+     * @param[in]  aClient   the caller
+     * @param[in]  aParam    the parameter
+     *
+     * @retval ERROR_SUCCESS on success
+     * @retval ERROR_EXEC_FAILED if the Lua script failed
+     * @returns Error code otherwise
+     */
     virtual err_t execute(Client& aClient, int32_t aParam) const;
 
 private:
@@ -34,27 +62,8 @@ private:
     static int pic(lua_State* aState);
     static int create(lua_State* aState);
 
-    // Getters / Setters Lua methods
-    static int getName(lua_State* aState);
-    static int getLook(lua_State* aState);
-    static int getHair(lua_State* aState);
-    static int getMoney(lua_State* aState);
-    static int getExp(lua_State* aState);
-    static int getForce(lua_State* aState);
-    static int getHealth(lua_State* aState);
-    static int getSpeed(lua_State* aState);
-    static int getSoul(lua_State* aState);
-    static int getAddPoints(lua_State* aState);
-    static int getCurHP(lua_State* aState);
-    static int getMaxHP(lua_State* aState);
-    static int getCurMP(lua_State* aState);
-    static int getMaxMP(lua_State* aState);
-    static int getPkPoints(lua_State* aState);
-    static int getLevel(lua_State* aState);
-    static int getProfession(lua_State* aState);
-
 private:
-    std::string mFct;
+    std::string mFct; //!< the function's name to call
 };
 
 #endif // _FAITH_EMULATOR_NPC_TASK_H_
